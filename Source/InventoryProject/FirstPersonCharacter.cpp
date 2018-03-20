@@ -10,7 +10,7 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Find actor components (and other external dependancies)
-	FindActorComponents();
+	InitActorComponents();
 }
 
 // Called when the game starts or when spawned
@@ -36,9 +36,9 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 		PhysicsHandle->SetTargetLocationAndRotation(GetRayEndPoint(), GetActorRotation());
 	}
 	// Check if we can detect a grabable object
-	if (AActor* hitActor = GetTraceResult().GetActor())
+	if (ACollectableObject* hitCollectable = Cast<ACollectableObject>(GetTraceResult().GetActor()))
 	{
-		GrabIndicator = "Click to pick up " + hitActor->GetName();
+		GrabIndicator = "Click to pick up " + hitCollectable->GetIndicatorName();
 	}
 	else
 	{
