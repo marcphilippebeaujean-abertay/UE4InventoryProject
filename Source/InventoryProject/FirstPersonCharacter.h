@@ -11,6 +11,8 @@
 #include "Blueprint/UserWidget.h"
 #include "FirstPersonCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInterfaceUpdate);
+
 UCLASS()
 class INVENTORYPROJECT_API AFirstPersonCharacter : public ACharacter
 {
@@ -59,15 +61,21 @@ private:
 	// Drop the physics object being held by the player
 	void ReleaseObject();
 
-	// Finds all attached components
-	void FindActorComponents();
+	// Create/find dependancies
+	void InitActorComponents();
+
+	// Creates the initial interface when the game starts
+	void SetupInterface();
 
 	// Raycast dependancies
 	const FVector GetRayEndPoint();
 	FVector PlayerViewPointLocation;
 
 	// Return hit from raycast
-	const FHitResult GetTraceResult();
+	FHitResult GetTraceResult();
+
+	// Update the string that indicates if an object is in range of being picked up
+	FString GrabIndicator;
 
 public:
 	// Called every frame
@@ -76,6 +84,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// Function that allows the UI widget to access the string
+	UFUNCTION(BlueprintPure)
+	FString GetGrabIndicator() { return GrabIndicator; }
 private:
 
 };

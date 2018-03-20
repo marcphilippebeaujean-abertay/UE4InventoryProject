@@ -17,6 +17,8 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 void AFirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	// Setup interface after the game has started
+	SetupInterface();
 }
 
 // Called every frame
@@ -32,6 +34,16 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 	{
 		// Move object we are holding
 		PhysicsHandle->SetTargetLocationAndRotation(GetRayEndPoint(), GetActorRotation());
+	}
+	// Check if we can detect a grabable object
+	if (AActor* hitActor = GetTraceResult().GetActor())
+	{
+		GrabIndicator = "Click to pick up " + hitActor->GetName();
+	}
+	else
+	{
+		// Otherwise, we have not hit an actor - don't display indicator
+		GrabIndicator = "";
 	}
 }
 
@@ -51,8 +63,33 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	InputComponent->BindAction("Grab", IE_Released, this, &AFirstPersonCharacter::ReleaseObject);
 }
 
+void AFirstPersonCharacter::SetupInterface()
+{
+	// Check the selected UI class is not NULL
+	if (DefaultInterfaceWidgetClass)
+	{
+		// If the widget is not created and == NULL
+		if (!DefaultInterfaceWidget)
+		{
+			// Check if player is being possesed by a controller
+			if (PlCtrler)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Creating interface widget!"));
+				// Create Widget by accessing the player controller
+				DefaultInterfaceWidget = CreateWidget<UUserWidget>(PlCtrler, DefaultInterfaceWidgetClass);
+			}
+			if (!DefaultInterfaceWidget)
+			{
+				// Something went wrong!
+				return;
+			}
+			// Add it to the viewport so the Construct() method in the UUserWidget:: is run
+			DefaultInterfaceWidget->AddToViewport();
+		}
+	}
+}
 
-void AFirstPersonCharacter::FindActorComponents()
+void AFirstPersonCharacter::InitActorComponents()
 {
 	// Create new physics handle
 	this->PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
@@ -68,37 +105,15 @@ void AFirstPersonCharacter::FindActorComponents()
 	}
 	// Get player controller from the world - since it is a one player game, ID will be 0
 	PlCtrler = UGameplayStatics::GetPlayerController(this->GetWorld(), 0);
-	// Check the selected UI class is not NULL
-	if (DefaultInterfaceWidgetClass)
-	{
-		// If the widget is not created and == NULL
-		if (!DefaultInterfaceWidget)
-		{
-			// Check if player is being possesed by a controller
-			if (PlCtrler)
-			{
-				// Create Widget by accessing the player controller
-				DefaultInterfaceWidget = CreateWidget<UUserWidget>(PlCtrler, DefaultInterfaceWidgetClass);
-			}
-			if (!DefaultInterfaceWidget)
-			{
-				// Something went wrong!
-				return;
-			}
-			// Add it to the viewport so the Construct() method in the UUserWidget:: is run
-			DefaultInterfaceWidget->AddToViewport();
-		}
-	}
 }
 
 void AFirstPersonCharacter::GrabObject()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Attempting to grab object!"));
-	// Send out trace to find objects in reach
-	FHitResult HitResult = GetTraceResult();
+	FHitResult hit = GetTraceResult();
 	// Deduce the actor that was hit by the trace
-	auto ActorHit = HitResult.GetActor();
-	auto PhysicsComponent = HitResult.GetComponent();
+	auto ActorHit = hit.GetActor();
+	auto PhysicsComponent = hit.GetComponent();
 	// Check if actor was detected
 	if (ActorHit)
 	{
@@ -130,7 +145,8 @@ const FVector AFirstPersonCharacter::GetRayEndPoint()
 	return RayEndPoint;
 }
 
-const FHitResult AFirstPersonCharacter::GetTraceResult()
+
+FHitResult AFirstPersonCharacter::GetTraceResult()
 {
 	// Define ray collision specifications
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, this);
