@@ -18,7 +18,7 @@ public:
 
 	// The name of an object as it should be displayed when the player hovers over it
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (BlueprintProtected = "true"))
-		FString IndicatorDisplayName;
+	FString IndicatorDisplayName;
 
 	// Variable that allows the designer to assign a mesh in the editor
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (BlueprintProtected = "true"))
@@ -42,5 +42,8 @@ public:
 	// Function that allows the character to access the object name
 	UFUNCTION()
 	FString GetIndicatorName() { return IndicatorDisplayName; }
+
+	// Handle behaviour when object is collected by the player (disable mesh and collision components etc.)
+	virtual void CollectObject();
 	
 };

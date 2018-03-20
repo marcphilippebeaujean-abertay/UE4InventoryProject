@@ -38,8 +38,16 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 	// Check if we can detect a grabable object
 	if (ACollectableObject* hitCollectable = Cast<ACollectableObject>(GetTraceResult().GetActor()))
 	{
-		UE_LOG(LogTemp, Error, TEXT("Traced a collectable object!"));
-		GrabIndicator = "Click to pick up " + hitCollectable->GetIndicatorName();
+		// Make sure we aren't holding another component
+		if (!PhysicsHandle->GrabbedComponent)
+		{
+			GrabIndicator = "Click to pick up " + hitCollectable->GetIndicatorName();
+		}
+		else
+		{
+			// Don't display indicator
+			GrabIndicator = "";
+		}
 	}
 	else
 	{
@@ -110,7 +118,7 @@ void AFirstPersonCharacter::InitActorComponents()
 
 void AFirstPersonCharacter::GrabObject()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Attempting to grab object!"));
+	// Generate hit results
 	FHitResult hit = GetTraceResult();
 	// Deduce the actor that was hit by the trace
 	auto ActorHit = hit.GetActor();
@@ -118,11 +126,21 @@ void AFirstPersonCharacter::GrabObject()
 	// Check if actor was detected
 	if (ActorHit)
 	{
-		// Check if a physics component has been detected
-		if (PhysicsComponent)
+		// Check if the object is a collectable
+		if (ACollectableObject* hitCollectable = Cast<ACollectableObject>(ActorHit))
 		{
-			// Grab component via the physics handle
-			PhysicsHandle->GrabComponentAtLocationWithRotation(PhysicsComponent, NAME_None, ActorHit->GetActorLocation(), DefaultGrabRotation);
+			// Attempt to collect the object
+			hitCollectable->CollectObject();
+			UE_LOG(LogTemp, Warning, TEXT("Collected object from %s"), *ActorHit->GetName());
+		}
+		else
+		{
+			// Otherwise, check if it's a physics object
+			if (PhysicsComponent)
+			{
+				// Grab component via the physics handle
+				PhysicsHandle->GrabComponentAtLocationWithRotation(PhysicsComponent, NAME_None, ActorHit->GetActorLocation(), DefaultGrabRotation);
+			}
 		}
 	}
 }
@@ -146,7 +164,6 @@ const FVector AFirstPersonCharacter::GetRayEndPoint()
 	return RayEndPoint;
 }
 
-
 FHitResult AFirstPersonCharacter::GetTraceResult()
 {
 	// Define ray collision specifications
@@ -161,7 +178,7 @@ FHitResult AFirstPersonCharacter::GetTraceResult()
 		// See if we hit a physics object
 		if (AActor* ActorHit = Hit.GetActor())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Name of hit Object is: %s"), *ActorHit->GetName());
+
 		}
 	}
 	return Hit;

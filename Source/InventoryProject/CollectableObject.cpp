@@ -43,3 +43,11 @@ void ACollectableObject::AssignDefaultComponents()
 	// Attach to root
 	Mesh->SetupAttachment(RootComponent);
 }
+
+void ACollectableObject::CollectObject()
+{
+	// Deactivate collision for the actor
+	this->SetActorEnableCollision(false);
+	// Hide actor from being visible while disabled
+	this->SetActorHiddenInGame(true);
+}
