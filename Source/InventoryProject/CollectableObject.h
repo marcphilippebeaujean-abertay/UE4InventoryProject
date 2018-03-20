@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/BoxComponent.h"
 #include "CollectableObject.generated.h"
 
 UCLASS()
@@ -15,20 +16,24 @@ public:
 	// Sets default values for this actor's properties
 	ACollectableObject();
 
+	// The name of an object as it should be displayed when the player hovers over it
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (BlueprintProtected = "true"))
+		FString IndicatorDisplayName;
+
+	// Variable that allows the designer to assign a mesh in the editor
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (BlueprintProtected = "true"))
+	UStaticMeshComponent* Mesh = nullptr;
+
+	// Collider used for hit detection
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Collision", Meta = (BlueprintProtected = "true"))
+	UBoxComponent* Collider = nullptr;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// The name of an object as it should be displayed when the player hovers over it
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (BlueprintProtected = "true"))
-	FString IndicatorDisplayName;
-
-	// Mesh that should be displayed in the scene
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (BlueprintProtected = "true"))
-	UStaticMesh* ObjectMesh = nullptr;
-
-	// 
+	// Function that applies variables assigned in the editor
+	void AssignDefaultComponents();
 
 public:	
 	// Called every frame

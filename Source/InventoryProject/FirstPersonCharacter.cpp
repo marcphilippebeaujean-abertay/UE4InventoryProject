@@ -38,6 +38,7 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 	// Check if we can detect a grabable object
 	if (ACollectableObject* hitCollectable = Cast<ACollectableObject>(GetTraceResult().GetActor()))
 	{
+		UE_LOG(LogTemp, Error, TEXT("Traced a collectable object!"));
 		GrabIndicator = "Click to pick up " + hitCollectable->GetIndicatorName();
 	}
 	else
