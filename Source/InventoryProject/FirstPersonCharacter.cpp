@@ -41,17 +41,20 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 		// Make sure we aren't holding another component
 		if (!PhysicsHandle->GrabbedComponent)
 		{
+			UE_LOG(LogTemp, Error, TEXT("Found collectable"));
 			GrabIndicator = "Click to pick up " + hitCollectable->GetIndicatorName();
 		}
 		else
 		{
 			// Don't display indicator
+			UE_LOG(LogTemp, Error, TEXT("Didn't find collectable"));
 			GrabIndicator = "";
 		}
 	}
 	else
 	{
 		// Otherwise, we have not hit an actor - don't display indicator
+		UE_LOG(LogTemp, Error, TEXT("Didn't find collectable"));
 		GrabIndicator = "";
 	}
 }

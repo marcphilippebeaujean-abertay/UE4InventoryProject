@@ -31,6 +31,9 @@ public:
 	UFUNCTION()
 	FString GetIndicatorName() { return IndicatorDisplayName; }
 
+	// Returns weight of item
+	int GetItemWeight() { return ItemWeight; }
+
 	// Handle behaviour when object is collected by the player (disable mesh and collision components etc.)
 	virtual void CollectObject();
 	
@@ -38,14 +41,17 @@ private:
 
 	// The name of an object as it should be displayed when the player hovers over it
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
-		FString IndicatorDisplayName;
+	FString IndicatorDisplayName;
 
 	// Variable that allows the designer to assign a mesh in the editor
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
-		UStaticMeshComponent* Mesh = nullptr;
+	UStaticMeshComponent* Mesh = nullptr;
 
 	// Collider used for hit detection
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Collision", Meta = (AllowPrivateAccess = "true"))
-		USceneComponent* SceneComp = nullptr;
+	USceneComponent* SceneComp = nullptr;
 
+	// Value that determines how much space the object takes up in the inventory
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item Values", Meta = (AllowPrivateAccess = "true"))
+	int ItemWeight = 10;
 };
