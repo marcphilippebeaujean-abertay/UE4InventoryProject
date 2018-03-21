@@ -16,18 +16,6 @@ public:
 	// Sets default values for this actor's properties
 	ACollectableObject();
 
-	// The name of an object as it should be displayed when the player hovers over it
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (BlueprintProtected = "true"))
-	FString IndicatorDisplayName;
-
-	// Variable that allows the designer to assign a mesh in the editor
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (BlueprintProtected = "true"))
-	UStaticMeshComponent* Mesh = nullptr;
-
-	// Collider used for hit detection
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Collision", Meta = (BlueprintProtected = "true"))
-	UBoxComponent* Collider = nullptr;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -46,4 +34,18 @@ public:
 	// Handle behaviour when object is collected by the player (disable mesh and collision components etc.)
 	virtual void CollectObject();
 	
+private:
+
+	// The name of an object as it should be displayed when the player hovers over it
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
+		FString IndicatorDisplayName;
+
+	// Variable that allows the designer to assign a mesh in the editor
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
+		UStaticMeshComponent* Mesh = nullptr;
+
+	// Collider used for hit detection
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Collision", Meta = (AllowPrivateAccess = "true"))
+		USceneComponent* SceneComp = nullptr;
+
 };

@@ -31,17 +31,14 @@ void ACollectableObject::Tick(float DeltaTime)
 void ACollectableObject::AssignDefaultComponents()
 {
 	// Create collider object
-	Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
+	SceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("Root Component"));
 	// Make collider object the root
-	RootComponent = Collider;
-	// Create preset collider size
-	Collider->InitBoxExtent(FVector(30, 30, 30));
-	Collider->SetCollisionProfileName(TEXT("Pawn"));
+	RootComponent = SceneComp;
 
 	// Create mesh object
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Component"));
 	// Attach to root
-	Mesh->SetupAttachment(RootComponent);
+	Mesh->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }
 
 void ACollectableObject::CollectObject()

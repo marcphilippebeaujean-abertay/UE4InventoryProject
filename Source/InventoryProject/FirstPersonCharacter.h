@@ -34,18 +34,6 @@ protected:
 	void MoveForward(float val);
 	void MoveRight(float val);
 
-	// Variable that holds the widget after it is assigned in the blue print
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI", Meta = (BlueprintProtected = "true"))
-	TSubclassOf<class UUserWidget> DefaultInterfaceWidgetClass;
-
-	// How far the ray reaches ahead of the player
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Grab", Meta = (BlueprintProtected = "true"))
-	float GrabDistance = 90.0f;
-
-	// The rotation of an object after it has been grabbed
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Grab", Meta = (BlueprintProtected = "true"))
-	FRotator DefaultGrabRotation;
-
 private:
 
 	// Interface used when player does not have the inventory open
@@ -84,6 +72,22 @@ private:
 
 	// Array that stores objects which have been collected by the player
 	TArray<ACollectableObject*> InventoryContents;
+
+	// Variable that holds the widget after it is assigned in the blue print
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class UUserWidget> DefaultInterfaceWidgetClass;
+
+	// How far the ray reaches ahead of the player
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
+	float GrabDistance = 90.0f;
+
+	// The rotation of an object after it has been grabbed
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
+	FRotator DefaultGrabRotation;
+
+	// As each collectable takes up space in the inventory, we need to set a value that dictates how much we can carry
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
+	int MaximumInventoryCapaticy = 100;
 
 public:
 
