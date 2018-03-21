@@ -52,13 +52,18 @@ private:
 	void GrabObject();
 
 	// Drop the physics object being held by the player
-	void ReleaseObject();
+	void ReleasePhysicsObject();
 
 	// Create/find dependancies
 	void InitActorComponents();
 
 	// Creates the initial interface when the game starts
 	void SetupInterface();
+
+	// Add object to the inventory
+	void AddObjToInventory(ACollectableObject* NewItem);
+
+	void DropObjFromInventory();
 
 	// Raycast dependancies
 	const FVector GetRayEndPoint();
@@ -69,6 +74,9 @@ private:
 
 	// Update the string that indicates if an object is in range of being picked up
 	FString GrabIndicator;
+
+	// Keeps track of how much capacity is left in the inventory
+	int CurCapacity;
 
 	// Array that stores objects which have been collected by the player
 	TArray<ACollectableObject*> InventoryContents;

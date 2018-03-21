@@ -34,6 +34,9 @@ public:
 	// Returns weight of item
 	int GetItemWeight() { return ItemWeight; }
 
+	// Returns the object to the scene as a collectable
+	void DropItem(FVector DropLocation);
+
 	// Handle behaviour when object is collected by the player (disable mesh and collision components etc.)
 	virtual void CollectObject();
 	

@@ -50,3 +50,15 @@ void ACollectableObject::CollectObject()
 	// Stop actor from ticking
 	this->SetActorTickEnabled(false);
 }
+
+void ACollectableObject::DropItem(FVector DropLocation)
+{
+	// Reposition the collectable to the position where it is being dropped (Player's position? Near a lootbox?)
+	this->SetActorLocation(DropLocation);
+	// Activate collision for the actor
+	this->SetActorEnableCollision(true);
+	// Make actor visible
+	this->SetActorHiddenInGame(false);
+	// Actor should tick
+	this->SetActorTickEnabled(true);
+}

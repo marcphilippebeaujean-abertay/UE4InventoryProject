@@ -19,6 +19,8 @@ void AFirstPersonCharacter::BeginPlay()
 	Super::BeginPlay();
 	// Setup interface after the game has started
 	SetupInterface();
+	// Initialise inventory capacity
+	CurCapacity = MaximumInventoryCapaticy;
 }
 
 // Called every frame
@@ -41,20 +43,18 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 		// Make sure we aren't holding another component
 		if (!PhysicsHandle->GrabbedComponent)
 		{
-			UE_LOG(LogTemp, Error, TEXT("Found collectable"));
+			// Show indicator that tells the player what they can pick up
 			GrabIndicator = "Click to pick up " + hitCollectable->GetIndicatorName();
 		}
 		else
 		{
 			// Don't display indicator
-			UE_LOG(LogTemp, Error, TEXT("Didn't find collectable"));
 			GrabIndicator = "";
 		}
 	}
 	else
 	{
 		// Otherwise, we have not hit an actor - don't display indicator
-		UE_LOG(LogTemp, Error, TEXT("Didn't find collectable"));
 		GrabIndicator = "";
 	}
 }
@@ -72,7 +72,9 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	InputComponent->BindAxis("LookUp", this, &AFirstPersonCharacter::AddControllerPitchInput);
 	// Bind input actions related to grabbing objects
 	InputComponent->BindAction("Grab", IE_Pressed, this, &AFirstPersonCharacter::GrabObject);
-	InputComponent->BindAction("Grab", IE_Released, this, &AFirstPersonCharacter::ReleaseObject);
+	InputComponent->BindAction("Grab", IE_Released, this, &AFirstPersonCharacter::ReleasePhysicsObject);
+
+	InputComponent->BindAction("DropObject", IE_Pressed, this, &AFirstPersonCharacter::DropObjFromInventory);
 }
 
 void AFirstPersonCharacter::SetupInterface()
@@ -130,11 +132,12 @@ void AFirstPersonCharacter::GrabObject()
 	if (ActorHit)
 	{
 		// Check if the object is a collectable
-		if (ACollectableObject* hitCollectable = Cast<ACollectableObject>(ActorHit))
+		if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
 		{
 			// Attempt to collect the object
-			hitCollectable->CollectObject();
-			UE_LOG(LogTemp, Warning, TEXT("Collected object from %s"), *ActorHit->GetName());
+			HitCollectable->CollectObject();
+			// Add the traced object to the inventory
+			AddObjToInventory(HitCollectable);
 		}
 		else
 		{
@@ -148,7 +151,37 @@ void AFirstPersonCharacter::GrabObject()
 	}
 }
 
-void AFirstPersonCharacter::ReleaseObject()
+void AFirstPersonCharacter::AddObjToInventory(ACollectableObject* NewItem)
+{
+	// Check if the item has not been destroyed
+	if (NewItem != nullptr)
+	{
+		// Check if the inventory capacity wont exceed the maximum if the item is added
+		if (0 < (CurCapacity - NewItem->GetItemWeight()))
+		{
+			// Subtract the item's weight from the current capacity 
+			CurCapacity -= NewItem->GetItemWeight();
+			// Add the item to the inventory array
+			InventoryContents.Add(NewItem);
+			UE_LOG(LogTemp, Error, TEXT("Added %s to inventory!"), *NewItem->GetName());
+		}
+	}
+}
+
+void AFirstPersonCharacter::DropObjFromInventory()
+{
+	// See if object is available
+	if (InventoryContents[0] != nullptr)
+	{
+		// Drop item at player's location
+		InventoryContents[0]->DropItem(GetActorLocation() + FVector(0, 0, 10));
+		UE_LOG(LogTemp, Error, TEXT("Removing %s from inventory!"), *InventoryContents[0]->GetName());
+		// Remove item from the inventory
+		InventoryContents.Pop();
+	}
+}
+
+void AFirstPersonCharacter::ReleasePhysicsObject()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Releasing object!"));
 	// Release component
