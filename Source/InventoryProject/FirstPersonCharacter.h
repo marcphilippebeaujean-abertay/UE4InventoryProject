@@ -10,6 +10,7 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Blueprint/UserWidget.h"
+#include "Containers/Array.h"
 #include "FirstPersonCharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInterfaceUpdate);
@@ -20,10 +21,12 @@ class INVENTORYPROJECT_API AFirstPersonCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
+
 	// Sets default values for this character's properties
 	AFirstPersonCharacter();
 
 protected:
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -44,6 +47,7 @@ protected:
 	FRotator DefaultGrabRotation;
 
 private:
+
 	// Interface used when player does not have the inventory open
 	UPROPERTY()
 	UUserWidget* DefaultInterfaceWidget = nullptr;
@@ -78,7 +82,11 @@ private:
 	// Update the string that indicates if an object is in range of being picked up
 	FString GrabIndicator;
 
+	// Array that stores objects which have been collected by the player
+	TArray<ACollectableObject*> InventoryContents;
+
 public:
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -88,6 +96,7 @@ public:
 	// Function that allows the UI widget to access the string
 	UFUNCTION(BlueprintPure)
 	FString GetGrabIndicator() { return GrabIndicator; }
+
 private:
 
 };

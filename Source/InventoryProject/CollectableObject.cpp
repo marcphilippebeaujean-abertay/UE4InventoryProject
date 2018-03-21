@@ -50,4 +50,6 @@ void ACollectableObject::CollectObject()
 	this->SetActorEnableCollision(false);
 	// Hide actor from being visible while disabled
 	this->SetActorHiddenInGame(true);
+	// Stop actor from ticking
+	this->SetActorTickEnabled(false);
 }
