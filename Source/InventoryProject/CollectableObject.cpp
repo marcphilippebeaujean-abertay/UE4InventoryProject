@@ -30,13 +30,10 @@ void ACollectableObject::Tick(float DeltaTime)
 
 void ACollectableObject::AssignDefaultComponents()
 {
-	// Create collider object
-	SceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("Root Component"));
-	// Make collider object the root
-	RootComponent = SceneComp;
-
 	// Create mesh object
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Component"));
+	// Make mesh object the root (since it contains collision, physics, etc.)
+	RootComponent = Mesh;
 	// Attach to root
 	Mesh->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }

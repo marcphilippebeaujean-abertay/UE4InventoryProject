@@ -50,10 +50,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh = nullptr;
 
-	// Collider used for hit detection
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Collision", Meta = (AllowPrivateAccess = "true"))
-	USceneComponent* SceneComp = nullptr;
-
 	// Value that determines how much space the object takes up in the inventory
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item Values", Meta = (AllowPrivateAccess = "true"))
 	int ItemWeight = 10;
