@@ -177,7 +177,7 @@ void AFirstPersonCharacter::DropObjFromInventory()
 		InventoryContents[0]->DropItem(GetActorLocation() + FVector(0, 0, 10));
 		UE_LOG(LogTemp, Error, TEXT("Removing %s from inventory!"), *InventoryContents[0]->GetName());
 		// Remove item from the inventory
-		InventoryContents.Pop();
+		InventoryContents.Remove(InventoryContents[0]);
 	}
 }
 
