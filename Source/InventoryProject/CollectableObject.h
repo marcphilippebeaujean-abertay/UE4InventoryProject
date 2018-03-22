@@ -43,9 +43,13 @@ public:
 	
 private:
 
-	// The name of an object as it should be displayed when the player hovers over it
+	// The name of an object as it should be displayed when the player hovers over it and in the inventory UI
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	FString IndicatorDisplayName;
+
+	// Icon that should be displayed to represent the item in the inventory
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
+	UTexture2D* Thumbnail = nullptr;
 
 	// Variable that allows the designer to assign a mesh in the editor
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
