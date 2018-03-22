@@ -98,6 +98,10 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
 	int MaximumInventoryCapaticy = 100;
 
+	// Distance away from that the player, that dropped items are reinstantiated
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
+	int DropDistance = 10;
+
 	bool LookingAtFloor();
 
 public:

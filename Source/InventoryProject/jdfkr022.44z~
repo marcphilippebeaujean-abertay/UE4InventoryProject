@@ -174,13 +174,13 @@ void AFirstPersonCharacter::DropObjFromInventory()
 	if (InventoryContents.Num() > 0)
 	{
 		// See if object is available
-		if (InventoryContents[0] != nullptr)
+		if (InventoryContents.FindLast(ACollectableObject*))
 		{
 			// Drop item at player's location
-			InventoryContents[0]->DropItem(PlayerViewPointLocation + GetActorForwardVector() * DropDistance);
+			InventoryContents[0]->DropItem(GetActorLocation());
 			UE_LOG(LogTemp, Error, TEXT("Removing %s from inventory!"), *InventoryContents[0]->GetName());
-			// Remove corresponding item from the array
-			InventoryContents.RemoveAt(0);
+			// Remove item from the inventory
+			InventoryContents.Remove(InventoryContents[0]);
 		}
 	}
 	else
