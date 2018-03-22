@@ -183,7 +183,6 @@ void AFirstPersonCharacter::DropObjFromInventory()
 
 void AFirstPersonCharacter::ReleasePhysicsObject()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Releasing object!"));
 	// Release component
 	PhysicsHandle->ReleaseComponent();
 }
@@ -194,16 +193,11 @@ const FVector AFirstPersonCharacter::GetRayEndPoint()
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
 	// Temporary variable that stores the grab distance
 	float FinalGrabDistance = GrabDistance;
-	// Check if the player has grabbed a component
-	if (!PhysicsHandle->GrabbedComponent)
+	// Check if the player is looking at the floor beneath them
+	if (LookingAtFloor())
 	{
-		// Check if the player is looking at the floor beneath them
-		if (LookingAtFloor())
-		{
-			// To simulate the player being able to crouch down and grab objects beneath them, the grab distance is multiplied
-			FinalGrabDistance *= 3;
-			UE_LOG(LogTemp, Error, TEXT("Long grab distance used!"));
-		}
+		// To simulate the player being able to crouch down and grab objects beneath them, the grab distance is multiplied
+		FinalGrabDistance *= 2;
 	}
 	// Create the ray end point
 	FVector RayEndPoint = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * FinalGrabDistance;
