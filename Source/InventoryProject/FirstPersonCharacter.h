@@ -68,6 +68,7 @@ private:
 	// Raycast dependancies
 	const FVector GetRayEndPoint();
 	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
 
 	// Return hit from raycast
 	FHitResult GetTraceResult();
@@ -96,6 +97,8 @@ private:
 	// As each collectable takes up space in the inventory, we need to set a value that dictates how much we can carry
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
 	int MaximumInventoryCapaticy = 100;
+
+	bool LookingAtFloor();
 
 public:
 

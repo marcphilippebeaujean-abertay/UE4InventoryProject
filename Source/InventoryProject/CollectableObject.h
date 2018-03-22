@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "CollectableObject.generated.h"
 
 UCLASS()

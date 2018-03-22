@@ -190,12 +190,23 @@ void AFirstPersonCharacter::ReleasePhysicsObject()
 
 const FVector AFirstPersonCharacter::GetRayEndPoint()
 {
-	// Get player view point on tick
-	FRotator PlayerViewPointRotation;
 	// Strange syntax - the parameters past into the function are manipulated (returned?)
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
+	// Temporary variable that stores the grab distance
+	float FinalGrabDistance = GrabDistance;
+	// Check if the player has grabbed a component
+	if (!PhysicsHandle->GrabbedComponent)
+	{
+		// Check if the player is looking at the floor beneath them
+		if (LookingAtFloor())
+		{
+			// To simulate the player being able to crouch down and grab objects beneath them, the grab distance is multiplied
+			FinalGrabDistance *= 3;
+			UE_LOG(LogTemp, Error, TEXT("Long grab distance used!"));
+		}
+	}
 	// Create the ray end point
-	FVector RayEndPoint = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * GrabDistance;
+	FVector RayEndPoint = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * FinalGrabDistance;
 
 	return RayEndPoint;
 }
@@ -246,5 +257,18 @@ void AFirstPersonCharacter::MoveRight(float val)
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
 		// add movement in that direction
 		AddMovementInput(Direction, val);
+	}
+}
+
+bool AFirstPersonCharacter::LookingAtFloor()
+{
+	// Check the view point pitch rotation and compare to angles to determine if player is looking down
+	if (PlayerViewPointRotation.Pitch > 270 && PlayerViewPointRotation.Pitch < 290)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
