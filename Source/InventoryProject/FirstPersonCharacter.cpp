@@ -294,8 +294,11 @@ void AFirstPersonCharacter::ToggleInventory()
 	{
 		// Enable/disable mouse cursor to navigate the inventory
 		PlCtrler->bShowMouseCursor = bInventoryOpen;
+		// Enable/disable UI navigation
 		PlCtrler->bEnableClickEvents = bInventoryOpen;
 		PlCtrler->bEnableMouseOverEvents = bInventoryOpen;
+		// Stop/enable player camera rotation
+		PlCtrler->SetIgnoreLookInput(bInventoryOpen);
 	}
 	// Find inventory widget
 	UWidget* InventoryWidget = DefaultInterfaceWidget->GetWidgetFromName(FName("Inventory"));
@@ -312,3 +315,4 @@ void AFirstPersonCharacter::ToggleInventory()
 		}
 	}
 }
+
