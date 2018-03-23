@@ -105,6 +105,10 @@ private:
 	// Check to see if camera is angled at the ground
 	bool LookingAtFloor();
 
+	// Function that toggles the inventory, as well as the player's ability to see the cursor
+	void ToggleInventory();
+	bool bInventoryOpen = false;
+
 public:
 
 	// Called every frame
@@ -122,7 +126,7 @@ public:
 	void UpdateInventoryWidget();
 
 	// Delegate used to broadcast to the blueprint
-	UPROPERTY(BlueprintAssignable, Category = "Inventory")
+	UPROPERTY(BlueprintAssignable, Category = "UI Events")
 	FInventoryInterfaceUpdate OnUpdateInventory;
 
 private:

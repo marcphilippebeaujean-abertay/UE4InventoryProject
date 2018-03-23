@@ -73,8 +73,8 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	// Bind input actions related to grabbing objects
 	InputComponent->BindAction("Grab", IE_Pressed, this, &AFirstPersonCharacter::GrabObject);
 	InputComponent->BindAction("Grab", IE_Released, this, &AFirstPersonCharacter::ReleasePhysicsObject);
-
-	InputComponent->BindAction("DropObject", IE_Pressed, this, &AFirstPersonCharacter::DropObjFromInventory);
+	// Inventory related input
+	InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &AFirstPersonCharacter::ToggleInventory); 
 }
 
 void AFirstPersonCharacter::SetupInterface()
@@ -284,4 +284,31 @@ void AFirstPersonCharacter::UpdateInventoryWidget()
 {
 	// "Broadcast" our inventory - which creates a reference for the array that is accessible in blueprints
 	OnUpdateInventory.Broadcast(InventoryContents);
+}
+
+void AFirstPersonCharacter::ToggleInventory()
+{
+	// Toggle the inventory bool
+	bInventoryOpen = !bInventoryOpen;
+	if (PlCtrler)
+	{
+		// Enable/disable mouse cursor to navigate the inventory
+		PlCtrler->bShowMouseCursor = bInventoryOpen;
+		PlCtrler->bEnableClickEvents = bInventoryOpen;
+		PlCtrler->bEnableMouseOverEvents = bInventoryOpen;
+	}
+	// Find inventory widget
+	UWidget* InventoryWidget = DefaultInterfaceWidget->GetWidgetFromName(FName("Inventory"));
+	if (InventoryWidget)
+	{
+		// Determine if the inventory should be visible or not
+		if (bInventoryOpen)
+		{
+			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
+		}
+		else
+		{
+			InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
 }
