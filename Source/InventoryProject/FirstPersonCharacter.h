@@ -110,6 +110,9 @@ private:
 	void ToggleInventory();
 	bool bInventoryOpen = false;
 
+	// Displays the bulk of the inventory
+	UWidget* InventoryWidget = nullptr;
+
 public:
 
 	// Called every frame

@@ -101,6 +101,8 @@ void AFirstPersonCharacter::SetupInterface()
 			DefaultInterfaceWidget->AddToViewport();
 		}
 	}
+	// Find main inventory widget
+	InventoryWidget = DefaultInterfaceWidget->GetWidgetFromName(FName("Inventory"));
 }
 
 void AFirstPersonCharacter::InitActorComponents()
@@ -300,8 +302,6 @@ void AFirstPersonCharacter::ToggleInventory()
 		// Enable/disable player camera rotation
 		PlCtrler->SetIgnoreLookInput(bInventoryOpen);
 	}
-	// Find inventory widget
-	UWidget* InventoryWidget = DefaultInterfaceWidget->GetWidgetFromName(FName("Inventory"));
 	if (InventoryWidget)
 	{
 		// Determine if the inventory should be visible or not
