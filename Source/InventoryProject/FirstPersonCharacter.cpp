@@ -121,81 +121,6 @@ void AFirstPersonCharacter::InitActorComponents()
 	PlCtrler = UGameplayStatics::GetPlayerController(this->GetWorld(), 0);
 }
 
-void AFirstPersonCharacter::GrabObject()
-{
-	// Generate hit results
-	FHitResult hit = GetTraceResult();
-	// Deduce the actor that was hit by the trace
-	auto ActorHit = hit.GetActor();
-	auto PhysicsComponent = hit.GetComponent();
-	// Check if actor was detected
-	if (ActorHit)
-	{
-		// Check if the object is a collectable
-		if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
-		{
-			// Attempt to collect the object
-			HitCollectable->CollectObject();
-			// Add the traced object to the inventory
-			AddObjToInventory(HitCollectable);
-		}
-		else
-		{
-			// Otherwise, check if it's a physics object
-			if (PhysicsComponent)
-			{
-				// Grab component via the physics handle
-				PhysicsHandle->GrabComponentAtLocationWithRotation(PhysicsComponent, NAME_None, ActorHit->GetActorLocation(), DefaultGrabRotation);
-			}
-		}
-	}
-}
-
-void AFirstPersonCharacter::AddObjToInventory(ACollectableObject* NewItem)
-{
-	// Check if the item has not been destroyed
-	if (NewItem != nullptr)
-	{
-		// Check if the inventory capacity wont exceed the maximum if the item is added
-		if (0 < (CurCapacity - NewItem->GetItemWeight()))
-		{
-			// Subtract the item's weight from the current capacity 
-			CurCapacity -= NewItem->GetItemWeight();
-			// Add the item to the inventory array
-			InventoryContents.Add(NewItem);
-			UE_LOG(LogTemp, Error, TEXT("Added %s to inventory, available weight is now %d!"), *NewItem->GetName(), CurCapacity);
-		}
-	}
-}
-
-void AFirstPersonCharacter::DropObjFromInventory()
-{
-	// Check if inventory is not empty
-	if (InventoryContents.Num() > 0)
-	{
-		// See if object is available
-		if (InventoryContents[0] != nullptr)
-		{
-			// Drop item at player's location
-			InventoryContents[0]->DropItem(PlayerViewPointLocation + GetActorForwardVector() * DropDistance);
-			UE_LOG(LogTemp, Error, TEXT("Removing %s from inventory!"), *InventoryContents[0]->GetName());
-			// Remove corresponding item from the array
-			InventoryContents.RemoveAt(0);
-		}
-	}
-	else
-	{
-		// No items in the inventory - do nothing
-		UE_LOG(LogTemp, Error, TEXT("Inventory is empty!"));
-	}
-}
-
-void AFirstPersonCharacter::ReleasePhysicsObject()
-{
-	// Release component
-	PhysicsHandle->ReleaseComponent();
-}
-
 const FVector AFirstPersonCharacter::GetRayEndPoint()
 {
 	// Strange syntax - the parameters past into the function are manipulated (returned?)
@@ -274,4 +199,89 @@ bool AFirstPersonCharacter::LookingAtFloor()
 	{
 		return false;
 	}
+}
+
+void AFirstPersonCharacter::GrabObject()
+{
+	// Generate hit results
+	FHitResult hit = GetTraceResult();
+	// Deduce the actor that was hit by the trace
+	auto ActorHit = hit.GetActor();
+	auto PhysicsComponent = hit.GetComponent();
+	// Check if actor was detected
+	if (ActorHit)
+	{
+		// Check if the object is a collectable
+		if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
+		{
+			// Attempt to collect the object
+			HitCollectable->CollectObject();
+			// Add the traced object to the inventory
+			AddObjToInventory(HitCollectable);
+		}
+		else
+		{
+			// Otherwise, check if it's a physics object
+			if (PhysicsComponent)
+			{
+				// Grab component via the physics handle
+				PhysicsHandle->GrabComponentAtLocationWithRotation(PhysicsComponent, NAME_None, ActorHit->GetActorLocation(), DefaultGrabRotation);
+			}
+		}
+	}
+}
+
+void AFirstPersonCharacter::ReleasePhysicsObject()
+{
+	// Release component
+	PhysicsHandle->ReleaseComponent();
+}
+
+void AFirstPersonCharacter::AddObjToInventory(ACollectableObject* NewItem)
+{
+	// Check if the item has not been destroyed
+	if (NewItem != nullptr)
+	{
+		// Check if the inventory capacity wont exceed the maximum if the item is added
+		if (0 < (CurCapacity - NewItem->GetItemWeight()))
+		{
+			// Subtract the item's weight from the current capacity 
+			CurCapacity -= NewItem->GetItemWeight();
+			// Add the item to the inventory array
+			InventoryContents.Add(NewItem);
+			UE_LOG(LogTemp, Error, TEXT("Added %s to inventory, available weight is now %d!"), *NewItem->GetName(), CurCapacity);
+			// We added an object to the inventory - let's update the UI
+			UpdateInventoryWidget();
+		}
+	}
+}
+
+void AFirstPersonCharacter::DropObjFromInventory()
+{
+	// Check if inventory is not empty
+	if (InventoryContents.Num() > 0)
+	{
+		// See if object is available
+		if (InventoryContents[0] != nullptr)
+		{
+			// Drop item at player's location
+			InventoryContents[0]->DropItem(PlayerViewPointLocation + GetActorForwardVector() * DropDistance);
+			UE_LOG(LogTemp, Error, TEXT("Removing %s from inventory!"), *InventoryContents[0]->GetName());
+			// Remove corresponding item from the array
+			InventoryContents.RemoveAt(0);
+			// We added an object to the inventory - let's update the UI
+			UpdateInventoryWidget();
+		}
+	}
+	else
+	{
+		// No items in the inventory - do nothing
+		UE_LOG(LogTemp, Error, TEXT("Inventory is empty!"));
+	}
+}
+
+void AFirstPersonCharacter::UpdateInventoryWidget()
+{
+	// "Broadcast" our inventory - which creates a reference for the array that is accessible in blueprints
+	OnUpdateInventory.Broadcast(InventoryContents);
 }

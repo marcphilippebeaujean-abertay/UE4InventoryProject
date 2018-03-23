@@ -13,7 +13,7 @@
 #include "Containers/Array.h"
 #include "FirstPersonCharacter.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInterfaceUpdate, TArray<ACollectableObject*>&, InventoryContents);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryInterfaceUpdate, const TArray<ACollectableObject*>&, InventoryContents);
 
 UCLASS()
 class INVENTORYPROJECT_API AFirstPersonCharacter : public ACharacter
@@ -102,6 +102,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
 	int DropDistance = 10;
 
+	// Check to see if camera is angled at the ground
 	bool LookingAtFloor();
 
 public:
@@ -117,8 +118,12 @@ public:
 	FString GetGrabIndicator() { return GrabIndicator; }
 
 	// Updates the inventory by casting our inventory array to the widget blueprint
-	UFUNCTION(BlueprintPure)
-		void UpdateInventoryWidget();
+	UFUNCTION(BlueprintCallable)
+	void UpdateInventoryWidget();
+
+	// Delegate used to broadcast to the blueprint
+	UPROPERTY(BlueprintAssignable, Category = "Inventory")
+	FInventoryInterfaceUpdate OnUpdateInventory;
 
 private:
 
