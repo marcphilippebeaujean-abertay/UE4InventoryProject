@@ -297,7 +297,7 @@ void AFirstPersonCharacter::ToggleInventory()
 		// Enable/disable UI navigation
 		PlCtrler->bEnableClickEvents = bInventoryOpen;
 		PlCtrler->bEnableMouseOverEvents = bInventoryOpen;
-		// Stop/enable player camera rotation
+		// Enable/disable player camera rotation
 		PlCtrler->SetIgnoreLookInput(bInventoryOpen);
 	}
 	// Find inventory widget

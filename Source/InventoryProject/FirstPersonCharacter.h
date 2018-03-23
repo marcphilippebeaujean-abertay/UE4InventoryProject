@@ -63,6 +63,7 @@ private:
 	// Add object to the inventory
 	void AddObjToInventory(ACollectableObject* NewItem);
 
+	// Remove item from inventory and spawn it into the world
 	void DropObjFromInventory();
 
 	// Raycast dependancies
