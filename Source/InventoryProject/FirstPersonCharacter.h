@@ -13,7 +13,7 @@
 #include "Containers/Array.h"
 #include "FirstPersonCharacter.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInterfaceUpdate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInterfaceUpdate, TArray<ACollectableObject*>&, InventoryContents);
 
 UCLASS()
 class INVENTORYPROJECT_API AFirstPersonCharacter : public ACharacter
@@ -115,6 +115,10 @@ public:
 	// Function that allows the UI widget to access the string
 	UFUNCTION(BlueprintPure)
 	FString GetGrabIndicator() { return GrabIndicator; }
+
+	// Updates the inventory by casting our inventory array to the widget blueprint
+	UFUNCTION(BlueprintPure)
+		void UpdateInventoryWidget();
 
 private:
 
