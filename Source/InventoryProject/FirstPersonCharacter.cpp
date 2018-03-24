@@ -21,6 +21,8 @@ void AFirstPersonCharacter::BeginPlay()
 	SetupInterface();
 	// Initialise inventory capacity
 	CurCapacity = MaximumInventoryCapaticy;
+	// Initialise the inventory array
+	InitInventory();
 }
 
 // Called every frame
@@ -123,6 +125,18 @@ void AFirstPersonCharacter::InitActorComponents()
 	PlCtrler = UGameplayStatics::GetPlayerController(this->GetWorld(), 0);
 }
 
+void AFirstPersonCharacter::InitInventory()
+{
+	// Check if we need to add item slots
+	while (InventoryContents.Num() < MaxItemSlots)
+	{
+		// If so, add the emtpy slot to the inventory
+		InventoryContents.Add(EmtpySlotItem);
+	}
+	// Indicate that the inventory needs to be updated
+	OnUpdateInventory.Broadcast(InventoryContents);
+}
+
 const FVector AFirstPersonCharacter::GetRayEndPoint()
 {
 	// Strange syntax - the parameters past into the function are manipulated (returned?)
@@ -216,8 +230,6 @@ void AFirstPersonCharacter::GrabObject()
 		// Check if the object is a collectable
 		if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
 		{
-			// Attempt to collect the object
-			HitCollectable->CollectObject();
 			// Add the traced object to the inventory
 			AddObjToInventory(HitCollectable);
 		}
@@ -247,13 +259,25 @@ void AFirstPersonCharacter::AddObjToInventory(ACollectableObject* NewItem)
 		// Check if the inventory capacity wont exceed the maximum if the item is added
 		if (0 < (CurCapacity - NewItem->GetItemWeight()))
 		{
-			// Subtract the item's weight from the current capacity 
-			CurCapacity -= NewItem->GetItemWeight();
-			// Add the item to the inventory array
-			InventoryContents.Add(NewItem);
-			UE_LOG(LogTemp, Error, TEXT("Added %s to inventory, available weight is now %d!"), *NewItem->GetName(), CurCapacity);
-			// We added an object to the inventory - let's update the UI
-			UpdateInventoryWidget();
+			// Loop through the array, trying to find an empty slot
+			for (int i = 0; i < InventoryContents.Num(); i++)
+			{
+				// If we found an empty slot...
+				if (InventoryContents[i] == EmtpySlotItem)
+				{
+					// Remove object from the scene
+					NewItem->CollectObject();
+					// Subtract the item's weight from the current capacity 
+					CurCapacity -= NewItem->GetItemWeight();
+					// Add the item to the inventory array
+					InventoryContents[i] = NewItem;
+					// We added an object to the inventory - let's update the UI
+					UpdateInventoryWidget();
+					// Break fromt the loop since the operatin is complete
+					UE_LOG(LogTemp, Error, TEXT("Added %s to inventory, available weight is now %d!"), *NewItem->GetName(), CurCapacity);
+					break;
+				}
+			}
 		}
 	}
 }
@@ -286,6 +310,16 @@ void AFirstPersonCharacter::UpdateInventoryWidget()
 {
 	// "Broadcast" our inventory - which creates a reference for the array that is accessible in blueprints
 	OnUpdateInventory.Broadcast(InventoryContents);
+}
+
+void AFirstPersonCharacter::UpdateQuickAccessWidget()
+{
+
+}
+
+void AFirstPersonCharacter::SwitchItemSlots(int NewSlot, int CurSlot)
+{
+
 }
 
 void AFirstPersonCharacter::ToggleInventory()

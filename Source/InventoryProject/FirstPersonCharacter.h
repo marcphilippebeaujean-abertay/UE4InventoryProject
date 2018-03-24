@@ -103,6 +103,17 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
 	int DropDistance = 10;
 
+	// Maximum number of different classes that the inventory can hold - needs to be synchronised with the UI
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
+	int MaxItemSlots = 10;
+
+	// Item that is used for empty slots in the inventory - makes it easier to switch between item slots and allows for more customisation by the designer
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
+	ACollectableObject* EmtpySlotItem = nullptr;
+
+	// Fills the inventory with empty slot items
+	void InitInventory();
+
 	// Check to see if camera is angled at the ground
 	bool LookingAtFloor();
 
@@ -129,9 +140,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateInventoryWidget();
 
-	// Delegate used to broadcast to the blueprint
+	// Updates the quick access UI widget
+	UFUNCTION(BlueprintCallable)
+	void UpdateQuickAccessWidget();
+
+	// Function that is called when player drags an item to a new slot
+	UFUNCTION(BlueprintCallable)
+	void SwitchItemSlots(int NewSlot, int CurSlot);
+
+	// Delegate used to broadcast to the blueprint that theinvneotyr has been updated
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")
 	FInventoryInterfaceUpdate OnUpdateInventory;
+
+	// Delegate used to broadcast to the blueprint
+	UPROPERTY(BlueprintAssignable, Category = "UI Events")
+	FInventoryInterfaceUpdate OnUpdateQuickAccess;
 
 private:
 
