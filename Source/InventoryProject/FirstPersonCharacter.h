@@ -87,6 +87,10 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class UUserWidget> DefaultInterfaceWidgetClass;
 
+	// Item that is used for empty slots in the inventory - makes it easier to switch between item slots and allows for more customisation by the designer
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, BlueprintReadWrite, Category = "Inventory")
+	TSubclassOf<ACollectableObject> EmptySlot;
+
 	// How far the ray reaches ahead of the player
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	float GrabDistance = 90.0f;
@@ -106,10 +110,6 @@ private:
 	// Maximum number of different classes that the inventory can hold - needs to be synchronised with the UI
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
 	int MaxItemSlots = 10;
-
-	// Item that is used for empty slots in the inventory - makes it easier to switch between item slots and allows for more customisation by the designer
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
-	ACollectableObject* EmtpySlotItem = nullptr;
 
 	// Fills the inventory with empty slot items
 	void InitInventory();

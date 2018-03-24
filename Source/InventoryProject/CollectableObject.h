@@ -56,6 +56,10 @@ private:
 	UStaticMeshComponent* Mesh = nullptr;
 
 	// Value that determines how much space the object takes up in the inventory
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item Values", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
 	int ItemWeight = 10;
+
+	// Specifies if the item can be dragged in the inventory
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
+	bool CanBeDragged = true;
 };

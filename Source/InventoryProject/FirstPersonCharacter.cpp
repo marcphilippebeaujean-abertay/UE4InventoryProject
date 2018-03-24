@@ -102,6 +102,10 @@ void AFirstPersonCharacter::SetupInterface()
 			// Add it to the viewport so the Construct() method in the UUserWidget:: is run
 			DefaultInterfaceWidget->AddToViewport();
 		}
+		else
+		{
+			return;
+		}
 	}
 	// Find main inventory widget
 	InventoryWidget = DefaultInterfaceWidget->GetWidgetFromName(FName("Inventory"));
@@ -130,8 +134,9 @@ void AFirstPersonCharacter::InitInventory()
 	// Check if we need to add item slots
 	while (InventoryContents.Num() < MaxItemSlots)
 	{
+		ACollectableObject* itemSlot = EmptySlot;
 		// If so, add the emtpy slot to the inventory
-		InventoryContents.Add(EmtpySlotItem);
+		InventoryContents.Add(EmptySlot);
 	}
 	// Indicate that the inventory needs to be updated
 	OnUpdateInventory.Broadcast(InventoryContents);
@@ -263,7 +268,7 @@ void AFirstPersonCharacter::AddObjToInventory(ACollectableObject* NewItem)
 			for (int i = 0; i < InventoryContents.Num(); i++)
 			{
 				// If we found an empty slot...
-				if (InventoryContents[i] == EmtpySlotItem)
+				if (InventoryContents[i] == EmptySlot)
 				{
 					// Remove object from the scene
 					NewItem->CollectObject();
