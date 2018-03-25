@@ -33,7 +33,7 @@ public:
 	FString GetIndicatorName() { return IndicatorDisplayName; }
 
 	// Returns weight of item
-	int GetItemWeight() { return ItemWeight; }
+	int GetItemWeight() { return ItemWeight; }https://www.facebook.com/
 
 	// Returns the object to the scene as a collectable
 	void DropItem(FVector DropLocation);
@@ -41,6 +41,10 @@ public:
 	// Handle behaviour when object is collected by the player (disable mesh and collision components etc.)
 	virtual void CollectObject();
 	
+	// Used to make distinctions between empty slots and normal items in the blueprints script
+	UFUNCTION(BlueprintCallable)
+	bool IsEmptySlot() { return bEmptySlot; }
+
 private:
 
 	// The name of an object as it should be displayed when the player hovers over it and in the inventory UI
@@ -61,5 +65,5 @@ private:
 
 	// Specifies if the item can be dragged in the inventory
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
-	bool CanBeDragged = true;
+	bool bEmptySlot = false;
 };

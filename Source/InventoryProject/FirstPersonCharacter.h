@@ -64,7 +64,7 @@ private:
 	void AddObjToInventory(ACollectableObject* NewItem);
 
 	// Remove item from inventory and spawn it into the world
-	void DropObjFromInventory();
+	void DropObjFromInventory(int ItemID);
 
 	// Raycast dependancies
 	const FVector GetRayEndPoint();
@@ -147,7 +147,7 @@ public:
 
 	// Function that is called when player drags an item to a new slot
 	UFUNCTION(BlueprintCallable)
-	void SwitchItemSlots(int NewSlot, int CurSlot);
+	void SwitchItemSlots(int FirstItem, int SecondItem);
 
 	// Delegate used to broadcast to the blueprint that theinvneotyr has been updated
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")

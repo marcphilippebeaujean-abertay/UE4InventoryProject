@@ -297,19 +297,21 @@ void AFirstPersonCharacter::AddObjToInventory(ACollectableObject* NewItem)
 	}
 }
 
-void AFirstPersonCharacter::DropObjFromInventory()
+void AFirstPersonCharacter::DropObjFromInventory(int ItemID)
 {
 	// Check if inventory is not empty
 	if (InventoryContents.Num() > 0)
 	{
 		// See if object is available
-		if (InventoryContents[0] != nullptr)
+		if (InventoryContents[ItemID] != nullptr && InventoryContents[ItemID] != EmptySlot)
 		{
 			// Drop item at player's location
-			InventoryContents[0]->DropItem(PlayerViewPointLocation + GetActorForwardVector() * DropDistance);
+			InventoryContents[ItemID]->DropItem(PlayerViewPointLocation + GetActorForwardVector() * DropDistance);
 			UE_LOG(LogTemp, Error, TEXT("Removing %s from inventory!"), *InventoryContents[0]->GetName());
 			// Remove corresponding item from the array
-			InventoryContents.RemoveAt(0);
+			InventoryContents.RemoveAt(ItemID);
+			// Add empty slot to replace the removed item
+			InventoryContents.Insert(EmptySlot, ItemID);
 			// We added an object to the inventory - let's update the UI
 			UpdateInventoryWidget();
 		}
@@ -329,12 +331,15 @@ void AFirstPersonCharacter::UpdateInventoryWidget()
 
 void AFirstPersonCharacter::UpdateQuickAccessWidget()
 {
-
+	
 }
 
-void AFirstPersonCharacter::SwitchItemSlots(int NewSlot, int CurSlot)
+void AFirstPersonCharacter::SwitchItemSlots(int FirstItem, int SecondItem)
 {
-
+	// Swap between the items in the inventory
+	InventoryContents.Swap(FirstItem, SecondItem);
+	// Update the inventory visuals
+	UpdateInventoryWidget();
 }
 
 void AFirstPersonCharacter::ToggleInventory()
