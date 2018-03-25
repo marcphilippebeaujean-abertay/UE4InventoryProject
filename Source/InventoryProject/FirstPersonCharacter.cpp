@@ -127,15 +127,20 @@ void AFirstPersonCharacter::InitActorComponents()
 	}
 	// Get player controller from the world - since it is a one player game, ID will be 0
 	PlCtrler = UGameplayStatics::GetPlayerController(this->GetWorld(), 0);
-	// Spawn an empty slot object into the world, so that we can reference it
-	if (EmptySlot = Cast<ACollectableObject>(this->GetWorld()->SpawnActor(EmptySlotClass)))
-	{
-		UE_LOG(LogTemp, Error, TEXT("Spawned actor and cast to collectable class!"));
-	}
 }
 
 void AFirstPersonCharacter::InitInventory()
 {
+	// Check if emtpy slot class was assigned - not doing this check can crash the editor
+	if (EmptySlotClass)
+	{
+		// Spawn an empty slot actor into the world, so that we can reference it
+		EmptySlot = Cast<ACollectableObject>(this->GetWorld()->SpawnActor(EmptySlotClass));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No empty slot class blueprint assigned!"));
+	}
 	// Check if we need to add item slots
 	while (InventoryContents.Num() < MaxItemSlots)
 	{
