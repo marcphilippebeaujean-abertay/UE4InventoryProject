@@ -127,6 +127,11 @@ void AFirstPersonCharacter::InitActorComponents()
 	}
 	// Get player controller from the world - since it is a one player game, ID will be 0
 	PlCtrler = UGameplayStatics::GetPlayerController(this->GetWorld(), 0);
+	// Spawn an empty slot object into the world, so that we can reference it
+	if (EmptySlot = Cast<ACollectableObject>(this->GetWorld()->SpawnActor(EmptySlotClass)))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Spawned actor and cast to collectable class!"));
+	}
 }
 
 void AFirstPersonCharacter::InitInventory()

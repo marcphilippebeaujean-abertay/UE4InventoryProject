@@ -88,8 +88,9 @@ private:
 	TSubclassOf<class UUserWidget> DefaultInterfaceWidgetClass;
 
 	// Item that is used for empty slots in the inventory - makes it easier to switch between item slots and allows for more customisation by the designer
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, BlueprintReadWrite, Category = "Inventory")
-	TSubclassOf<ACollectableObject> EmptySlot;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class ACollectableObject> EmptySlotClass;
+	ACollectableObject* EmptySlot = nullptr;
 
 	// How far the ray reaches ahead of the player
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
