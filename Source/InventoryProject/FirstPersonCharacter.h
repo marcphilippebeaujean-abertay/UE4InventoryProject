@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "CollectableObject.h"
+#include "ItemContainer.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Blueprint/UserWidget.h"
@@ -48,6 +49,10 @@ private:
 	UPROPERTY()
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
+	// Inventory containing all the objects the player collected
+	UPROPERTY()
+	UItemContainer* Inventory = nullptr;
+
 	// Grab object in reach of raycast
 	void GrabObject();
 
@@ -60,12 +65,6 @@ private:
 	// Creates the initial interface when the game starts
 	void SetupInterface();
 
-	// Add object to the inventory
-	void AddObjToInventory(ACollectableObject* NewItem);
-
-	// Remove item from inventory and spawn it into the world
-	void DropObjFromInventory(int ItemID);
-
 	// Raycast dependancies
 	const FVector GetRayEndPoint();
 	FVector PlayerViewPointLocation;
@@ -76,12 +75,6 @@ private:
 
 	// Update the string that indicates if an object is in range of being picked up
 	FString GrabIndicator;
-
-	// Keeps track of how much capacity is left in the inventory
-	int CurCapacity;
-
-	// Array that stores objects which have been collected by the player
-	TArray<ACollectableObject*> InventoryContents;
 
 	// Variable that holds the widget after it is assigned in the blue print
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
@@ -100,20 +93,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	FRotator DefaultGrabRotation;
 
-	// As each collectable takes up space in the inventory, we need to set a value that dictates how much we can carry
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
-	int MaximumInventoryCapaticy = 100;
-
 	// Distance away from that the player, that dropped items are reinstantiated
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
 	int DropDistance = 10;
-
-	// Maximum number of different classes that the inventory can hold - needs to be synchronised with the UI
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
-	int MaxItemSlots = 10;
-
-	// Fills the inventory with empty slot items
-	void InitInventory();
 
 	// Check to see if camera is angled at the ground
 	bool LookingAtFloor();
@@ -123,7 +105,12 @@ private:
 	bool bInventoryOpen = false;
 
 	// Displays the bulk of the inventory
-	UWidget* InventoryWidget = nullptr;
+	UUserWidget* InventoryWidget = nullptr;
+
+	// Initialises inventory component and broadcasts an update to the widget
+	void InitInventory();
+
+	void CreateInterfaceElement(UUserWidget* WidgetPointer, TSubclassOf<class UUserWidget> WidgetClass);
 
 public:
 
@@ -144,10 +131,6 @@ public:
 	// Updates the quick access UI widget
 	UFUNCTION(BlueprintCallable)
 	void UpdateQuickAccessWidget();
-
-	// Function that is called when player drags an item to a new slot
-	UFUNCTION(BlueprintCallable)
-	void SwitchItemSlots(int FirstItem, int SecondItem);
 
 	// Delegate used to broadcast to the blueprint that theinvneotyr has been updated
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")

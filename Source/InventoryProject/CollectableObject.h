@@ -32,9 +32,6 @@ public:
 	UFUNCTION()
 	FString GetIndicatorName() { return IndicatorDisplayName; }
 
-	// Returns weight of item
-	int GetItemWeight() { return ItemWeight; }https://www.facebook.com/
-
 	// Returns the object to the scene as a collectable
 	void DropItem(FVector DropLocation);
 
@@ -58,10 +55,6 @@ private:
 	// Variable that allows the designer to assign a mesh in the editor
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh = nullptr;
-
-	// Value that determines how much space the object takes up in the inventory
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
-	int ItemWeight = 10;
 
 	// Specifies if the item can be dragged in the inventory
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))

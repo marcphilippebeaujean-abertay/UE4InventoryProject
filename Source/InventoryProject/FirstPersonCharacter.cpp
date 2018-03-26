@@ -11,6 +11,8 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 
 	// Find actor components (and other external dependancies)
 	InitActorComponents();
+	// Initialise the inventory array
+	InitInventory();
 }
 
 // Called when the game starts or when spawned
@@ -19,10 +21,6 @@ void AFirstPersonCharacter::BeginPlay()
 	Super::BeginPlay();
 	// Setup interface after the game has started
 	SetupInterface();
-	// Initialise inventory capacity
-	CurCapacity = MaximumInventoryCapaticy;
-	// Initialise the inventory array
-	InitInventory();
 }
 
 // Called every frame
@@ -79,36 +77,44 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &AFirstPersonCharacter::ToggleInventory); 
 }
 
+void AFirstPersonCharacter::CreateInterfaceElement(UUserWidget* WidgetPointer, TSubclassOf<class UUserWidget> WidgetClass)
+{
+	// Check the selected UI class is not NULL
+	if (WidgetClass)
+	{
+		// Check if player is being possesed by a controller
+		if (PlCtrler)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Creating interface widget!"));
+			// Create Widget by accessing the player controller
+			WidgetPointer = CreateWidget<UUserWidget>(PlCtrler, WidgetClass);
+		}
+		if (!WidgetPointer)
+		{
+			// Something went wrong!
+			return;
+		}
+		// Add it to the viewport so the Construct() method in the UUserWidget:: is run
+		WidgetPointer->AddToViewport();
+	}
+	else
+	{
+		return;
+	}
+}
+
 void AFirstPersonCharacter::SetupInterface()
 {
 	// Check the selected UI class is not NULL
 	if (DefaultInterfaceWidgetClass)
 	{
-		// If the widget is not created and == NULL
-		if (!DefaultInterfaceWidget)
-		{
-			// Check if player is being possesed by a controller
-			if (PlCtrler)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Creating interface widget!"));
-				// Create Widget by accessing the player controller
-				DefaultInterfaceWidget = CreateWidget<UUserWidget>(PlCtrler, DefaultInterfaceWidgetClass);
-			}
-			if (!DefaultInterfaceWidget)
-			{
-				// Something went wrong!
-				return;
-			}
-			// Add it to the viewport so the Construct() method in the UUserWidget:: is run
-			DefaultInterfaceWidget->AddToViewport();
-		}
-		else
-		{
-			return;
-		}
+		// Create default interface
+		CreateInterfaceElement(DefaultInterfaceWidget, DefaultInterfaceWidgetClass);
 	}
-	// Find main inventory widget
-	InventoryWidget = DefaultInterfaceWidget->GetWidgetFromName(FName("Inventory"));
+	// Find the container component that acts as our inventory
+	InitInventory();
+	// Create the interface for the inventory
+	CreateInterfaceElement(InventoryWidget, Inventory->GetContainerWidget());
 }
 
 void AFirstPersonCharacter::InitActorComponents()
@@ -131,25 +137,16 @@ void AFirstPersonCharacter::InitActorComponents()
 
 void AFirstPersonCharacter::InitInventory()
 {
-	// Check if emtpy slot class was assigned - not doing this check can crash the editor
-	if (EmptySlotClass)
+	// Find inventory component in the children of the player
+	Inventory = this->FindComponentByClass<UItemContainer>();
+	if(Inventory != nullptr)
 	{
-		// Spawn an empty slot actor into the world, so that we can reference it
-		EmptySlot = Cast<ACollectableObject>(this->GetWorld()->SpawnActor(EmptySlotClass));
+		UE_LOG(LogTemp, Warning, TEXT("Inventory found!"));
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("No empty slot class blueprint assigned!"));
+		return;
 	}
-	// Check if we need to add item slots
-	while (InventoryContents.Num() < MaxItemSlots)
-	{
-		ACollectableObject* itemSlot = EmptySlot;
-		// If so, add the emtpy slot to the inventory
-		InventoryContents.Add(EmptySlot);
-	}
-	// Indicate that the inventory needs to be updated
-	OnUpdateInventory.Broadcast(InventoryContents);
 }
 
 const FVector AFirstPersonCharacter::GetRayEndPoint()
@@ -246,7 +243,7 @@ void AFirstPersonCharacter::GrabObject()
 		if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
 		{
 			// Add the traced object to the inventory
-			AddObjToInventory(HitCollectable);
+			
 		}
 		else
 		{
@@ -266,80 +263,15 @@ void AFirstPersonCharacter::ReleasePhysicsObject()
 	PhysicsHandle->ReleaseComponent();
 }
 
-void AFirstPersonCharacter::AddObjToInventory(ACollectableObject* NewItem)
-{
-	// Check if the item has not been destroyed
-	if (NewItem != nullptr)
-	{
-		// Check if the inventory capacity wont exceed the maximum if the item is added
-		if (0 < (CurCapacity - NewItem->GetItemWeight()))
-		{
-			// Loop through the array, trying to find an empty slot
-			for (int i = 0; i < InventoryContents.Num(); i++)
-			{
-				// If we found an empty slot...
-				if (InventoryContents[i] == EmptySlot)
-				{
-					// Remove object from the scene
-					NewItem->CollectObject();
-					// Subtract the item's weight from the current capacity 
-					CurCapacity -= NewItem->GetItemWeight();
-					// Add the item to the inventory array
-					InventoryContents[i] = NewItem;
-					// We added an object to the inventory - let's update the UI
-					UpdateInventoryWidget();
-					// Break fromt the loop since the operatin is complete
-					UE_LOG(LogTemp, Error, TEXT("Added %s to inventory, available weight is now %d!"), *NewItem->GetName(), CurCapacity);
-					break;
-				}
-			}
-		}
-	}
-}
-
-void AFirstPersonCharacter::DropObjFromInventory(int ItemID)
-{
-	// Check if inventory is not empty
-	if (InventoryContents.Num() > 0)
-	{
-		// See if object is available
-		if (InventoryContents[ItemID] != nullptr && InventoryContents[ItemID] != EmptySlot)
-		{
-			// Drop item at player's location
-			InventoryContents[ItemID]->DropItem(PlayerViewPointLocation + GetActorForwardVector() * DropDistance);
-			UE_LOG(LogTemp, Error, TEXT("Removing %s from inventory!"), *InventoryContents[0]->GetName());
-			// Remove corresponding item from the array
-			InventoryContents.RemoveAt(ItemID);
-			// Add empty slot to replace the removed item
-			InventoryContents.Insert(EmptySlot, ItemID);
-			// We added an object to the inventory - let's update the UI
-			UpdateInventoryWidget();
-		}
-	}
-	else
-	{
-		// No items in the inventory - do nothing
-		UE_LOG(LogTemp, Error, TEXT("Inventory is empty!"));
-	}
-}
-
 void AFirstPersonCharacter::UpdateInventoryWidget()
 {
 	// "Broadcast" our inventory - which creates a reference for the array that is accessible in blueprints
-	OnUpdateInventory.Broadcast(InventoryContents);
+	OnUpdateInventory.Broadcast(Inventory->GetContainerItems());
 }
 
 void AFirstPersonCharacter::UpdateQuickAccessWidget()
 {
 	
-}
-
-void AFirstPersonCharacter::SwitchItemSlots(int FirstItem, int SecondItem)
-{
-	// Swap between the items in the inventory
-	InventoryContents.Swap(FirstItem, SecondItem);
-	// Update the inventory visuals
-	UpdateInventoryWidget();
 }
 
 void AFirstPersonCharacter::ToggleInventory()
@@ -361,6 +293,10 @@ void AFirstPersonCharacter::ToggleInventory()
 		// Determine if the inventory should be visible or not
 		if (bInventoryOpen)
 		{
+			// Add the inventory widget to the viewport
+			InventoryWidget->AddToViewport();
+			// Indicate that the inventory needs to be updated
+			OnUpdateInventory.Broadcast(Inventory->GetContainerItems());
 			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
 		}
 		else
