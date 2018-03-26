@@ -305,7 +305,8 @@ void AFirstPersonCharacter::ToggleInventory()
 		// Determine if the inventory should be visible or not
 		if (bInventoryOpen)
 		{
-			// Indicate that the inventory needs to be updated
+			// Make sure to update the inventory before making it visible
+			UpdateInventoryWidget();
 			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
 		}
 		else
