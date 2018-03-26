@@ -57,6 +57,8 @@ void UItemContainer::AddObjToContainer(ACollectableObject* NewItem)
 			{
 				// Set the empty slot to equal the new item
 				ContainerItems[i] = NewItem;
+				// If we found a slot, only add one instance of the item to the container
+				break;
 			}
 		}
 	}
