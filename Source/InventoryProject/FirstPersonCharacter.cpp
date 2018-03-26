@@ -19,6 +19,8 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 void AFirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	// Find the container component that acts as our inventory
+	InitInventory();
 	// Setup interface after the game has started
 	SetupInterface();
 }
@@ -77,44 +79,54 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &AFirstPersonCharacter::ToggleInventory); 
 }
 
-void AFirstPersonCharacter::CreateInterfaceElement(UUserWidget* WidgetPointer, TSubclassOf<class UUserWidget> WidgetClass)
+void AFirstPersonCharacter::SetupInterface()
 {
 	// Check the selected UI class is not NULL
-	if (WidgetClass)
+	if (DefaultInterfaceWidgetClass)
 	{
 		// Check if player is being possesed by a controller
 		if (PlCtrler)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Creating interface widget!"));
 			// Create Widget by accessing the player controller
-			WidgetPointer = CreateWidget<UUserWidget>(PlCtrler, WidgetClass);
+			DefaultInterfaceWidget = CreateWidget<UUserWidget>(PlCtrler, DefaultInterfaceWidgetClass);
 		}
-		if (!WidgetPointer)
+		if (!DefaultInterfaceWidget)
 		{
 			// Something went wrong!
 			return;
 		}
 		// Add it to the viewport so the Construct() method in the UUserWidget:: is run
-		WidgetPointer->AddToViewport();
+		DefaultInterfaceWidget->AddToViewport();
 	}
 	else
 	{
 		return;
 	}
-}
-
-void AFirstPersonCharacter::SetupInterface()
-{
-	// Check the selected UI class is not NULL
-	if (DefaultInterfaceWidgetClass)
-	{
-		// Create default interface
-		CreateInterfaceElement(DefaultInterfaceWidget, DefaultInterfaceWidgetClass);
-	}
-	// Find the container component that acts as our inventory
-	InitInventory();
 	// Create the interface for the inventory
-	CreateInterfaceElement(InventoryWidget, Inventory->GetContainerWidget());
+	if (Inventory->GetContainerWidget())
+	{
+		// Check if player is being possesed by a controller
+		if (PlCtrler)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Creating interface widget!"));
+			// Create Widget by accessing the player controller
+			InventoryWidget = CreateWidget<UUserWidget>(PlCtrler, Inventory->GetContainerWidget());
+		}
+		if (!InventoryWidget)
+		{
+			// Something went wrong!
+			return;
+		}
+		// set inventory to be hidden initially
+		InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
+		// Add it to the viewport so the Construct() method in the UUserWidget:: is run
+		InventoryWidget->AddToViewport();
+	}
+	else
+	{
+		return;
+	}
 }
 
 void AFirstPersonCharacter::InitActorComponents()
@@ -293,16 +305,17 @@ void AFirstPersonCharacter::ToggleInventory()
 		// Determine if the inventory should be visible or not
 		if (bInventoryOpen)
 		{
-			// Add the inventory widget to the viewport
-			InventoryWidget->AddToViewport();
 			// Indicate that the inventory needs to be updated
-			OnUpdateInventory.Broadcast(Inventory->GetContainerItems());
 			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
 		}
 		else
 		{
 			InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
 		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Inventory Widget missing!"));
 	}
 }
 

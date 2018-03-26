@@ -110,8 +110,6 @@ private:
 	// Initialises inventory component and broadcasts an update to the widget
 	void InitInventory();
 
-	void CreateInterfaceElement(UUserWidget* WidgetPointer, TSubclassOf<class UUserWidget> WidgetClass);
-
 public:
 
 	// Called every frame
