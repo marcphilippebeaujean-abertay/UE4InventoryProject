@@ -7,14 +7,14 @@
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "CollectableObject.h"
-#include "ItemContainer.h"
+#include "QuickAccess.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Containers/Array.h"
 #include "FirstPersonCharacter.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryInterfaceUpdate, const TArray<ACollectableObject*>&, InventoryContents);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryInterfaceUpdate, const TArray<ACollectableObject*>&, Contents);
 
 UCLASS()
 class INVENTORYPROJECT_API AFirstPersonCharacter : public ACharacter
@@ -52,6 +52,10 @@ private:
 	// Inventory containing all the objects the player collected
 	UPROPERTY()
 	UItemContainer* Inventory = nullptr;
+
+	// Items stored in the quick access bar to 
+	UPROPERTY()
+	UQuickAccess* QuickAccessBar = nullptr;
 
 	// Grab object in reach of raycast
 	void GrabObject();
@@ -122,13 +126,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	FString GetGrabIndicator() { return GrabIndicator; }
 
-	// Updates the inventory by casting our inventory array to the widget blueprint
+	// Updates the inventory and all other container related widgets by casting our container arrays to the corresponding widget blueprint
 	UFUNCTION(BlueprintCallable)
 	void UpdateInventoryWidget();
-
-	// Updates the quick access UI widget
-	UFUNCTION(BlueprintCallable)
-	void UpdateQuickAccessWidget();
 
 	// Delegate used to broadcast to the blueprint that theinvneotyr has been updated
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")
@@ -140,6 +140,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	UItemContainer* GetInventoryContainer() { return Inventory; }
+
+	UFUNCTION(BlueprintCallable)
+	UItemContainer* GetQuickAccessContainer() { return QuickAccessBar; }
 
 private:
 

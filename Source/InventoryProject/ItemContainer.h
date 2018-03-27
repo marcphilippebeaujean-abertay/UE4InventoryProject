@@ -23,6 +23,9 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	// Array that stores objects which are in the container
+	TArray<ACollectableObject*> ContainerItems;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -46,18 +49,16 @@ public:
 	// Get an item from a container
 	ACollectableObject* GetContainerItem(int ContainerID) { return ContainerItems[ContainerID]; }
 
+	// Maximum number of different classes that the inventory can hold - needs to be synchronised with the UI
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container")
+	int MaxItemSlots = 10;
+
 private:
-	// Array that stores objects which are in the container
-	TArray<ACollectableObject*> ContainerItems;
 
 	// Item that is used for empty slots in the inventory - makes it easier to switch between item slots and allows for more customisation by the designer
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class ACollectableObject> EmptySlotClass;
 	ACollectableObject* EmptySlot = nullptr;
-
-	// Maximum number of different classes that the inventory can hold - needs to be synchronised with the UI
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true"))
-	int MaxItemSlots = 10;
 
 	// Widget that is displayed when the user accesses the container
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))

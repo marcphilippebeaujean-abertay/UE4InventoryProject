@@ -11,8 +11,6 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 
 	// Find actor components (and other external dependancies)
 	InitActorComponents();
-	// Initialise the inventory array
-	InitInventory();
 }
 
 // Called when the game starts or when spawned
@@ -127,6 +125,8 @@ void AFirstPersonCharacter::SetupInterface()
 	{
 		return;
 	}
+	// Update the UI container widgets
+	UpdateInventoryWidget();
 }
 
 void AFirstPersonCharacter::InitActorComponents()
@@ -149,15 +149,34 @@ void AFirstPersonCharacter::InitActorComponents()
 
 void AFirstPersonCharacter::InitInventory()
 {
-	// Find inventory component in the children of the player
-	Inventory = this->FindComponentByClass<UItemContainer>();
-	if(Inventory != nullptr)
+	// Find inventory components in the children of the player
+	TArray<UItemContainer*> Containers;
+	this->GetComponents<UItemContainer>(Containers);
+	// Iterate through each found component and assign them to the corresponding variable
+	for(int i = 0; i < Containers.Num(); i++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Inventory found!"));
+		// Check if casting to quick access is possible
+		if(Cast<UQuickAccess>(Containers[i]))
+		{
+			QuickAccessBar = Cast<UQuickAccess>(Containers[i]);
+			UE_LOG(LogTemp, Error, TEXT("Assigning quick access!"));
+		}
+		else
+		{
+			// Otherwise, we know it's just a normal container, so assign it to be our inventory
+			Inventory = Containers[i];
+			UE_LOG(LogTemp, Error, TEXT("Assigning inventory!"));
+		}
 	}
-	else
+	if(Inventory == nullptr)
 	{
-		return;
+		UE_LOG(LogTemp, Error, TEXT("Failed to find inventory!"));
+	}
+	// Find quick access component
+	// QuickAccessBar = this->FindComponentByClass<UQuickAccess>();
+	if(QuickAccessBar == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to find quick access bar!"));
 	}
 }
 
@@ -281,11 +300,8 @@ void AFirstPersonCharacter::UpdateInventoryWidget()
 {
 	// "Broadcast" our inventory - which creates a reference for the array that is accessible in blueprints
 	OnUpdateInventory.Broadcast(Inventory->GetContainerItems());
-}
-
-void AFirstPersonCharacter::UpdateQuickAccessWidget()
-{
-	
+	// Broadcast quick access items
+	OnUpdateQuickAccess.Broadcast(QuickAccessBar->GetContainerItems());
 }
 
 void AFirstPersonCharacter::ToggleInventory()
