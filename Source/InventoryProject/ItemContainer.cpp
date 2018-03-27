@@ -74,3 +74,8 @@ void UItemContainer::SwapItems(UItemContainer* OtherContainer, int OtherItemID, 
 	SetContainerItem(LocalItemID, TempObject);
 	UE_LOG(LogTemp, Error, TEXT("After swap: %s!"), *GetContainerItem(LocalItemID)->GetIndicatorName());
 }
+
+void UItemContainer::BroadcastWidgetUpdate()
+{
+	OnUpdateContainer.Broadcast(ContainerItems);
+}

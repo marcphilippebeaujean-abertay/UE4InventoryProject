@@ -9,6 +9,7 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "ItemContainer.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryInterfaceUpdate, const TArray<ACollectableObject*>&, Contents);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class INVENTORYPROJECT_API UItemContainer : public UActorComponent
@@ -58,6 +59,9 @@ public:
 
 	bool IsQuickAccess() { return bQuickAccess; }
 
+	// Broadcasts event, indicating that the user interface needs to be updated
+	void BroadcastWidgetUpdate();
+
 private:
 
 	// Item that is used for empty slots in the inventory - makes it easier to switch between item slots and allows for more customisation by the designer
@@ -68,4 +72,8 @@ private:
 	// Widget that is displayed when the user accesses the container
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class UUserWidget> ContainerWidgetClass;
+
+	// Delegate used to broadcast to the blueprint that the invnetory has been updated
+	UPROPERTY(BlueprintAssignable, Category = "UI Events")
+	FInventoryInterfaceUpdate OnUpdateContainer;
 };

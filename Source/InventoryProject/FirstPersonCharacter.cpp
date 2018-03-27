@@ -258,9 +258,11 @@ void AFirstPersonCharacter::ReleasePhysicsObject()
 void AFirstPersonCharacter::UpdateInventoryWidget()
 {
 	// "Broadcast" our inventory - which creates a reference for the array that is accessible in blueprints
-	OnUpdateInventory.Broadcast(Inventory->GetContainerItems());
+	// OnUpdateInventory.Broadcast(Inventory->GetContainerItems());
 	// Broadcast quick access items
-	OnUpdateQuickAccess.Broadcast(QuickAccessBar->GetContainerItems());
+	// OnUpdateQuickAccess.Broadcast(QuickAccessBar->GetContainerItems());
+	Inventory->BroadcastWidgetUpdate();
+	QuickAccessBar->BroadcastWidgetUpdate();
 }
 
 void AFirstPersonCharacter::ToggleInventory()

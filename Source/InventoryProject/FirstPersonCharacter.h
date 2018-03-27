@@ -6,15 +6,12 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "CollectableObject.h"
 #include "QuickAccess.h"
 #include "PlayerInventory.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Containers/Array.h"
 #include "FirstPersonCharacter.generated.h"
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryInterfaceUpdate, const TArray<ACollectableObject*>&, Contents);
 
 UCLASS()
 class INVENTORYPROJECT_API AFirstPersonCharacter : public ACharacter
@@ -124,10 +121,6 @@ public:
 	// Updates the inventory and all other container related widgets by casting our container arrays to the corresponding widget blueprint
 	UFUNCTION(BlueprintCallable)
 	void UpdateInventoryWidget();
-
-	// Delegate used to broadcast to the blueprint that theinvneotyr has been updated
-	UPROPERTY(BlueprintAssignable, Category = "UI Events")
-	FInventoryInterfaceUpdate OnUpdateInventory;
 
 	// Delegate used to broadcast to the blueprint
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")
