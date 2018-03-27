@@ -38,13 +38,13 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 		PhysicsHandle->SetTargetLocationAndRotation(GetRayEndPoint(), GetActorRotation());
 	}
 	// Check if we can detect a grabable object
-	if (ACollectableObject* hitCollectable = Cast<ACollectableObject>(GetTraceResult().GetActor()))
+	if (Inventory->ElligableForPickup(GetTraceResult().GetActor()))
 	{
 		// Make sure we aren't holding another component
 		if (!PhysicsHandle->GrabbedComponent)
 		{
 			// Show indicator that tells the player what they can pick up
-			GrabIndicator = "Click to pick up " + hitCollectable->GetIndicatorName();
+			GrabIndicator = "Click to pick up " + Inventory->GetObjectIndicator(GetTraceResult().GetActor());
 		}
 		else
 		{
