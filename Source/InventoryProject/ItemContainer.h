@@ -36,6 +36,16 @@ public:
 	// Returns all items within the contain
 	TArray<ACollectableObject*> GetContainerItems() { return ContainerItems; };
 
+	// Allows the items to be swapped between containers
+	UFUNCTION(BlueprintCallable)
+	void SwapItems(UItemContainer* OtherContainer, int OtherItemID, int LocalItemID);
+
+	// Sets an item in the container
+	void SetContainerItem(int ContainerID, ACollectableObject* NewItem) { ContainerItems[ContainerID] = NewItem; }
+
+	// Get an item from a container
+	ACollectableObject* GetContainerItem(int ContainerID) { return ContainerItems[ContainerID]; }
+
 private:
 	// Array that stores objects which are in the container
 	TArray<ACollectableObject*> ContainerItems;

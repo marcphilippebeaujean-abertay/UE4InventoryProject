@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/DragDropOperation.h"
 #include "CollectableObject.h"
+#include "ItemContainer.h"
 #include "DragDropCollectable.generated.h"
 
 /**
@@ -16,9 +17,12 @@ class INVENTORYPROJECT_API UDragDropCollectable : public UDragDropOperation
 	GENERATED_BODY()
 	
 public:
-	/** Allows for storing and transferring items when dragging them in the inventory. */
+
+	/** Sends the item container corresponding to the dragged item. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drag and Drop", meta = (ExposeOnSpawn = "true"))
-	ACollectableObject* InventoryItem;
+	UItemContainer* DraggedItemContainer;
 	
-	
+	/** Sends the item ID corresponding to the dragged item. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drag and Drop", meta = (ExposeOnSpawn = "true"))
+	int DraggedItemID;
 };

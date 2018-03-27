@@ -29,9 +29,8 @@ void UItemContainer::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("No empty slot class blueprint assigned!"));
 	}
 	// Check if we need to add item slots
-	while (ContainerItems.Num() < MaxItemSlots)
+	for (int i = 0; i < MaxItemSlots; i++)
 	{
-		ACollectableObject* itemSlot = EmptySlot;
 		// If so, add the emtpy slot to the container
 		ContainerItems.Add(EmptySlot);
 	}
@@ -62,4 +61,16 @@ void UItemContainer::AddObjToContainer(ACollectableObject* NewItem)
 			}
 		}
 	}
+}
+
+void UItemContainer::SwapItems(UItemContainer* OtherContainer, int OtherItemID, int LocalItemID)
+{
+	UE_LOG(LogTemp, Error, TEXT("Before swap: %s!"), *GetContainerItem(LocalItemID)->GetIndicatorName());
+	// Create temporary object that stores values from other container's item
+	ACollectableObject* TempObject = OtherContainer->GetContainerItem(OtherItemID);
+	// Set other containers item to be able equal to that of the local one
+	OtherContainer->SetContainerItem(OtherItemID, GetContainerItem(LocalItemID));
+	// Set local item to be equal to that of the temporary object
+	SetContainerItem(LocalItemID, TempObject);
+	UE_LOG(LogTemp, Error, TEXT("After swap: %s!"), *GetContainerItem(LocalItemID)->GetIndicatorName());
 }

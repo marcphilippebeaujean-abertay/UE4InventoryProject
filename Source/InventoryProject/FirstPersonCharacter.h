@@ -138,6 +138,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")
 	FInventoryInterfaceUpdate OnUpdateQuickAccess;
 
+	UFUNCTION(BlueprintCallable)
+	UItemContainer* GetInventoryContainer() { return Inventory; }
+
 private:
 
 };
