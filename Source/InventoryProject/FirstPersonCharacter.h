@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "CollectableObject.h"
 #include "QuickAccess.h"
+#include "PlayerInventory.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Containers/Array.h"
@@ -50,7 +51,7 @@ private:
 
 	// Inventory containing all the objects the player collected
 	UPROPERTY()
-	UItemContainer* Inventory = nullptr;
+	UPlayerInventory* Inventory = nullptr;
 
 	// Items stored in the quick access bar to 
 	UPROPERTY()

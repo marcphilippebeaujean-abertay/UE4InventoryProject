@@ -128,31 +128,13 @@ void AFirstPersonCharacter::InitActorComponents()
 
 void AFirstPersonCharacter::InitInventory()
 {
-	// Find inventory components in the children of the player
-	TArray<UItemContainer*> Containers;
-	this->GetComponents<UItemContainer>(Containers);
-	// Iterate through each found component and assign them to the corresponding variable
-	for(int i = 0; i < Containers.Num(); i++)
-	{
-		// Check if casting to quick access is possible
-		if(Cast<UQuickAccess>(Containers[i]))
-		{
-			QuickAccessBar = Cast<UQuickAccess>(Containers[i]);
-			UE_LOG(LogTemp, Error, TEXT("Assigning quick access!"));
-		}
-		else
-		{
-			// Otherwise, we know it's just a normal container, so assign it to be our inventory
-			Inventory = Containers[i];
-			UE_LOG(LogTemp, Error, TEXT("Assigning inventory!"));
-		}
-	}
+	Inventory = this->FindComponentByClass<UPlayerInventory>();
 	if(Inventory == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to find inventory!"));
 	}
 	// Find quick access component
-	// QuickAccessBar = this->FindComponentByClass<UQuickAccess>();
+	QuickAccessBar = this->FindComponentByClass<UQuickAccess>();
 	if(QuickAccessBar == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to find quick access bar!"));
