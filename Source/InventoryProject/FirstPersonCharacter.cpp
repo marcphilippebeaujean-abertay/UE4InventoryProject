@@ -232,12 +232,10 @@ void AFirstPersonCharacter::GrabObject()
 	if (ActorHit)
 	{
 		// Check if the object is a collectable
-		if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
+		if (Inventory->ElligableForPickup(ActorHit))
 		{
-			// Remove hit object from the scene
-			HitCollectable->CollectObject();
-			// Add the traced object to the inventory
-			Inventory->AddObjToContainer(HitCollectable);
+			// Use inventory to pick up the object
+			Inventory->CollectObject(ActorHit);
 		}
 		else
 		{

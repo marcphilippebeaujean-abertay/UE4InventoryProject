@@ -24,4 +24,15 @@ bool UPlayerInventory::ElligableForPickup(AActor* OtherActor)
 	return false;
 }
 
+void UPlayerInventory::CollectObject(AActor* OtherActor)
+{
+	// Cast to collectable object
+	ACollectableObject* ActorToCollect = Cast<ACollectableObject>(OtherActor);
+	// Disable the collectable object
+	ActorToCollect->CollectObject();
+	// Add the object to inventory
+	AddObjToContainer(ActorToCollect);
+}
+
+
 
