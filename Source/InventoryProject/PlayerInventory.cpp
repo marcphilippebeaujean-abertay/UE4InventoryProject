@@ -2,36 +2,12 @@
 
 #include "PlayerInventory.h"
 
-FString UPlayerInventory::GetObjectIndicator(AActor* OtherActor)
+void UPlayerInventory::CollectObject(ACollectableObject* OtherActor)
 {
-	// Check if other actor is of type collectable
-	if (ACollectableObject* IndicatorCollectable = Cast<ACollectableObject>(OtherActor))
-	{
-		// Return the name of the collectable
-		return IndicatorCollectable->GetIndicatorName();
-	}
-	// Otherwise, return nothing
-	return "";
-}
-
-bool UPlayerInventory::ElligableForPickup(AActor* OtherActor)
-{
-	// Check if other actor is of type collectable
-	if (ACollectableObject* IndicatorCollectable = Cast<ACollectableObject>(OtherActor))
-	{
-		return true;
-	}
-	return false;
-}
-
-void UPlayerInventory::CollectObject(AActor* OtherActor)
-{
-	// Cast to collectable object
-	ACollectableObject* ActorToCollect = Cast<ACollectableObject>(OtherActor);
 	// Disable the collectable object
-	ActorToCollect->CollectObject();
+	OtherActor->CollectObject();
 	// Add the object to inventory
-	AddObjToContainer(ActorToCollect);
+	AddObjToContainer(OtherActor);
 }
 
 

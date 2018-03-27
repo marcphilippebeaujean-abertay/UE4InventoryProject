@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "QuickAccess.h"
 #include "PlayerInventory.h"
+#include "CollectableObject.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Containers/Array.h"
@@ -121,10 +122,6 @@ public:
 	// Updates the inventory and all other container related widgets by casting our container arrays to the corresponding widget blueprint
 	UFUNCTION(BlueprintCallable)
 	void UpdateInventoryWidget();
-
-	// Delegate used to broadcast to the blueprint
-	UPROPERTY(BlueprintAssignable, Category = "UI Events")
-	FInventoryInterfaceUpdate OnUpdateQuickAccess;
 
 	UFUNCTION(BlueprintCallable)
 	UItemContainer* GetInventoryContainer() { return Inventory; }

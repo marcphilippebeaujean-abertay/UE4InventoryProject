@@ -38,13 +38,13 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 		PhysicsHandle->SetTargetLocationAndRotation(GetRayEndPoint(), GetActorRotation());
 	}
 	// Check if we can detect a grabable object
-	if (Inventory->ElligableForPickup(GetTraceResult().GetActor()))
+	if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(GetTraceResult().GetActor()))
 	{
 		// Make sure we aren't holding another component
 		if (!PhysicsHandle->GrabbedComponent)
 		{
 			// Show indicator that tells the player what they can pick up
-			GrabIndicator = "Click to pick up " + Inventory->GetObjectIndicator(GetTraceResult().GetActor());
+			GrabIndicator = "Click to pick up " + HitCollectable->GetIndicatorName();
 		}
 		else
 		{
@@ -232,10 +232,10 @@ void AFirstPersonCharacter::GrabObject()
 	if (ActorHit)
 	{
 		// Check if the object is a collectable
-		if (Inventory->ElligableForPickup(ActorHit))
+		if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
 		{
 			// Use inventory to pick up the object
-			Inventory->CollectObject(ActorHit);
+			Inventory->CollectObject(HitCollectable);
 		}
 		else
 		{
@@ -257,10 +257,6 @@ void AFirstPersonCharacter::ReleasePhysicsObject()
 
 void AFirstPersonCharacter::UpdateInventoryWidget()
 {
-	// "Broadcast" our inventory - which creates a reference for the array that is accessible in blueprints
-	// OnUpdateInventory.Broadcast(Inventory->GetContainerItems());
-	// Broadcast quick access items
-	// OnUpdateQuickAccess.Broadcast(QuickAccessBar->GetContainerItems());
 	Inventory->BroadcastWidgetUpdate();
 	QuickAccessBar->BroadcastWidgetUpdate();
 }
