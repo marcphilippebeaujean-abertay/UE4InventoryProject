@@ -101,30 +101,32 @@ void AFirstPersonCharacter::SetupInterface()
 	{
 		return;
 	}
-	// Create the interface for the inventory
-	if (Inventory->GetContainerWidget())
-	{
-		// Check if player is being possesed by a controller
-		if (PlCtrler)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Creating interface widget!"));
-			// Create Widget by accessing the player controller
-			InventoryWidget = CreateWidget<UUserWidget>(PlCtrler, Inventory->GetContainerWidget());
-		}
-		if (!InventoryWidget)
-		{
-			// Something went wrong!
-			return;
-		}
-		// set inventory to be hidden initially
-		InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
-		// Add it to the viewport so the Construct() method in the UUserWidget:: is run
-		InventoryWidget->AddToViewport();
-	}
-	else
-	{
-		return;
-	}
+	InventoryWidget = DefaultInterfaceWidget->GetWidgetFromName("Inventory_Container");
+	InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
+	//// Create the interface for the inventory
+	//if (Inventory->GetContainerWidget())
+	//{
+	//	// Check if player is being possesed by a controller
+	//	if (PlCtrler)
+	//	{
+	//		UE_LOG(LogTemp, Warning, TEXT("Creating interface widget!"));
+	//		// Create Widget by accessing the player controller
+	//		InventoryWidget = CreateWidget<UUserWidget>(PlCtrler, Inventory->GetContainerWidget());
+	//	}
+	//	if (!InventoryWidget)
+	//	{
+	//		// Something went wrong!
+	//		return;
+	//	}
+	//	// set inventory to be hidden initially
+	//	InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
+	//	// Add it to the viewport so the Construct() method in the UUserWidget:: is run
+	//	InventoryWidget->AddToViewport();
+	//}
+	//else
+	//{
+	//	return;
+	//}
 	// Update the UI container widgets
 	UpdateInventoryWidget();
 }

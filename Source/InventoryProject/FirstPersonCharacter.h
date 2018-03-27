@@ -109,7 +109,7 @@ private:
 	bool bInventoryOpen = false;
 
 	// Displays the bulk of the inventory
-	UUserWidget* InventoryWidget = nullptr;
+	UWidget* InventoryWidget = nullptr;
 
 	// Initialises inventory component and broadcasts an update to the widget
 	void InitInventory();
