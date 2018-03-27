@@ -12,7 +12,16 @@ ACollectableObject::ACollectableObject()
 
 	// Apply editor-specified variables to the local temps created in the script
 	AssignDefaultComponents();
+
+	// Call init function
+	Init();
 }
+
+void ACollectableObject::Init()
+{
+	UE_LOG(LogTemp, Error, TEXT("Init called!"));
+}
+
 
 // Called when the game starts or when spawned
 void ACollectableObject::BeginPlay()

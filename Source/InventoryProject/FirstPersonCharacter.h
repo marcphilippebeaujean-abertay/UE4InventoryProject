@@ -8,7 +8,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "CollectableObject.h"
 #include "QuickAccess.h"
-#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Containers/Array.h"
@@ -83,11 +82,6 @@ private:
 	// Variable that holds the widget after it is assigned in the blue print
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class UUserWidget> DefaultInterfaceWidgetClass;
-
-	// Item that is used for empty slots in the inventory - makes it easier to switch between item slots and allows for more customisation by the designer
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class ACollectableObject> EmptySlotClass;
-	ACollectableObject* EmptySlot = nullptr;
 
 	// How far the ray reaches ahead of the player
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))

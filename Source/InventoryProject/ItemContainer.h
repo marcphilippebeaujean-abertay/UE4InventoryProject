@@ -26,6 +26,9 @@ protected:
 	// Array that stores objects which are in the container
 	TArray<ACollectableObject*> ContainerItems;
 
+	// Variable used to differentiate between quick access and regular containers, without having to cast
+	bool bQuickAccess = false;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -52,6 +55,8 @@ public:
 	// Maximum number of different classes that the inventory can hold - needs to be synchronised with the UI
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container")
 	int MaxItemSlots = 10;
+
+	bool IsQuickAccess() { return bQuickAccess; }
 
 private:
 

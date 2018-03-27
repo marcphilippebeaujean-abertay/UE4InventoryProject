@@ -3,6 +3,15 @@
 #include "QuickAccess.h"
 
 
+// Sets default values for this component's properties
+void UQuickAccess::OnComponentCreated()
+{
+	Super::OnComponentCreated();
+
+	// Set quick access check to true
+	bQuickAccess = true;
+}
+
 ACollectableObject* UQuickAccess::UpdateSelectedItem(bool increment)
 {
 	// Manipulate selected value item based on condition
