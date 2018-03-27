@@ -56,6 +56,8 @@ void UItemContainer::AddObjToContainer(ACollectableObject* NewItem)
 			{
 				// Set the empty slot to equal the new item
 				ContainerItems[i] = NewItem;
+				// Update the widget
+				BroadcastWidgetUpdate();
 				// If we found a slot, only add one instance of the item to the container
 				break;
 			}
@@ -73,6 +75,9 @@ void UItemContainer::SwapItems(UItemContainer* OtherContainer, int OtherItemID, 
 	// Set local item to be equal to that of the temporary object
 	SetContainerItem(LocalItemID, TempObject);
 	UE_LOG(LogTemp, Error, TEXT("After swap: %s!"), *GetContainerItem(LocalItemID)->GetIndicatorName());
+	// Update widgets
+	BroadcastWidgetUpdate();
+	OtherContainer->BroadcastWidgetUpdate();
 }
 
 void UItemContainer::BroadcastWidgetUpdate()

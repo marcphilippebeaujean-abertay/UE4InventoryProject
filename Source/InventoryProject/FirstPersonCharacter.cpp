@@ -281,7 +281,6 @@ void AFirstPersonCharacter::ToggleInventory()
 		if (bInventoryOpen)
 		{
 			// Make sure to update the inventory before making it visible
-			UpdateInventoryWidget();
 			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
 		}
 		else
