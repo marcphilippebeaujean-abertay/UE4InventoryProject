@@ -33,7 +33,7 @@ protected:
 	ACollectableObject();
 
 	// The name of an object as it should be displayed when the player hovers over it and in the inventory UI
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	FString IndicatorDisplayName;
 
 public:	
@@ -48,7 +48,7 @@ public:
 	void DropItem(FVector DropLocation);
 
 	// Handle behaviour when object is collected by the player (disable mesh and collision components etc.)
-	virtual void CollectObject();
+	virtual void CollectObject(AFirstPersonCharacter* NewOwner);
 	
 	// Used to make distinctions between empty slots and normal items in the blueprints script
 	UFUNCTION(BlueprintCallable)
@@ -58,6 +58,9 @@ public:
 	bool IsEquipable() { return bEquipable; }
 
 private:
+
+	// The character that owns the object
+	AFirstPersonCharacter* ObjectOwner;
 
 	// Icon that should be displayed to represent the item in the inventory
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))

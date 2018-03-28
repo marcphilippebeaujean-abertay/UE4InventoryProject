@@ -47,7 +47,7 @@ void ACollectableObject::AssignDefaultComponents()
 	Mesh->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }
 
-void ACollectableObject::CollectObject()
+void ACollectableObject::CollectObject(AFirstPersonCharacter* NewOwner)
 {
 	// Deactivate collision for the actor
 	this->SetActorEnableCollision(false);
@@ -55,6 +55,8 @@ void ACollectableObject::CollectObject()
 	this->SetActorHiddenInGame(true);
 	// Stop actor from ticking
 	this->SetActorTickEnabled(false);
+	// Set the new owner of the object
+	ObjectOwner = NewOwner;
 }
 
 void ACollectableObject::DropItem(FVector DropLocation)

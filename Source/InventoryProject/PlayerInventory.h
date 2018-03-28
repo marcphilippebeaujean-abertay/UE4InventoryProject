@@ -19,6 +19,9 @@ protected:
 
 private:
 
+	// Owning player of the inventory
+	AFirstPersonCharacter* OwningPlayer;
+
 public: 
 	// Collect item, add it to inventory and disable in game world
 	void CollectObject(ACollectableObject* OtherActor);
