@@ -4,14 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "GameFramework/PlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "QuickAccess.h"
-#include "PlayerInventory.h"
-#include "CollectableObject.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Blueprint/UserWidget.h"
-#include "Containers/Array.h"
 #include "FirstPersonCharacter.generated.h"
 
 UCLASS()
@@ -78,6 +73,6 @@ public:
 
 	// Drop the physics object being held by the player
 	void ReleasePhysicsObject();
-
+	// Returns true if playre is carrying physics object
 	bool CarryingPhysicsObject();
 };

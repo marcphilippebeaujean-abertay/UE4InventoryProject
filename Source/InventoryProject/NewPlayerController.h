@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "CollectableObject.h"
 #include "FirstPersonCharacter.h"
-#include "ItemContainer.h"
+#include "PlayerInventory.h"
+#include "QuickAccess.h"
 #include "NewPlayerController.generated.h"
 
 /**
