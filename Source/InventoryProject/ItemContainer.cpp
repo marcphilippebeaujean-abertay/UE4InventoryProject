@@ -28,7 +28,6 @@ void UItemContainer::BeginPlay()
 		{
 			// If so, add the emtpy slot to the container
 			ContainerItems.Add(EmptySlot);
-			UE_LOG(LogTemp, Error, TEXT("Added empty slot!"));
 		}
 	}
 	else
