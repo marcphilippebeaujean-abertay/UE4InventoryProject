@@ -35,25 +35,9 @@ protected:
 
 private:
 
-	// Interface used when player does not have the inventory open
-	UPROPERTY()
-	UUserWidget* DefaultInterfaceWidget = nullptr;
-
-	// Reference to the player controller
-	UPROPERTY()
-	APlayerController* PlCtrler = nullptr;
-
 	// Physics handle component that we will access
 	UPROPERTY()
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
-
-	// Inventory containing all the objects the player collected
-	UPROPERTY()
-	UPlayerInventory* Inventory = nullptr;
-
-	// Items stored in the quick access bar to 
-	UPROPERTY()
-	UQuickAccess* QuickAccessBar = nullptr;
 
 	// Grab object in reach of raycast
 	void GrabObject();
@@ -72,15 +56,8 @@ private:
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 
-	// Return hit from raycast
-	FHitResult GetTraceResult();
-
 	// Update the string that indicates if an object is in range of being picked up
 	FString GrabIndicator;
-
-	// Variable that holds the widget after it is assigned in the blue print
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class UUserWidget> DefaultInterfaceWidgetClass;
 
 	// How far the ray reaches ahead of the player
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
@@ -101,12 +78,6 @@ private:
 	void ToggleInventory();
 	bool bInventoryOpen = false;
 
-	// Displays the bulk of the inventory
-	UWidget* InventoryWidget = nullptr;
-
-	// Initialises inventory component and broadcasts an update to the widget
-	void InitInventory();
-
 public:
 
 	// Called every frame
@@ -119,16 +90,7 @@ public:
 	UFUNCTION(BlueprintPure)
 	FString GetGrabIndicator() { return GrabIndicator; }
 
-	// Updates the inventory and all other container related widgets by casting our container arrays to the corresponding widget blueprint
-	UFUNCTION(BlueprintCallable)
-	void UpdateInventoryWidget();
-
-	UFUNCTION(BlueprintCallable)
-	UItemContainer* GetInventoryContainer() { return Inventory; }
-
-	UFUNCTION(BlueprintCallable)
-	UItemContainer* GetQuickAccessContainer() { return QuickAccessBar; }
-
-private:
+	// Return hit from raycast
+	FHitResult GetTraceResult();
 
 };

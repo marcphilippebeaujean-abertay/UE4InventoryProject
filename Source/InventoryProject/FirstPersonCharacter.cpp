@@ -17,8 +17,6 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 void AFirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	// Find the container component that acts as our inventory
-	InitInventory();
 	// Setup interface after the game has started
 	SetupInterface();
 }
@@ -71,41 +69,17 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	InputComponent->BindAxis("Turn", this, &AFirstPersonCharacter::AddControllerYawInput);
 	InputComponent->BindAxis("LookUp", this, &AFirstPersonCharacter::AddControllerPitchInput);
 	// Bind input actions related to grabbing objects
-	InputComponent->BindAction("Grab", IE_Pressed, this, &AFirstPersonCharacter::GrabObject);
-	InputComponent->BindAction("Grab", IE_Released, this, &AFirstPersonCharacter::ReleasePhysicsObject);
-	// Inventory related input
-	InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &AFirstPersonCharacter::ToggleInventory); 
+	//InputComponent->BindAction("Grab", IE_Pressed, this, &AFirstPersonCharacter::GrabObject);
+	//InputComponent->BindAction("Grab", IE_Released, this, &AFirstPersonCharacter::ReleasePhysicsObject);
+	//// Inventory related input
+	//InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &AFirstPersonCharacter::ToggleInventory); 
 }
 
 void AFirstPersonCharacter::SetupInterface()
 {
-	// Check the selected UI class is not NULL
-	if (DefaultInterfaceWidgetClass)
-	{
-		// Check if player is being possesed by a controller
-		if (PlCtrler)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Creating interface widget!"));
-			// Create Widget by accessing the player controller
-			DefaultInterfaceWidget = CreateWidget<UUserWidget>(PlCtrler, DefaultInterfaceWidgetClass);
-		}
-		if (!DefaultInterfaceWidget)
-		{
-			// Something went wrong!
-			return;
-		}
-		// Add it to the viewport so the Construct() method in the UUserWidget:: is run
-		DefaultInterfaceWidget->AddToViewport();
-	}
-	else
-	{
-		return;
-	}
-	// Set inventory widget
-	InventoryWidget = DefaultInterfaceWidget->GetWidgetFromName("Inventory_Container");
-	InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
+
 	// Update the UI container widgets
-	UpdateInventoryWidget();
+	// UpdateInventoryWidget();
 }
 
 void AFirstPersonCharacter::InitActorComponents()
@@ -121,23 +95,6 @@ void AFirstPersonCharacter::InitActorComponents()
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to generate physics handle!"));
 		return;
-	}
-	// Get player controller from the world - since it is a one player game, ID will be 0
-	PlCtrler = UGameplayStatics::GetPlayerController(this->GetWorld(), 0);
-}
-
-void AFirstPersonCharacter::InitInventory()
-{
-	Inventory = this->FindComponentByClass<UPlayerInventory>();
-	if(Inventory == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to find inventory!"));
-	}
-	// Find quick access component
-	QuickAccessBar = this->FindComponentByClass<UQuickAccess>();
-	if(QuickAccessBar == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to find quick access bar!"));
 	}
 }
 
@@ -229,24 +186,24 @@ void AFirstPersonCharacter::GrabObject()
 	auto ActorHit = hit.GetActor();
 	auto PhysicsComponent = hit.GetComponent();
 	// Check if actor was detected
-	if (ActorHit)
-	{
-		// Check if the object is a collectable
-		if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
-		{
-			// Use inventory to pick up the object
-			Inventory->CollectObject(HitCollectable);
-		}
-		else
-		{
-			// Otherwise, check if it's a physics object
-			if (PhysicsComponent)
-			{
-				// Grab component via the physics handle
-				PhysicsHandle->GrabComponentAtLocationWithRotation(PhysicsComponent, NAME_None, ActorHit->GetActorLocation(), DefaultGrabRotation);
-			}
-		}
-	}
+	//if (ActorHit)
+	//{
+	//	// Check if the object is a collectable
+	//	if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
+	//	{
+	//		// Use inventory to pick up the object
+	//		Inventory->CollectObject(HitCollectable);
+	//	}
+	//	else
+	//	{
+	//		// Otherwise, check if it's a physics object
+	//		if (PhysicsComponent)
+	//		{
+	//			// Grab component via the physics handle
+	//			PhysicsHandle->GrabComponentAtLocationWithRotation(PhysicsComponent, NAME_None, ActorHit->GetActorLocation(), DefaultGrabRotation);
+	//		}
+	//	}
+	//}
 }
 
 void AFirstPersonCharacter::ReleasePhysicsObject()
@@ -255,42 +212,36 @@ void AFirstPersonCharacter::ReleasePhysicsObject()
 	PhysicsHandle->ReleaseComponent();
 }
 
-void AFirstPersonCharacter::UpdateInventoryWidget()
-{
-	Inventory->BroadcastWidgetUpdate();
-	QuickAccessBar->BroadcastWidgetUpdate();
-}
-
 void AFirstPersonCharacter::ToggleInventory()
 {
 	// Toggle the inventory bool
 	bInventoryOpen = !bInventoryOpen;
-	if (PlCtrler)
-	{
-		// Enable/disable mouse cursor to navigate the inventory
-		PlCtrler->bShowMouseCursor = bInventoryOpen;
-		// Enable/disable UI navigation
-		PlCtrler->bEnableClickEvents = bInventoryOpen;
-		PlCtrler->bEnableMouseOverEvents = bInventoryOpen;
-		// Enable/disable player camera rotation
-		PlCtrler->SetIgnoreLookInput(bInventoryOpen);
-	}
-	if (InventoryWidget)
-	{
-		// Determine if the inventory should be visible or not
-		if (bInventoryOpen)
-		{
-			// Make sure to update the inventory before making it visible
-			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
-		}
-		else
-		{
-			InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Inventory Widget missing!"));
-	}
+	//if (PlCtrler)
+	//{
+	//	// Enable/disable mouse cursor to navigate the inventory
+	//	PlCtrler->bShowMouseCursor = bInventoryOpen;
+	//	// Enable/disable UI navigation
+	//	PlCtrler->bEnableClickEvents = bInventoryOpen;
+	//	PlCtrler->bEnableMouseOverEvents = bInventoryOpen;
+	//	// Enable/disable player camera rotation
+	//	PlCtrler->SetIgnoreLookInput(bInventoryOpen);
+	//}
+	//if (InventoryWidget)
+	//{
+	//	// Determine if the inventory should be visible or not
+	//	if (bInventoryOpen)
+	//	{
+	//		// Make sure to update the inventory before making it visible
+	//		InventoryWidget->SetVisibility(ESlateVisibility::Visible);
+	//	}
+	//	else
+	//	{
+	//		InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
+	//	}
+	//}
+	//else
+	//{
+	//	UE_LOG(LogTemp, Error, TEXT("Inventory Widget missing!"));
+	//}
 }
 
