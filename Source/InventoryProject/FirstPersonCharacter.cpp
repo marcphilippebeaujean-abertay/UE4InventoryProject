@@ -17,8 +17,6 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 void AFirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	// Setup interface after the game has started
-	SetupInterface();
 }
 
 // Called every frame
@@ -70,15 +68,6 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	InputComponent->BindAxis("LookUp", this, &AFirstPersonCharacter::AddControllerPitchInput);
 	// Release physics objects
 	InputComponent->BindAction("Grab", IE_Released, this, &AFirstPersonCharacter::ReleasePhysicsObject);
-	//// Inventory related input
-	//InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &AFirstPersonCharacter::ToggleInventory); 
-}
-
-void AFirstPersonCharacter::SetupInterface()
-{
-
-	// Update the UI container widgets
-	// UpdateInventoryWidget();
 }
 
 void AFirstPersonCharacter::InitActorComponents()
@@ -123,14 +112,10 @@ FHitResult AFirstPersonCharacter::GetTraceResult()
 	FHitResult Hit;
 	// Update view related variables - "PlayerViewPointLocation" is updated here, hence why we need to call it first
 	FVector RayEndPoint = GetRayEndPoint();
-	// Function that sets "hit" to contain the information of our ray cast
+	// Function that sets "Hit" to contain the information of our ray cast
 	if (GetWorld()->LineTraceSingleByObjectType(Hit, PlayerViewPointLocation, RayEndPoint, FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), TraceParameters))
 	{
-		// See if we hit a physics object
-		if (AActor* ActorHit = Hit.GetActor())
-		{
-
-		}
+		// Sent out trace
 	}
 	return Hit;
 }
@@ -177,7 +162,7 @@ bool AFirstPersonCharacter::LookingAtFloor()
 	}
 }
 
-void AFirstPersonCharacter::GrabObject()
+void AFirstPersonCharacter::GrabPhysicsObject()
 {
 	// Generate hit results
 	FHitResult hit = GetTraceResult();
@@ -185,24 +170,15 @@ void AFirstPersonCharacter::GrabObject()
 	auto ActorHit = hit.GetActor();
 	auto PhysicsComponent = hit.GetComponent();
 	// Check if actor was detected
-	//if (ActorHit)
-	//{
-	//	// Check if the object is a collectable
-	//	if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
-	//	{
-	//		// Use inventory to pick up the object
-	//		Inventory->CollectObject(HitCollectable);
-	//	}
-	//	else
-	//	{
-	//		// Otherwise, check if it's a physics object
-	//		if (PhysicsComponent)
-	//		{
-	//			// Grab component via the physics handle
-	//			PhysicsHandle->GrabComponentAtLocationWithRotation(PhysicsComponent, NAME_None, ActorHit->GetActorLocation(), DefaultGrabRotation);
-	//		}
-	//	}
-	//}
+	if (ActorHit)
+	{
+		// Otherwise, check if it's a physics object
+		if (PhysicsComponent)
+		{
+			// Grab component via the physics handle
+			PhysicsHandle->GrabComponentAtLocationWithRotation(PhysicsComponent, NAME_None, ActorHit->GetActorLocation(), DefaultGrabRotation);
+		}
+	}
 }
 
 void AFirstPersonCharacter::ReleasePhysicsObject()
@@ -212,38 +188,5 @@ void AFirstPersonCharacter::ReleasePhysicsObject()
 		// Release component
 		PhysicsHandle->ReleaseComponent();
 	}
-}
-
-void AFirstPersonCharacter::ToggleInventory()
-{
-	// Toggle the inventory bool
-	bInventoryOpen = !bInventoryOpen;
-	//if (PlCtrler)
-	//{
-	//	// Enable/disable mouse cursor to navigate the inventory
-	//	PlCtrler->bShowMouseCursor = bInventoryOpen;
-	//	// Enable/disable UI navigation
-	//	PlCtrler->bEnableClickEvents = bInventoryOpen;
-	//	PlCtrler->bEnableMouseOverEvents = bInventoryOpen;
-	//	// Enable/disable player camera rotation
-	//	PlCtrler->SetIgnoreLookInput(bInventoryOpen);
-	//}
-	//if (InventoryWidget)
-	//{
-	//	// Determine if the inventory should be visible or not
-	//	if (bInventoryOpen)
-	//	{
-	//		// Make sure to update the inventory before making it visible
-	//		InventoryWidget->SetVisibility(ESlateVisibility::Visible);
-	//	}
-	//	else
-	//	{
-	//		InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
-	//	}
-	//}
-	//else
-	//{
-	//	UE_LOG(LogTemp, Error, TEXT("Inventory Widget missing!"));
-	//}
 }
 

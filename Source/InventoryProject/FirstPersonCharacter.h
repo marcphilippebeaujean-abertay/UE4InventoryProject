@@ -39,17 +39,11 @@ private:
 	UPROPERTY()
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
-	// Grab object in reach of raycast
-	void GrabObject();
-
 	// Drop the physics object being held by the player
 	void ReleasePhysicsObject();
 
 	// Create/find dependancies
 	void InitActorComponents();
-
-	// Creates the initial interface when the game starts
-	void SetupInterface();
 
 	// Raycast dependancies
 	const FVector GetRayEndPoint();
@@ -74,10 +68,6 @@ private:
 	// Check to see if camera is angled at the ground
 	bool LookingAtFloor();
 
-	// Function that toggles the inventory, as well as the player's ability to see the cursor
-	void ToggleInventory();
-	bool bInventoryOpen = false;
-
 public:
 
 	// Called every frame
@@ -92,5 +82,8 @@ public:
 
 	// Return hit from raycast
 	FHitResult GetTraceResult();
+
+	// Grab object in reach of raycast
+	void GrabPhysicsObject();
 
 };

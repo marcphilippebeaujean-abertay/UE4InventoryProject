@@ -75,7 +75,25 @@ void ANewPlayerController::SetupInputComponent()
 
 void ANewPlayerController::GrabObject()
 {
-	
+	// Get the hit result to see if we grabbed a collectable object
+	FHitResult TraceHit = PlayerCharacter->GetTraceResult();
+	// Deduce the actor that was hit by the trace
+	auto ActorHit = TraceHit.GetActor();
+	// Check if we got a hit
+	if(ActorHit)
+	{
+		// Check if the other actor is of type collectable
+		if(ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
+		{
+			// Use the inventory to collect the item
+			Inventory->CollectObject(HitCollectable);
+		}
+		else
+		{
+			// Attempt to grab a physics object if the hit object is not of type collectable
+			PlayerCharacter->GrabPhysicsObject();
+		}
+	}
 }
 
 void ANewPlayerController::UpdateWidgets()
