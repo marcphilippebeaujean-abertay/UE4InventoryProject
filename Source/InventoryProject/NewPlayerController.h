@@ -49,6 +49,7 @@ private:
 
 	// Function called by player input to grab nearest object
 	void GrabObject();
+	void OnGrabRelease();
 
 	// Reference to the player character
 	AFirstPersonCharacter* PlayerCharacter = nullptr;

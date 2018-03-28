@@ -69,6 +69,7 @@ void ANewPlayerController::SetupInputComponent()
 
 	// Grab object
 	InputComponent->BindAction("Grab", IE_Pressed, this, &ANewPlayerController::GrabObject);
+	InputComponent->BindAction("Grab", IE_Released, this, &ANewPlayerController::OnGrabRelease);
 	// Toggle inventory
 	InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &ANewPlayerController::ToggleInventory);
 }
@@ -87,14 +88,18 @@ void ANewPlayerController::GrabObject()
 		{
 			// Use the inventory to collect the item
 			Inventory->CollectObject(HitCollectable);
+			return;
 		}
-		else
-		{
-			// Attempt to grab a physics object if the hit object is not of type collectable
-			PlayerCharacter->GrabPhysicsObject();
-		}
+		// Attempt to grab a physics object if the hit object is not of type collectable
+		PlayerCharacter->GrabPhysicsObject();
 	}
 }
+
+void ANewPlayerController::OnGrabRelease()
+{
+	PlayerCharacter->ReleasePhysicsObject();
+}
+
 
 void ANewPlayerController::UpdateWidgets()
 {

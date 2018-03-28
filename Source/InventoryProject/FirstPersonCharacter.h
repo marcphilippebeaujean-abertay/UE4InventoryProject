@@ -39,9 +39,6 @@ private:
 	UPROPERTY()
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
-	// Drop the physics object being held by the player
-	void ReleasePhysicsObject();
-
 	// Create/find dependancies
 	void InitActorComponents();
 
@@ -86,4 +83,6 @@ public:
 	// Grab object in reach of raycast
 	void GrabPhysicsObject();
 
+	// Drop the physics object being held by the player
+	void ReleasePhysicsObject();
 };

@@ -66,8 +66,6 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	// Setup mouse input
 	InputComponent->BindAxis("Turn", this, &AFirstPersonCharacter::AddControllerYawInput);
 	InputComponent->BindAxis("LookUp", this, &AFirstPersonCharacter::AddControllerPitchInput);
-	// Release physics objects
-	InputComponent->BindAction("Grab", IE_Released, this, &AFirstPersonCharacter::ReleasePhysicsObject);
 }
 
 void AFirstPersonCharacter::InitActorComponents()
@@ -183,10 +181,7 @@ void AFirstPersonCharacter::GrabPhysicsObject()
 
 void AFirstPersonCharacter::ReleasePhysicsObject()
 {
-	if (PhysicsHandle->GrabbedComponent)
-	{
-		// Release component
-		PhysicsHandle->ReleaseComponent();
-	}
+	// Release component
+	PhysicsHandle->ReleaseComponent();
 }
 
