@@ -47,6 +47,18 @@ private:
 	// Called to bind functionality to input
 	virtual void SetupInputComponent() override;
 
+	// Function called by player input to grab nearest object
+	void GrabObject();
+
+	// Reference to the player character
+	AFirstPersonCharacter* PlayerCharacter = nullptr;
+
+	// Turn off or enable inventory
+	void ToggleInventory();
+
+	// Bool that is toggled to enable/disable inventory
+	bool bInventoryOpen;
+
 public:
 
 	// Blueprint functions that make item containers globally accessible
@@ -55,4 +67,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UItemContainer* GetQuickAccessContainer() { return QuickAccessBar; }
 	// Update all UI elements
+	UFUNCTION(BlueprintCallable)
+	void UpdateWidgets();
 };

@@ -4,10 +4,20 @@
 
 void ANewPlayerController::BeginPlay()
 {
-	// Create interface widgets when the game starts
-	InitInterfaceWidgets();
+	// Initialise reference to player character
+	if (ACharacter* PlChar = GetCharacter())
+	{
+		PlayerCharacter = Cast<AFirstPersonCharacter>(PlChar);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to find character!"));
+		return;
+	}
 	// Initialise the containers
 	InitContainers();
+	// Create interface widgets when the game starts
+	InitInterfaceWidgets();
 }
 
 void ANewPlayerController::InitInterfaceWidgets()
@@ -33,6 +43,8 @@ void ANewPlayerController::InitInterfaceWidgets()
 	// Set inventory widget
 	InventoryWidget = DefaultInterfaceWidget->GetWidgetFromName("Inventory_Container");
 	InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
+	// Broadcast a widget update
+	UpdateWidgets();
 }
 
 void ANewPlayerController::InitContainers()
@@ -55,6 +67,49 @@ void ANewPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
+	// Grab object
+	InputComponent->BindAction("Grab", IE_Pressed, this, &ANewPlayerController::GrabObject);
+	// Toggle inventory
+	InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &ANewPlayerController::ToggleInventory);
+}
 
+void ANewPlayerController::GrabObject()
+{
+	
+}
 
+void ANewPlayerController::UpdateWidgets()
+{
+	Inventory->BroadcastWidgetUpdate();
+	QuickAccessBar->BroadcastWidgetUpdate();
+}
+
+void ANewPlayerController::ToggleInventory()
+{
+	// Toggle the inventory bool
+	bInventoryOpen = !bInventoryOpen;
+	// Enable/disable mouse cursor to navigate the inventory
+	this->bShowMouseCursor = bInventoryOpen;
+	// Enable/disable UI navigation
+	this->bEnableClickEvents = bInventoryOpen;
+	this->bEnableMouseOverEvents = bInventoryOpen;
+	// Enable/disable player camera rotation
+	this->SetIgnoreLookInput(bInventoryOpen);
+	if (InventoryWidget)
+	{
+		// Determine if the inventory should be visible or not
+		if (bInventoryOpen)
+		{
+			// Make sure to update the inventory before making it visible
+			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
+		}
+		else
+		{
+			InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Inventory Widget missing!"));
+	}
 }

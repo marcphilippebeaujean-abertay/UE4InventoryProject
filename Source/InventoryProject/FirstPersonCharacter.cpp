@@ -68,9 +68,8 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	// Setup mouse input
 	InputComponent->BindAxis("Turn", this, &AFirstPersonCharacter::AddControllerYawInput);
 	InputComponent->BindAxis("LookUp", this, &AFirstPersonCharacter::AddControllerPitchInput);
-	// Bind input actions related to grabbing objects
-	//InputComponent->BindAction("Grab", IE_Pressed, this, &AFirstPersonCharacter::GrabObject);
-	//InputComponent->BindAction("Grab", IE_Released, this, &AFirstPersonCharacter::ReleasePhysicsObject);
+	// Release physics objects
+	InputComponent->BindAction("Grab", IE_Released, this, &AFirstPersonCharacter::ReleasePhysicsObject);
 	//// Inventory related input
 	//InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &AFirstPersonCharacter::ToggleInventory); 
 }
@@ -208,8 +207,11 @@ void AFirstPersonCharacter::GrabObject()
 
 void AFirstPersonCharacter::ReleasePhysicsObject()
 {
-	// Release component
-	PhysicsHandle->ReleaseComponent();
+	if (PhysicsHandle->GrabbedComponent)
+	{
+		// Release component
+		PhysicsHandle->ReleaseComponent();
+	}
 }
 
 void AFirstPersonCharacter::ToggleInventory()
