@@ -47,9 +47,6 @@ private:
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 
-	// Update the string that indicates if an object is in range of being picked up
-	FString GrabIndicator;
-
 	// How far the ray reaches ahead of the player
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	float GrabDistance = 90.0f;
@@ -73,10 +70,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// Function that allows the UI widget to access the string
-	UFUNCTION(BlueprintPure)
-	FString GetGrabIndicator() { return GrabIndicator; }
-
 	// Return hit from raycast
 	FHitResult GetTraceResult();
 
@@ -85,4 +78,6 @@ public:
 
 	// Drop the physics object being held by the player
 	void ReleasePhysicsObject();
+
+	bool CarryingPhysicsObject();
 };

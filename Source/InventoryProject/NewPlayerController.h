@@ -16,18 +16,20 @@ UCLASS()
 class INVENTORYPROJECT_API ANewPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
 protected:
 
+	ANewPlayerController();
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 
 private:
 
 	// Variable that holds the widget after it is assigned in the blue print
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class UUserWidget> DefaultInterfaceWidgetClass;
+		TSubclassOf<class UUserWidget> DefaultInterfaceWidgetClass;
 	UPROPERTY()
-	UUserWidget* DefaultInterfaceWidget = nullptr;
+		UUserWidget* DefaultInterfaceWidget = nullptr;
 
 	// Initialise inventory components
 	void InitInterfaceWidgets();
@@ -38,11 +40,11 @@ private:
 
 	// Inventory containing all the objects the player collected
 	UPROPERTY()
-	UPlayerInventory* Inventory = nullptr;
+		UPlayerInventory* Inventory = nullptr;
 
 	// Items stored in the quick access bar to 
 	UPROPERTY()
-	UQuickAccess* QuickAccessBar = nullptr;
+		UQuickAccess* QuickAccessBar = nullptr;
 
 	// Called to bind functionality to input
 	virtual void SetupInputComponent() override;
@@ -60,14 +62,20 @@ private:
 	// Bool that is toggled to enable/disable inventory
 	bool bInventoryOpen;
 
+	// Indicator for when the player is in reach of an object
+	FString InteractionIndicator;
+
 public:
 
 	// Blueprint functions that make item containers globally accessible
 	UFUNCTION(BlueprintCallable)
-	UItemContainer* GetInventoryContainer() { return Inventory; }
+		UItemContainer* GetInventoryContainer() { return Inventory; }
 	UFUNCTION(BlueprintCallable)
-	UItemContainer* GetQuickAccessContainer() { return QuickAccessBar; }
+		UItemContainer* GetQuickAccessContainer() { return QuickAccessBar; }
 	// Update all UI elements
 	UFUNCTION(BlueprintCallable)
 	void UpdateWidgets();
+	// Update indicator
+	UFUNCTION(BlueprintCallable)
+	FString GetInteractionIndicator() { return InteractionIndicator; }
 };

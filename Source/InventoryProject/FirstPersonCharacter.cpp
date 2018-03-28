@@ -33,26 +33,6 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 		// Move object we are holding
 		PhysicsHandle->SetTargetLocationAndRotation(GetRayEndPoint(), GetActorRotation());
 	}
-	// Check if we can detect a grabable object
-	if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(GetTraceResult().GetActor()))
-	{
-		// Make sure we aren't holding another component
-		if (!PhysicsHandle->GrabbedComponent)
-		{
-			// Show indicator that tells the player what they can pick up
-			GrabIndicator = "Click to pick up " + HitCollectable->GetIndicatorName();
-		}
-		else
-		{
-			// Don't display indicator
-			GrabIndicator = "";
-		}
-	}
-	else
-	{
-		// Otherwise, we have not hit an actor - don't display indicator
-		GrabIndicator = "";
-	}
 }
 
 // Called to bind functionality to input
@@ -185,3 +165,14 @@ void AFirstPersonCharacter::ReleasePhysicsObject()
 	PhysicsHandle->ReleaseComponent();
 }
 
+bool AFirstPersonCharacter::CarryingPhysicsObject()
+{
+	if(PhysicsHandle->GrabbedComponent)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

@@ -2,6 +2,11 @@
 
 #include "NewPlayerController.h"
 
+ANewPlayerController::ANewPlayerController()
+{
+	PrimaryActorTick.bCanEverTick = true;
+}
+
 void ANewPlayerController::BeginPlay()
 {
 	// Initialise reference to player character
@@ -19,6 +24,31 @@ void ANewPlayerController::BeginPlay()
 	// Create interface widgets when the game starts
 	InitInterfaceWidgets();
 }
+
+void ANewPlayerController::Tick(float DeltaSeconds)
+{
+	// Check if we can detect a grabable object
+	if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(PlayerCharacter->GetTraceResult().GetActor()))
+	{
+		// Make sure we aren't holding another component
+		if (!PlayerCharacter->CarryingPhysicsObject())
+		{
+			// Show indicator that tells the player what they can pick up
+			InteractionIndicator = "Click to pick up " + HitCollectable->GetIndicatorName();
+		}
+		else
+		{
+			// Don't display indicator
+			InteractionIndicator = "";
+		}
+	}
+	else
+	{
+		// Otherwise, we have not hit an actor - don't display indicator
+		InteractionIndicator = "";
+	}
+}
+
 
 void ANewPlayerController::InitInterfaceWidgets()
 {
