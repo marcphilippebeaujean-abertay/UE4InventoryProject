@@ -23,7 +23,9 @@ protected:
 	virtual void BeginPlay() override;
 	// Called to bind functionality to input
 	virtual void SetupInputComponent() override;
+	virtual void Tick(float DeltaSeconds) override;
 
+	AFirstPersonPlayerController();
 private:
 	// Variable that holds the widget after it is assigned in the blue print
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
@@ -55,6 +57,7 @@ private:
 	// Reference to the player character
 	AFirstPersonCharacter* PlayerCharacter = nullptr;
 
+	/// Functions called to interact with objects in the world
 	void GrabObject();
 	void OnGrabReleased();
 

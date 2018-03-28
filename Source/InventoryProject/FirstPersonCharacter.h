@@ -69,7 +69,7 @@ public:
 	FHitResult GetTraceResult();
 
 	// Grab object in reach of raycast
-	void GrabPhysicsObject();
+	void GrabPhysicsObject(UPrimitiveComponent* Component, FVector HitActorLocation);
 
 	// Drop the physics object being held by the player
 	void ReleasePhysicsObject();

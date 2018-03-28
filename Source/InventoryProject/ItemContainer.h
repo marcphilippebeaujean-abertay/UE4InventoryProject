@@ -37,9 +37,6 @@ public:
 	// Add object to the inventory
 	void AddObjToContainer(ACollectableObject* NewItem);
 
-	// Access the widget of the container
-	TSubclassOf<class UUserWidget> GetContainerWidget() { return ContainerWidgetClass; }
-
 	// Returns all items within the contain
 	TArray<ACollectableObject*> GetContainerItems() { return ContainerItems; };
 
@@ -68,10 +65,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class ACollectableObject> EmptySlotClass;
 	ACollectableObject* EmptySlot = nullptr;
-
-	// Widget that is displayed when the user accesses the container
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class UUserWidget> ContainerWidgetClass;
 
 	// Delegate used to broadcast to the blueprint that the invnetory has been updated
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")

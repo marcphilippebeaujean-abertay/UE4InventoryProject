@@ -2,6 +2,11 @@
 
 #include "PlayerInventory.h"
 
+void UPlayerInventory::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void UPlayerInventory::CollectObject(ACollectableObject* OtherActor)
 {
 	// Disable the collectable object
@@ -9,6 +14,3 @@ void UPlayerInventory::CollectObject(ACollectableObject* OtherActor)
 	// Add the object to inventory
 	AddObjToContainer(OtherActor);
 }
-
-
-

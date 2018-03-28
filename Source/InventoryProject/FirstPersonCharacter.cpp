@@ -137,22 +137,13 @@ bool AFirstPersonCharacter::LookingAtFloor()
 	}
 }
 
-void AFirstPersonCharacter::GrabPhysicsObject()
+void AFirstPersonCharacter::GrabPhysicsObject(UPrimitiveComponent* PhysicsComponent, FVector HitActorLocation)
 {
-	// Generate hit results
-	FHitResult hit = GetTraceResult();
-	// Deduce the actor that was hit by the trace
-	auto ActorHit = hit.GetActor();
-	auto PhysicsComponent = hit.GetComponent();
-	// Check if actor was detected
-	if (ActorHit)
+	// Otherwise, check if it's a physics object
+	if (PhysicsComponent)
 	{
-		// Otherwise, check if it's a physics object
-		if (PhysicsComponent)
-		{
-			// Grab component via the physics handle
-			PhysicsHandle->GrabComponentAtLocationWithRotation(PhysicsComponent, NAME_None, ActorHit->GetActorLocation(), DefaultGrabRotation);
-		}
+		// Grab component via the physics handle
+		PhysicsHandle->GrabComponentAtLocationWithRotation(PhysicsComponent, NAME_None, HitActorLocation, DefaultGrabRotation);
 	}
 }
 

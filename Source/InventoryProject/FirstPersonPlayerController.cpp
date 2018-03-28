@@ -3,18 +3,30 @@
 #include "FirstPersonPlayerController.h"
 
 
+AFirstPersonPlayerController::AFirstPersonPlayerController()
+{
+	PrimaryActorTick.bCanEverTick = true;
+}
+
+
 void AFirstPersonPlayerController::BeginPlay()
 {
+	PlayerCharacter = Cast<AFirstPersonCharacter>(GetCharacter());
+	if (!PlayerCharacter)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to find character!"));
+	}
 	// Find and create the containers
 	InitContainers();
 	// Create the UI widgets
 	InitInterfaceWidgets();
 	// Find player character
-	PlayerCharacter = Cast<AFirstPersonCharacter>(GetCharacter());
-	if(!PlayerCharacter)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to find character!"));
-	}
+}
+
+void AFirstPersonPlayerController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
 }
 
 
@@ -48,13 +60,13 @@ void AFirstPersonPlayerController::InitInterfaceWidgets()
 void AFirstPersonPlayerController::InitContainers()
 {
 	// Find player inventory
-	Inventory = this->FindComponentByClass<UPlayerInventory>();
+	Inventory = PlayerCharacter->FindComponentByClass<UPlayerInventory>();
 	if (Inventory == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to find inventory!"));
 	}
 	// Find quick access component
-	QuickAccessBar = this->FindComponentByClass<UQuickAccess>();
+	QuickAccessBar = PlayerCharacter->FindComponentByClass<UQuickAccess>();
 	if (QuickAccessBar == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to find quick access bar!"));
@@ -130,7 +142,7 @@ void AFirstPersonPlayerController::GrabObject()
 			return;
 		}
 		// Attempt to grab a physics object if the hit object is not of type collectable
-		PlayerCharacter->GrabPhysicsObject();
+		PlayerCharacter->GrabPhysicsObject(TraceHit.GetComponent(), TraceHit.GetActor()->GetActorLocation());
 	}
 }
 
