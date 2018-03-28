@@ -3,40 +3,34 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/PlayerController.h"
 #include "FirstPersonCharacter.h"
 #include "ItemContainer.h"
 #include "PlayerInventory.h"
 #include "QuickAccess.h"
-#include "NewPlayerController.generated.h"
+#include "Blueprint/UserWidget.h"
+#include "GameFramework/PlayerController.h"
+#include "FirstPersonPlayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class INVENTORYPROJECT_API ANewPlayerController : public APlayerController
+class INVENTORYPROJECT_API AFirstPersonPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
 protected:
-
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
-
-	ANewPlayerController();
+	// Called to bind functionality to input
+	virtual void SetupInputComponent() override;
 
 private:
-
 	// Variable that holds the widget after it is assigned in the blue print
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
-		TSubclassOf<class UUserWidget> DefaultInterfaceWidgetClass = nullptr;
+	TSubclassOf<class UUserWidget> DefaultInterfaceWidgetClass = nullptr;
 	UPROPERTY()
-		UUserWidget* DefaultInterfaceWidget = nullptr;
-
-	// Initialise inventory components
-	void InitInterfaceWidgets();
-	void InitContainers();
-
+	UUserWidget* DefaultInterfaceWidget = nullptr;
+	
 	// Displays the bulk of the inventory - should be toggled on and off
 	UWidget* InventoryWidget = nullptr;
 
@@ -48,30 +42,23 @@ private:
 	UPROPERTY()
 	UQuickAccess* QuickAccessBar = nullptr;
 
-	// Called to bind functionality to input
-	virtual void SetupInputComponent() override;
-
-	// Function called by player input to grab nearest object
-	void GrabObject();
-	void OnGrabRelease();
-
-	// Reference to the player character
-	AFirstPersonCharacter* PlayerCharacter = nullptr;
-
-	// Turn off or enable inventory
-	void ToggleInventory();
+	// Initialise inventory components
+	void InitInterfaceWidgets();
+	void InitContainers();
 
 	// Bool that is toggled to enable/disable inventory
 	bool bInventoryOpen = false;
 
-	// Indicator for when the player is in reach of an object
-	FString InteractionIndicator = "";
+	// Turn off or enable inventory
+	void ToggleInventory();
 
-	// Get hit result using the character
-	void UpdateCharacterViewpoint();
+	// Reference to the player character
+	AFirstPersonCharacter* PlayerCharacter = nullptr;
+
+	void GrabObject();
+	void OnGrabReleased();
+
 public:
-
-	// Blueprint functions that make item containers globally accessible
 	UFUNCTION(BlueprintCallable)
 	UItemContainer* GetInventoryContainer() { return Inventory; }
 	UFUNCTION(BlueprintCallable)
@@ -79,7 +66,4 @@ public:
 	// Update all UI elements
 	UFUNCTION(BlueprintCallable)
 	void UpdateWidgets();
-	// Update indicator
-	UFUNCTION(BlueprintCallable)
-	FString GetInteractionIndicator() { return InteractionIndicator; }
 };

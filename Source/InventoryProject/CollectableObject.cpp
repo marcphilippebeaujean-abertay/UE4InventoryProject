@@ -19,7 +19,7 @@ ACollectableObject::ACollectableObject()
 
 void ACollectableObject::Init()
 {
-	UE_LOG(LogTemp, Error, TEXT("Init called!"));
+	
 }
 
 

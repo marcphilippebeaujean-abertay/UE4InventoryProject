@@ -35,7 +35,7 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 	}
 }
 
-// Called to bind functionality to input
+//// Called to bind functionality to input
 void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -43,9 +43,6 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	// Setup movement input
 	InputComponent->BindAxis("Forward", this, &AFirstPersonCharacter::MoveForward);
 	InputComponent->BindAxis("Right", this, &AFirstPersonCharacter::MoveRight);
-	// Setup mouse input
-	InputComponent->BindAxis("Turn", this, &AFirstPersonCharacter::AddControllerYawInput);
-	InputComponent->BindAxis("LookUp", this, &AFirstPersonCharacter::AddControllerPitchInput);
 }
 
 void AFirstPersonCharacter::InitActorComponents()

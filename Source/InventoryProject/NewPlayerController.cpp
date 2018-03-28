@@ -4,11 +4,14 @@
 
 ANewPlayerController::ANewPlayerController()
 {
-	PrimaryActorTick.bCanEverTick = true;
+
 }
+
 
 void ANewPlayerController::BeginPlay()
 {
+	// Set actor to tick
+	PrimaryActorTick.bCanEverTick = true;
 	// Initialise reference to player character
 	if (ACharacter* PlChar = GetCharacter())
 	{
@@ -27,6 +30,8 @@ void ANewPlayerController::BeginPlay()
 
 void ANewPlayerController::Tick(float DeltaSeconds)
 {
+	// Update the characters view point for line tracing
+	UpdateCharacterViewpoint();
 	// Check if we can detect a grabable object
 	if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(PlayerCharacter->GetTraceResult().GetActor()))
 	{
@@ -48,7 +53,6 @@ void ANewPlayerController::Tick(float DeltaSeconds)
 		InteractionIndicator = "";
 	}
 }
-
 
 void ANewPlayerController::InitInterfaceWidgets()
 {
@@ -97,6 +101,9 @@ void ANewPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
+	// Handle mouse look
+	InputComponent->BindAxis("Turn", this, &ANewPlayerController::AddYawInput);
+	InputComponent->BindAxis("LookUp", this, &ANewPlayerController::AddPitchInput);
 	// Grab object
 	InputComponent->BindAction("Grab", IE_Pressed, this, &ANewPlayerController::GrabObject);
 	InputComponent->BindAction("Grab", IE_Released, this, &ANewPlayerController::OnGrabRelease);
@@ -165,4 +172,15 @@ void ANewPlayerController::ToggleInventory()
 	{
 		UE_LOG(LogTemp, Error, TEXT("Inventory Widget missing!"));
 	}
+}
+
+void ANewPlayerController::UpdateCharacterViewpoint()
+{
+	// Retrieve view point location + rotation
+	FVector CurViewPointLocation;
+	FRotator CurViewPointRotation;
+	GetPlayerViewPoint(CurViewPointLocation, CurViewPointRotation);
+	// Set the varaibles in the character
+	PlayerCharacter->SetPlayerViewLocation(CurViewPointLocation);
+	PlayerCharacter->SetPlayerViewRotation(CurViewPointRotation);
 }

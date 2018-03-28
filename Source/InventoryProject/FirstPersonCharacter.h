@@ -75,4 +75,8 @@ public:
 	void ReleasePhysicsObject();
 	// Returns true if playre is carrying physics object
 	bool CarryingPhysicsObject();
+	// Sets the player viewpoint - called from controller to avoid circular dependancy
+	void SetPlayerViewLocation(FVector ViewPointLocation) { PlayerViewPointLocation = ViewPointLocation; }
+	void SetPlayerViewRotation(FRotator ViewPointRotation) { PlayerViewPointRotation = ViewPointRotation; }
+
 };

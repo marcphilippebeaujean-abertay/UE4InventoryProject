@@ -23,16 +23,16 @@ void UItemContainer::BeginPlay()
 	{
 		// Spawn an empty slot actor into the world, so that we can reference it
 		EmptySlot = Cast<ACollectableObject>(this->GetWorld()->SpawnActor(EmptySlotClass));
+		// Check if we need to add item slots
+		for (int i = 0; i < MaxItemSlots; i++)
+		{
+			// If so, add the emtpy slot to the container
+			ContainerItems.Add(EmptySlot);
+		}
 	}
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("No empty slot class blueprint assigned!"));
-	}
-	// Check if we need to add item slots
-	for (int i = 0; i < MaxItemSlots; i++)
-	{
-		// If so, add the emtpy slot to the container
-		ContainerItems.Add(EmptySlot);
 	}
 }
 
