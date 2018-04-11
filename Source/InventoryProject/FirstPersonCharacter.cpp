@@ -35,16 +35,6 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 	}
 }
 
-//// Called to bind functionality to input
-void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	// Setup movement input
-	InputComponent->BindAxis("Forward", this, &AFirstPersonCharacter::MoveForward);
-	InputComponent->BindAxis("Right", this, &AFirstPersonCharacter::MoveRight);
-}
-
 void AFirstPersonCharacter::InitActorComponents()
 {
 	// Create new physics handle

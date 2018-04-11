@@ -67,6 +67,10 @@ private:
 	void GrabObject();
 	void OnGrabReleased();
 
+	// Back-and forwards movement
+	void MovementForward(float val);
+	void MovementRight(float val);
+
 public:
 	UFUNCTION(BlueprintCallable)
 	UItemContainer* GetInventoryContainer() { return Inventory; }

@@ -26,10 +26,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Basic movement functions bound to the axis
-	void MoveForward(float val);
-	void MoveRight(float val);
-
 private:
 
 	// First person camera
@@ -72,9 +68,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	// Return hit from raycast
 	FHitResult GetTraceResult();
 
@@ -88,5 +81,10 @@ public:
 	// Sets the player viewpoint - called from controller to avoid circular dependancy
 	void SetPlayerViewLocation(FVector ViewPointLocation) { PlayerViewPointLocation = ViewPointLocation; }
 	void SetPlayerViewRotation(FRotator ViewPointRotation) { PlayerViewPointRotation = ViewPointRotation; }
+
+
+	// Basic movement functions bound to the axis
+	void MoveForward(float val);
+	void MoveRight(float val);
 
 };
