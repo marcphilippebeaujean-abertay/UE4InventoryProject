@@ -105,8 +105,11 @@ void AFirstPersonPlayerController::SetupInputComponent()
 	// Grab object
 	InputComponent->BindAction("Grab", IE_Pressed, this, &AFirstPersonPlayerController::GrabObject);
 	InputComponent->BindAction("Grab", IE_Released, this, &AFirstPersonPlayerController::OnGrabReleased);
-	//// Toggle inventory
+	// Toggle inventory
 	InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &AFirstPersonPlayerController::ToggleInventory);
+	// Switch between items in the quick access bar
+	InputComponent->BindAction("IncrementItemSelection", IE_Pressed, this, &AFirstPersonPlayerController::UpdateItemSelectionInc);
+	InputComponent->BindAction("DecrementItemSelection", IE_Pressed, this, &AFirstPersonPlayerController::UpdateItemSelectionDec);
 }
 
 void AFirstPersonPlayerController::ToggleInventory()
@@ -126,7 +129,6 @@ void AFirstPersonPlayerController::ToggleInventory()
 		if (bInventoryOpen)
 		{
 			// Make sure to update the inventory before making it visible
-			UpdateWidgets();
 			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
 		}
 		else
@@ -140,6 +142,15 @@ void AFirstPersonPlayerController::ToggleInventory()
 	}
 }
 
+void AFirstPersonPlayerController::UpdateItemSelectionInc()
+{
+	QuickAccessBar->UpdateSelectedItem(true);
+}
+
+void AFirstPersonPlayerController::UpdateItemSelectionDec()
+{
+	QuickAccessBar->UpdateSelectedItem(false);
+}
 
 void AFirstPersonPlayerController::GrabObject()
 {
@@ -169,11 +180,17 @@ void AFirstPersonPlayerController::OnGrabReleased()
 
 void AFirstPersonPlayerController::MovementForward(float val)
 {
-	PlayerCharacter->MoveForward(val);
+	if (!bInventoryOpen)
+	{
+		PlayerCharacter->MoveForward(val);
+	}
 }
 
 void AFirstPersonPlayerController::MovementRight(float val)
 {
-	PlayerCharacter->MoveRight(val);
+	if (!bInventoryOpen)
+	{
+		PlayerCharacter->MoveRight(val);
+	}
 }
 

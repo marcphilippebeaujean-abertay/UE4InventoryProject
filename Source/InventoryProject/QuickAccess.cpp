@@ -12,8 +12,9 @@ void UQuickAccess::OnComponentCreated()
 	bQuickAccess = true;
 }
 
-ACollectableObject* UQuickAccess::UpdateSelectedItem(bool increment)
+void UQuickAccess::UpdateSelectedItem(bool increment)
 {
+	UE_LOG(LogTemp, Error, TEXT("Current cur item: %d!"), CurSelectedItem);
 	// Manipulate selected value item based on condition
 	if(increment)
 	{
@@ -24,15 +25,14 @@ ACollectableObject* UQuickAccess::UpdateSelectedItem(bool increment)
 		CurSelectedItem--;
 	}
 	// Ensure that cur selected item is going to be within the container's array - if they exceed them, return the highest/lowest possible value
-	if(CurSelectedItem > MaxItemSlots)
+	if(CurSelectedItem >= MaxItemSlots)
 	{
 		CurSelectedItem = 0;
 	}
-	if(CurSelectedItem < 0)
+	if(CurSelectedItem <= 0)
 	{
 		CurSelectedItem = MaxItemSlots;
 	}
-	// Return the item from the array
-	UE_LOG(LogTemp, Error, TEXT("Currently selected item in quick access is now %s!"), *ContainerItems[CurSelectedItem]->GetIndicatorName());
-	return ContainerItems[CurSelectedItem];
+	BroadcastWidgetUpdate();
+	UE_LOG(LogTemp, Error, TEXT("Current cur item: %d!"), CurSelectedItem);
 }

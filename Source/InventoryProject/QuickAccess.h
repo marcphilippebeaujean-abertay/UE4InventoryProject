@@ -21,7 +21,7 @@ private:
 public:
 
 	// Increments/Decrements the item in the action bar that is currently selected
-	ACollectableObject* UpdateSelectedItem(bool increment);
+	void UpdateSelectedItem(bool increment);
 
 	// Since overloading doesn't work in unreal, use OnComponentCreated instead
 	virtual void OnComponentCreated() override;
@@ -30,4 +30,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetCurSelectedItem() { return CurSelectedItem; }
 
+	// Returns the item that is currently equiped by the player
+	ACollectableObject* GetSelectedItem() { return ContainerItems[CurSelectedItem]; }
 };
