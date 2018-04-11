@@ -17,5 +17,5 @@ class INVENTORYPROJECT_API AEquipableObject : public ACollectableObject
 protected:
 
 	// Since overloading doesn't work in unreal, use OnConstruction instead
-	virtual void Init() override;
+	virtual void OnConstruction(const FTransform & Transform) override;
 };

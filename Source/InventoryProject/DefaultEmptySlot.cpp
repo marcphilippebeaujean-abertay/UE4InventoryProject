@@ -8,8 +8,6 @@ void ADefaultEmptySlot::OnConstruction(const FTransform & Transform)
 	// Define the variables for the empty slot
 	IndicatorDisplayName = "Empty Slot";
 	bEmptySlot = true;
-	bEquipable = true;
-	UE_LOG(LogTemp, Warning, TEXT("Init empty slot called!"));
 }
 
 

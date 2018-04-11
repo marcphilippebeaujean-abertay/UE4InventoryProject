@@ -20,9 +20,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Function used for interherited members to call the constructor
-	virtual void Init();
-
 	// Function that applies variables assigned in the editor
 	void AssignDefaultComponents();
 

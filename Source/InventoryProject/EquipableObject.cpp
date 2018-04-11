@@ -3,13 +3,11 @@
 #include "EquipableObject.h"
 
 
-void AEquipableObject::Init()
+void AEquipableObject::OnConstruction(const FTransform & Transform)
 {
+	Super::OnConstruction(Transform);
 	// Set equipable object to true
 	bEquipable = true;
-	UE_LOG(LogTemp, Warning, TEXT("Init equipable called!"));
-
-	Super::Init();
 }
 
 
