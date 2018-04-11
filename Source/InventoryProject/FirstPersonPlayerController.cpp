@@ -61,7 +61,7 @@ void AFirstPersonPlayerController::InitInterfaceWidgets()
 void AFirstPersonPlayerController::InitContainers()
 {
 	// Spawn empty slot actor
-	EmptySlot = Cast<ACollectableObject>(this->GetWorld()->SpawnActor(EmptySlotClass));
+	EmptySlot = Cast<ACollectableObject>(this->GetWorld()->SpawnActor<ADefaultEmptySlot>());
 	if(EmptySlot)
 	{
 		// Find player inventory

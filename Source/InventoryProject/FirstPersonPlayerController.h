@@ -33,10 +33,7 @@ private:
 	TSubclassOf<class UUserWidget> DefaultInterfaceWidgetClass = nullptr;
 	UUserWidget* DefaultInterfaceWidget = nullptr;
 
-	// Variable that holds the widget after it is assigned in the blue print
-	// Item that is used for empty slots in the inventory - makes it easier to switch between item slots and allows for more customisation by the designer
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class ACollectableObject> EmptySlotClass = nullptr;
+	// Empty slot initialised to be used by the containers
 	ACollectableObject* EmptySlot = nullptr;
 	
 	// Displays the bulk of the inventory - should be toggled on and off

@@ -4,7 +4,7 @@
 
 void ADefaultEmptySlot::OnConstruction(const FTransform & Transform)
 {
-	Super::Init();
+	Super::OnConstruction(Transform);
 	// Define the variables for the empty slot
 	IndicatorDisplayName = "Empty Slot";
 	bEmptySlot = true;
