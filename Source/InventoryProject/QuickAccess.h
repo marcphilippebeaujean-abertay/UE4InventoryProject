@@ -25,4 +25,9 @@ public:
 
 	// Since overloading doesn't work in unreal, use OnComponentCreated instead
 	virtual void OnComponentCreated() override;
+
+	// Returns selected item, required for item updates
+	UFUNCTION(BlueprintCallable)
+	int GetCurSelectedItem() { return CurSelectedItem; }
+
 };
