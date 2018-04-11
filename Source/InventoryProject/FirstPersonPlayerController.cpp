@@ -60,17 +60,29 @@ void AFirstPersonPlayerController::InitInterfaceWidgets()
 
 void AFirstPersonPlayerController::InitContainers()
 {
-	// Find player inventory
-	Inventory = PlayerCharacter->FindComponentByClass<UPlayerInventory>();
-	if (Inventory == nullptr)
+	// Spawn empty slot actor
+	EmptySlot = Cast<ACollectableObject>(this->GetWorld()->SpawnActor(EmptySlotClass));
+	if(EmptySlot)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to find inventory!"));
+		// Find player inventory
+		Inventory = PlayerCharacter->FindComponentByClass<UPlayerInventory>();
+		Inventory->InitContainerContents(EmptySlot);
+		if (Inventory == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to find inventory!"));
+		}
+		// Find quick access component
+		QuickAccessBar = PlayerCharacter->FindComponentByClass<UQuickAccess>();
+		if (QuickAccessBar == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to find quick access bar!"));
+		}
+		QuickAccessBar->InitContainerContents(EmptySlot);
 	}
-	// Find quick access component
-	QuickAccessBar = PlayerCharacter->FindComponentByClass<UQuickAccess>();
-	if (QuickAccessBar == nullptr)
+	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to find quick access bar!"));
+		UE_LOG(LogTemp, Error, TEXT("Failed to find empty slot class!"));
+		return;
 	}
 }
 

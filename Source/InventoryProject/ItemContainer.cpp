@@ -18,11 +18,16 @@ UItemContainer::UItemContainer()
 void UItemContainer::BeginPlay()
 {
 	Super::BeginPlay();
+
+}
+
+void UItemContainer::InitContainerContents(ACollectableObject* EmptySlotClass)
+{
+	// Set empty slot class
+	EmptySlot = EmptySlotClass;
 	// Check if emtpy slot class was assigned - not doing this check can crash the editor
-	if (EmptySlotClass)
+	if (EmptySlot != nullptr)
 	{
-		// Spawn an empty slot actor into the world, so that we can reference it
-		EmptySlot = Cast<ACollectableObject>(this->GetWorld()->SpawnActor(EmptySlotClass));
 		// Check if we need to add item slots
 		for (int i = 0; i < MaxItemSlots; i++)
 		{
@@ -35,6 +40,7 @@ void UItemContainer::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("No empty slot class blueprint assigned!"));
 	}
 }
+
 
 // Called every frame
 void UItemContainer::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

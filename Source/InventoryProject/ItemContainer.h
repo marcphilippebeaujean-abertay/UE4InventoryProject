@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "CollectableObject.h"
-#include "Blueprint/UserWidget.h"
+#include "DefaultEmptySlot.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "ItemContainer.generated.h"
 
@@ -59,11 +59,11 @@ public:
 	// Broadcasts event, indicating that the user interface needs to be updated
 	void BroadcastWidgetUpdate();
 
+	// Create reference to empty slot object
+	void InitContainerContents(ACollectableObject* EmptySlotClass);
+
 private:
 
-	// Item that is used for empty slots in the inventory - makes it easier to switch between item slots and allows for more customisation by the designer
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class ACollectableObject> EmptySlotClass;
 	ACollectableObject* EmptySlot = nullptr;
 
 	// Delegate used to broadcast to the blueprint that the invnetory has been updated

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "FirstPersonCharacter.h"
 #include "ItemContainer.h"
+#include "DefaultEmptySlot.h"
 #include "PlayerInventory.h"
 #include "QuickAccess.h"
 #include "Blueprint/UserWidget.h"
@@ -30,13 +31,18 @@ private:
 	// Variable that holds the widget after it is assigned in the blue print
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class UUserWidget> DefaultInterfaceWidgetClass = nullptr;
-
-	UPROPERTY()
 	UUserWidget* DefaultInterfaceWidget = nullptr;
+
+	// Variable that holds the widget after it is assigned in the blue print
+	// Item that is used for empty slots in the inventory - makes it easier to switch between item slots and allows for more customisation by the designer
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class ACollectableObject> EmptySlotClass = nullptr;
+	ACollectableObject* EmptySlot = nullptr;
 	
 	// Displays the bulk of the inventory - should be toggled on and off
 	UWidget* InventoryWidget = nullptr;
 
+	// Mesh of the currently equiped item
 	UStaticMeshComponent* ItemMesh;
 
 	// Inventory containing all the objects the player collected

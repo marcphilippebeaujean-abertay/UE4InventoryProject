@@ -5,10 +5,11 @@
 
 void AEquipableObject::Init()
 {
-	Super::Init();
-
 	// Set equipable object to true
 	bEquipable = true;
+	UE_LOG(LogTemp, Warning, TEXT("Init equipable called!"));
+
+	Super::Init();
 }
 
 

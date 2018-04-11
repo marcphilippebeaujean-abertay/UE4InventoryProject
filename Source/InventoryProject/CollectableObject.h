@@ -37,6 +37,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
 	bool bEquipable = false;
 
+	// Specifies if the item can be dragged in the inventory
+	bool bEmptySlot = false;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -70,8 +73,4 @@ private:
 	// Variable that allows the designer to assign a mesh in the editor
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh = nullptr;
-
-	// Specifies if the item can be dragged in the inventory
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
-	bool bEmptySlot = false;
 };

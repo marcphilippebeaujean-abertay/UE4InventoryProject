@@ -19,7 +19,7 @@ ACollectableObject::ACollectableObject()
 
 void ACollectableObject::Init()
 {
-	
+	UE_LOG(LogTemp, Warning, TEXT("Init collectable called! Object is: %s"), *IndicatorDisplayName);
 }
 
 
