@@ -26,15 +26,15 @@ protected:
 	// Function that applies variables assigned in the editor
 	void AssignDefaultComponents();
 
-	// Variable that determines if object is a resources or equipable
-	bool bEquipable = false;
-
 	// Sets default values for this actor's properties
 	ACollectableObject();
 
 	// The name of an object as it should be displayed when the player hovers over it and in the inventory UI
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	FString IndicatorDisplayName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
+	bool bEquipable = false;
 
 public:	
 	// Called every frame
@@ -73,7 +73,4 @@ private:
 	// Specifies if the item can be dragged in the inventory
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
 	bool bEmptySlot = false;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
-	bool bCanBeUsed = false;
 };

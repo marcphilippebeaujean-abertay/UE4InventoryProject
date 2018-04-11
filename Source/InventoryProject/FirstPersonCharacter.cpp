@@ -59,6 +59,22 @@ void AFirstPersonCharacter::InitActorComponents()
 		UE_LOG(LogTemp, Error, TEXT("Failed to generate physics handle!"));
 		return;
 	}
+
+	// Set size for collision capsule
+	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+
+	// Create a CameraComponent	
+	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
+	FirstPersonCameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); // Position the camera
+	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+
+	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
+	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMesh"));
+	ItemMesh->SetOnlyOwnerSee(true);
+	ItemMesh->SetupAttachment(FirstPersonCameraComponent);
+	ItemMesh->bCastDynamicShadow = false;
+	ItemMesh->CastShadow = false;
 }
 
 const FVector AFirstPersonCharacter::GetRayEndPoint()

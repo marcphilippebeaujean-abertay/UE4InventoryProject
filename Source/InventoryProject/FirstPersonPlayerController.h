@@ -30,11 +30,14 @@ private:
 	// Variable that holds the widget after it is assigned in the blue print
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class UUserWidget> DefaultInterfaceWidgetClass = nullptr;
+
 	UPROPERTY()
 	UUserWidget* DefaultInterfaceWidget = nullptr;
 	
 	// Displays the bulk of the inventory - should be toggled on and off
 	UWidget* InventoryWidget = nullptr;
+
+	UStaticMeshComponent* ItemMesh;
 
 	// Inventory containing all the objects the player collected
 	UPROPERTY()

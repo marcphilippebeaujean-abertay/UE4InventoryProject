@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "Camera/CameraComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "FirstPersonCharacter.generated.h"
 
@@ -29,6 +31,14 @@ protected:
 	void MoveRight(float val);
 
 private:
+
+	// First person camera
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UCameraComponent* FirstPersonCameraComponent;
+
+	// Mesh for the item
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* ItemMesh;
 
 	// Physics handle component that we will access
 	UPROPERTY()
