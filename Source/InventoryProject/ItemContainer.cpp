@@ -67,14 +67,23 @@ void UItemContainer::AddObjToContainer(ACollectableObject* NewItem)
 
 void UItemContainer::SwapItems(UItemContainer* OtherContainer, int OtherItemID, int LocalItemID)
 {
-	UE_LOG(LogTemp, Error, TEXT("Before swap: %s!"), *GetContainerItem(LocalItemID)->GetIndicatorName());
+	// Check if its possible to swap the items - first check if one of the items is quick access
+	if(bQuickAccess || OtherContainer->IsQuickAccess())
+	{
+		// Check if both items are equipable
+		if(!GetContainerItem(LocalItemID)->IsEquipable() && !OtherContainer->GetContainerItem(OtherItemID)->IsEquipable())
+		{
+			// If not, don't perform swap
+			return;
+		}
+	}
 	// Create temporary object that stores values from other container's item
 	ACollectableObject* TempObject = OtherContainer->GetContainerItem(OtherItemID);
 	// Set other containers item to be able equal to that of the local one
 	OtherContainer->SetContainerItem(OtherItemID, GetContainerItem(LocalItemID));
 	// Set local item to be equal to that of the temporary object
 	SetContainerItem(LocalItemID, TempObject);
-	UE_LOG(LogTemp, Error, TEXT("After swap: %s!"), *GetContainerItem(LocalItemID)->GetIndicatorName());
+	
 	// Update widgets
 	BroadcastWidgetUpdate();
 	OtherContainer->BroadcastWidgetUpdate();

@@ -33,6 +33,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	FString IndicatorDisplayName;
 
+	// Condition that checks if an object can be moved to quick access
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
 	bool bEquipable = false;
 
