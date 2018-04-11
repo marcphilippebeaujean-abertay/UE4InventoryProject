@@ -52,7 +52,7 @@ void UItemContainer::AddObjToContainer(ACollectableObject* NewItem)
 		// Iterate through each slot until an empty slot is found
 		for(int i = 0; i < ContainerItems.Num(); i++)
 		{
-			if(ContainerItems[i] == EmptySlot)
+			if(ContainerItems[i]->IsEmptySlot())
 			{
 				// Set the empty slot to equal the new item
 				ContainerItems[i] = NewItem;
@@ -70,8 +70,9 @@ void UItemContainer::SwapItems(UItemContainer* OtherContainer, int OtherItemID, 
 	// Check if its possible to swap the items - first check if one of the items is quick access
 	if(bQuickAccess || OtherContainer->IsQuickAccess())
 	{
+		UE_LOG(LogTemp, Error, TEXT("One of the containers is quick access!"));
 		// Check if both items are equipable
-		if(!GetContainerItem(LocalItemID)->IsEquipable() && !OtherContainer->GetContainerItem(OtherItemID)->IsEquipable())
+		if(!GetContainerItem(LocalItemID)->IsEquipable() || !OtherContainer->GetContainerItem(OtherItemID)->IsEquipable())
 		{
 			// If not, don't perform swap
 			return;
