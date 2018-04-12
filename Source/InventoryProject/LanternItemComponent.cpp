@@ -18,13 +18,15 @@ ULanternItemComponent::ULanternItemComponent()
 void ULanternItemComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	// Find the light component in the player's components
 	LanternLight = GetOwner()->FindComponentByClass<UPointLightComponent>();
 	if (!LanternLight)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to find lantern spot light!"));
 		return;
 	}
+	
+	CurAttenuation = InitAttenuation;
 
 	// ...
 	
@@ -35,6 +37,25 @@ void ULanternItemComponent::BeginPlay()
 void ULanternItemComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if(LanternLight)
+	{
+		// Decrement attenuation of light
+		if(CurAttenuation > 0)
+		{
+			CurAttenuation -= (LightDecrementRate * DeltaTime);
+			if(CurAttenuation < 8)
+			{
+				CurAttenuation = 8.0f;
+			}
+			LanternLight->SetAttenuationRadius(CurAttenuation);
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to find lantern spot light!"));
+		return;
+	}
 
 	// ...
 }
