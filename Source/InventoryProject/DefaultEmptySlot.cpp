@@ -12,10 +12,11 @@ void ADefaultEmptySlot::OnConstruction(const FTransform & Transform)
 
 void ADefaultEmptySlot::EquipItem()
 {
-	if (ObjectOwner)
-	{
-		ObjectOwner->HideItemMesh();
-	}
+	
 }
 
+void ADefaultEmptySlot::UnEquipItem()
+{
+	
+}
 

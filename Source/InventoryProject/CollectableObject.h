@@ -65,8 +65,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsEquipable() { return bEquipable; }
 
+	void SetObjectOwner(AFirstPersonCharacter* Owner) { ObjectOwner = Owner; }
+
 	// Function when the item is being equipped
-	virtual void EquipItem();
+	// virtual void EquipItem();
 
 private:
 

@@ -21,4 +21,5 @@ protected:
 public:
 
 	virtual void EquipItem() override;
+	virtual void UnEquipItem() override;
 };

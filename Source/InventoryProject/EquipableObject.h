@@ -22,6 +22,14 @@ protected:
 public:
 
 	// Function when the item is being equipped
-	virtual void EquipItem() override;
+	virtual void EquipItem();
+	virtual void UnEquipItem();
+
+	bool IsEquiped() { return bEquiped; }
+
+private:
+
+	// Condition that checks if the object is 
+	bool bEquiped = false;
 
 };

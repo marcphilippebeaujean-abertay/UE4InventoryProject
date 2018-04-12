@@ -176,7 +176,6 @@ void AFirstPersonCharacter::SetItemMesh(UStaticMesh* NewItemMesh)
 	ItemMesh->SetHiddenInGame(false);
 	// Set the new mesh
 	ItemMesh->SetStaticMesh(NewItemMesh);
-	UE_LOG(LogTemp, Error, TEXT("Assigning new mesh!"));
 }
 
 void AFirstPersonCharacter::HideItemMesh()

@@ -13,6 +13,28 @@ void AEquipableObject::OnConstruction(const FTransform & Transform)
 
 void AEquipableObject::EquipItem()
 {
-	// Set mesh of item for the player
-	ObjectOwner->SetItemMesh(Mesh->GetStaticMesh());
+	if (ObjectOwner)
+	{
+		// Set mesh of item for the player
+		ObjectOwner->SetItemMesh(Mesh->GetStaticMesh());
+		bEquiped = true;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to find object owner!"));
+	}
+}
+
+void AEquipableObject::UnEquipItem()
+{
+	if (ObjectOwner)
+	{
+		// Hide item mesh if its being unequiped
+		ObjectOwner->HideItemMesh();
+		bEquiped = false;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to find object owner!"));
+	}
 }
