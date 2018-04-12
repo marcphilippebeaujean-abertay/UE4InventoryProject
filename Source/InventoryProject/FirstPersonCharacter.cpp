@@ -64,6 +64,12 @@ void AFirstPersonCharacter::InitActorComponents()
 	ItemMesh->SetupAttachment(FirstPersonCameraComponent);
 	ItemMesh->bCastDynamicShadow = false;
 	ItemMesh->CastShadow = false;
+
+	LanternLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("LanternLight"));
+	LanternLight->SetupAttachment(ItemMesh);
+	LanternLight->SetAttenuationRadius(1000.0f);
+	LanternLight->SetIntensity(10.0f);
+	LanternLight->SetSourceRadius(0.0f);
 }
 
 const FVector AFirstPersonCharacter::GetRayEndPoint()

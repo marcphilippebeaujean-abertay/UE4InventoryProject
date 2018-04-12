@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/PointLightComponent.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Blueprint/UserWidget.h"
@@ -29,12 +30,16 @@ protected:
 private:
 
 	// First person camera
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent = nullptr;
 
 	// Mesh for the item
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* ItemMesh = nullptr;
+
+	// Light component used to toggle the lantern
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
+	UPointLightComponent* LanternLight = nullptr;
 
 	// Physics handle component that we will access
 	UPROPERTY()
