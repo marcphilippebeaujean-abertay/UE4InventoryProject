@@ -34,3 +34,23 @@ void UQuickAccess::UpdateSelectedItem(bool increment)
 	}
 	BroadcastWidgetUpdate();
 }
+
+void UQuickAccess::SetContainerItem(int ContainerID, ACollectableObject* NewItem)
+{
+	Super::SetContainerItem(ContainerID, NewItem);
+
+	// Check if the new object is being assigned as the current item slot
+	if(ContainerID == CurSelectedItem)
+	{
+		// Equip the item
+		AEquipableObject* EquipableObj = Cast<AEquipableObject>(NewItem);
+		if(EquipableObj != nullptr)
+		{
+			EquipableObj->EquipItem();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed cast to equipable object - cannot equip!"));
+		}
+	}
+}

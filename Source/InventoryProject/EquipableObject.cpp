@@ -11,3 +11,8 @@ void AEquipableObject::OnConstruction(const FTransform & Transform)
 }
 
 
+void AEquipableObject::EquipItem()
+{
+	// Set mesh of item for the player
+	ObjectOwner->SetItemMesh(Mesh->GetStaticMesh());
+}

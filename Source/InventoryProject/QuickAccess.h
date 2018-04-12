@@ -32,4 +32,7 @@ public:
 
 	// Returns the item that is currently equiped by the player
 	ACollectableObject* GetSelectedItem() { return ContainerItems[CurSelectedItem]; }
+
+	// Override set container item, since we need to check if an object is being equiped when a container update is made
+	virtual void SetContainerItem(int ContainerID, ACollectableObject* NewItem) override;
 };

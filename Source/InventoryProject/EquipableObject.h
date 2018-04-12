@@ -18,4 +18,10 @@ protected:
 
 	// Since overloading doesn't work in unreal, use OnConstruction instead
 	virtual void OnConstruction(const FTransform & Transform) override;
+
+public:
+
+	// Function when the item is being equipped
+	virtual void EquipItem();
+
 };

@@ -30,11 +30,11 @@ private:
 
 	// First person camera
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FirstPersonCameraComponent;
+	class UCameraComponent* FirstPersonCameraComponent = nullptr;
 
 	// Mesh for the item
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* ItemMesh;
+	class UStaticMeshComponent* ItemMesh = nullptr;
 
 	// Physics handle component that we will access
 	UPROPERTY()
@@ -86,5 +86,8 @@ public:
 	// Basic movement functions bound to the axis
 	void MoveForward(float val);
 	void MoveRight(float val);
+
+	// Function used when a new object is equiped
+	void SetItemMesh(UStaticMesh* NewItemMesh);
 
 };

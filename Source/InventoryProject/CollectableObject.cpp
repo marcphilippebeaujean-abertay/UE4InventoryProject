@@ -48,6 +48,11 @@ void ACollectableObject::CollectObject(AFirstPersonCharacter* NewOwner)
 	this->SetActorTickEnabled(false);
 	// Set the new owner of the object
 	ObjectOwner = NewOwner;
+
+	if(ObjectOwner == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to assign owner to object!"));
+	}
 }
 
 void ACollectableObject::DropItem(FVector DropLocation)

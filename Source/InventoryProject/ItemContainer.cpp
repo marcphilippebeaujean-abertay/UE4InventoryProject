@@ -41,7 +41,6 @@ void UItemContainer::InitContainerContents(ACollectableObject* EmptySlotClass)
 	}
 }
 
-
 // Called every frame
 void UItemContainer::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -76,7 +75,6 @@ void UItemContainer::SwapItems(UItemContainer* OtherContainer, int OtherItemID, 
 	// Check if its possible to swap the items - first check if one of the items is quick access
 	if(bQuickAccess || OtherContainer->IsQuickAccess())
 	{
-		UE_LOG(LogTemp, Error, TEXT("One of the containers is quick access!"));
 		// Check if both items are equipable
 		if(!GetContainerItem(LocalItemID)->IsEquipable() || !OtherContainer->GetContainerItem(OtherItemID)->IsEquipable())
 		{

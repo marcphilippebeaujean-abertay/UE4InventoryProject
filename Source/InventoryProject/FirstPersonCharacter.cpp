@@ -2,7 +2,6 @@
 
 #include "FirstPersonCharacter.h"
 
-
 // Sets default values
 AFirstPersonCharacter::AFirstPersonCharacter()
 {
@@ -169,4 +168,10 @@ bool AFirstPersonCharacter::CarryingPhysicsObject()
 	{
 		return false;
 	}
+}
+
+void AFirstPersonCharacter::SetItemMesh(UStaticMesh* NewItemMesh)
+{
+	ItemMesh->SetStaticMesh(NewItemMesh);
+	UE_LOG(LogTemp, Error, TEXT("Assigning new mesh!"));
 }

@@ -37,6 +37,13 @@ protected:
 	// Specifies if the item can be dragged in the inventory
 	bool bEmptySlot = false;
 
+	// The character that owns the object
+	AFirstPersonCharacter* ObjectOwner = nullptr;
+
+	// Variable that allows the designer to assign a mesh in the editor
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* Mesh = nullptr;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -60,14 +67,7 @@ public:
 
 private:
 
-	// The character that owns the object
-	AFirstPersonCharacter* ObjectOwner;
-
 	// Icon that should be displayed to represent the item in the inventory
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	UTexture2D* Thumbnail = nullptr;
-
-	// Variable that allows the designer to assign a mesh in the editor
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* Mesh = nullptr;
 };
