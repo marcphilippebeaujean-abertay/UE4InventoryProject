@@ -14,6 +14,8 @@ void UQuickAccess::OnComponentCreated()
 
 void UQuickAccess::UpdateSelectedItem(bool increment)
 {
+	// Unequip the current item
+	Cast<AEquipableObject>(GetContainerItem(CurSelectedItem))->UnEquipItem();
 	// Manipulate selected value item based on condition
 	if(increment)
 	{
@@ -32,6 +34,8 @@ void UQuickAccess::UpdateSelectedItem(bool increment)
 	{
 		CurSelectedItem = (MaxItemSlots - 1);
 	}
+	// Equip the new current item
+	Cast<AEquipableObject>(GetContainerItem(CurSelectedItem))->EquipItem();
 	BroadcastWidgetUpdate();
 }
 
