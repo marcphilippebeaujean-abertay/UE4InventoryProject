@@ -66,3 +66,8 @@ void ACollectableObject::DropItem(FVector DropLocation)
 	// Actor should tick
 	this->SetActorTickEnabled(true);
 }
+
+void ACollectableObject::EquipItem()
+{
+	
+}

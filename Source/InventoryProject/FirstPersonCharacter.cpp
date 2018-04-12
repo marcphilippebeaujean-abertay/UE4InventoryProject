@@ -172,6 +172,14 @@ bool AFirstPersonCharacter::CarryingPhysicsObject()
 
 void AFirstPersonCharacter::SetItemMesh(UStaticMesh* NewItemMesh)
 {
+	// Set visibility to true
+	ItemMesh->SetHiddenInGame(false);
+	// Set the new mesh
 	ItemMesh->SetStaticMesh(NewItemMesh);
 	UE_LOG(LogTemp, Error, TEXT("Assigning new mesh!"));
+}
+
+void AFirstPersonCharacter::HideItemMesh()
+{
+	ItemMesh->SetHiddenInGame(true);
 }

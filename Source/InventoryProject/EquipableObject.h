@@ -22,6 +22,6 @@ protected:
 public:
 
 	// Function when the item is being equipped
-	virtual void EquipItem();
+	virtual void EquipItem() override;
 
 };

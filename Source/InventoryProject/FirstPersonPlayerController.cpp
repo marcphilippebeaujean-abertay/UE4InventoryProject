@@ -62,6 +62,8 @@ void AFirstPersonPlayerController::InitContainers()
 {
 	// Spawn empty slot actor
 	EmptySlot = Cast<ACollectableObject>(this->GetWorld()->SpawnActor<ADefaultEmptySlot>());
+	// Set owner of slot to be the character
+	EmptySlot->SetOwner(PlayerCharacter);
 	if(EmptySlot)
 	{
 		// Find player inventory

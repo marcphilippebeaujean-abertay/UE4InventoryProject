@@ -17,4 +17,8 @@ class INVENTORYPROJECT_API ADefaultEmptySlot : public AEquipableObject
 protected:
 	// Constructor to define empty slot
 	void OnConstruction(const FTransform & Transform) override;
+
+public:
+
+	virtual void EquipItem() override;
 };

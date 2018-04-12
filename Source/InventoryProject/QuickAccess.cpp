@@ -42,11 +42,10 @@ void UQuickAccess::SetContainerItem(int ContainerID, ACollectableObject* NewItem
 	// Check if the new object is being assigned as the current item slot
 	if(ContainerID == CurSelectedItem)
 	{
-		// Equip the item
-		AEquipableObject* EquipableObj = Cast<AEquipableObject>(NewItem);
-		if(EquipableObj != nullptr)
+		// See if item is equipable
+		if(NewItem->IsEquipable())
 		{
-			EquipableObj->EquipItem();
+			NewItem->EquipItem();
 		}
 		else
 		{

@@ -65,6 +65,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsEquipable() { return bEquipable; }
 
+	// Function when the item is being equipped
+	virtual void EquipItem();
+
 private:
 
 	// Icon that should be displayed to represent the item in the inventory
