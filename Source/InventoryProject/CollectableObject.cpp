@@ -2,7 +2,7 @@
 
 #include "CollectableObject.h"
 #include "Components/StaticMeshComponent.h"
-
+#include "PlayerInventory.h"
 
 // Sets default values
 ACollectableObject::ACollectableObject()
@@ -48,10 +48,15 @@ void ACollectableObject::CollectObject(AFirstPersonCharacter* NewOwner)
 	this->SetActorTickEnabled(false);
 	// Set the new owner of the object
 	ObjectOwner = NewOwner;
-
-	if(ObjectOwner == nullptr)
+	if (ObjectOwner == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to assign owner to object!"));
+	}
+	// Get reference to the inventory
+	PlayerInventoryRef = NewOwner->FindComponentByClass<UPlayerInventory>();
+	if (PlayerInventoryRef == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to assign inventory!"));
 	}
 }
 

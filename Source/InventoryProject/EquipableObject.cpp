@@ -2,12 +2,16 @@
 
 #include "EquipableObject.h"
 
-
 void AEquipableObject::OnConstruction(const FTransform & Transform)
 {
 	Super::OnConstruction(Transform);
 	// Set equipable object to true
 	bEquipable = true;
+}
+
+void AEquipableObject::CollectObject(AFirstPersonCharacter* NewOwner)
+{
+	Super::CollectObject(NewOwner);
 }
 
 
@@ -37,4 +41,9 @@ void AEquipableObject::UnEquipItem()
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to find object owner!"));
 	}
+}
+
+void AEquipableObject::UseItem()
+{
+	
 }

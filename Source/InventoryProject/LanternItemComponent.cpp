@@ -13,7 +13,6 @@ ULanternItemComponent::ULanternItemComponent()
 	// ...
 }
 
-
 // Called when the game starts
 void ULanternItemComponent::BeginPlay()
 {
@@ -26,12 +25,11 @@ void ULanternItemComponent::BeginPlay()
 		return;
 	}
 	
-	CurAttenuation = InitAttenuation;
+	this->SetComponentTickEnabled(false);
 
 	// ...
 	
 }
-
 
 // Called every frame
 void ULanternItemComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -60,3 +58,16 @@ void ULanternItemComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
+void ULanternItemComponent::RelightLantern()
+{
+	// Reset attenuation for the point light
+	CurAttenuation = InitAttenuation;
+	LanternLight->SetAttenuationRadius(CurAttenuation);
+}
+
+void ULanternItemComponent::ExtinguishLantern()
+{
+	// Reset lantern attenuation
+	CurAttenuation = 8;
+	LanternLight->SetAttenuationRadius(CurAttenuation);
+}

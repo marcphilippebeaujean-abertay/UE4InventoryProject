@@ -44,6 +44,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh = nullptr;
 
+	// Forward declaration the player inventory
+	class UPlayerInventory* PlayerInventoryRef = nullptr;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -66,9 +69,6 @@ public:
 	bool IsEquipable() { return bEquipable; }
 
 	void SetObjectOwner(AFirstPersonCharacter* Owner) { ObjectOwner = Owner; }
-
-	// Function when the item is being equipped
-	// virtual void EquipItem();
 
 private:
 

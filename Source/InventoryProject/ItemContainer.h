@@ -62,8 +62,11 @@ public:
 	// Create reference to empty slot object
 	void InitContainerContents(ACollectableObject* EmptySlotClass);
 
-private:
+	// Get empty slot
+	ACollectableObject* GetEmptySlot() { return EmptySlot; }
 
+private:
+	// Reference to empty slot item
 	ACollectableObject* EmptySlot = nullptr;
 
 	// Delegate used to broadcast to the blueprint that the invnetory has been updated

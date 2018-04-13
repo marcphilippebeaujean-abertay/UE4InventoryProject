@@ -25,6 +25,10 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	// Called when the lantern needs to be reset
+	void RelightLantern();
+	void ExtinguishLantern();
+
 private:
 	// Reference to player's point light component
 	UPointLightComponent* LanternLight = nullptr;

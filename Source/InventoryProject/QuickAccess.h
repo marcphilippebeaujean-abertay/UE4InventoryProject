@@ -28,10 +28,10 @@ public:
 
 	// Returns selected item, required for item updates
 	UFUNCTION(BlueprintCallable)
-	int GetCurSelectedItem() { return CurSelectedItem; }
+	int GetCurSelectedID() { return CurSelectedItem; }
 
 	// Returns the item that is currently equiped by the player
-	ACollectableObject* GetSelectedItem() { return ContainerItems[CurSelectedItem]; }
+	AEquipableObject* GetSelectedItem() { return Cast<AEquipableObject>(ContainerItems[CurSelectedItem]); }
 
 	// Override set container item, since we need to check if an object is being equiped when a container update is made
 	virtual void SetContainerItem(int ContainerID, ACollectableObject* NewItem) override;

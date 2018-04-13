@@ -24,12 +24,17 @@ public:
 	// Function when the item is being equipped
 	virtual void EquipItem();
 	virtual void UnEquipItem();
+	virtual void UseItem();
+	virtual void CollectObject(AFirstPersonCharacter* NewOwner);
 
 	bool IsEquiped() { return bEquiped; }
+	bool HasExternalDependancy() { return bExternalDependancy; }
 
 private:
 
 	// Condition that checks if the object is 
 	bool bEquiped = false;
 
+	// If this condition is true, this object relies on other objects in the inventory to work
+	bool bExternalDependancy = false;
 };

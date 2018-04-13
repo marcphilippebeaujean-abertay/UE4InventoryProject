@@ -75,6 +75,8 @@ private:
 	void UpdateItemSelectionInc();
 	void UpdateItemSelectionDec();
 
+	void UseCurrentItem();
+
 public:
 	UFUNCTION(BlueprintCallable)
 	UItemContainer* GetInventoryContainer() { return Inventory; }
