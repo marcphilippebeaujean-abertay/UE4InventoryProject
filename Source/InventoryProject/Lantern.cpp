@@ -6,16 +6,13 @@
 void ALantern::EquipItem()
 {
 	Super::EquipItem();
-	if (LanternComponent)
+	if (!LanternComponent)
 	{
-		// Enable tick on the lantern component
-		LanternComponent->SetComponentTickEnabled(true);
+		// Locate and assign lantern item component, which is responsible for handling the light cast by the lantern
+		LanternComponent = ObjectOwner->FindComponentByClass<ULanternItemComponent>();
 	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to find lantern component!"));
-		return;
-	}
+	// Enable tick on the lantern component
+	LanternComponent->SetComponentTickEnabled(true);
 }
 
 void ALantern::UnEquipItem()
@@ -27,32 +24,15 @@ void ALantern::UnEquipItem()
 void ALantern::CollectObject(AFirstPersonCharacter* NewOwner)
 {
 	Super::CollectObject(NewOwner);
-	// Check that owner has been assigned correctly
-	if (ObjectOwner)
+	// Find lantern component
+	if(ObjectOwner)
 	{
-		// Locate and assign lantern item component, which is responsible for handling the light cast by the lantern
 		LanternComponent = ObjectOwner->FindComponentByClass<ULanternItemComponent>();
-		if(LanternComponent)
-		{
-			
-		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("Failed to find lantern component!"));
-			return;
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to find owning player!"));
-		return;
 	}
 }
 
 void ALantern::UseItem()
 {
-	Super::UseItem();
-	UE_LOG(LogTemp, Error, TEXT("Trying to use item!"));
 	if (LanternComponent)
 	{
 		// Relight the lantern component
@@ -61,6 +41,5 @@ void ALantern::UseItem()
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to find lantern component!"));
-		return;
 	}
 }

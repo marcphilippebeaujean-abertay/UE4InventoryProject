@@ -12,11 +12,10 @@
 UCLASS()
 class INVENTORYPROJECT_API ACollectableObject : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
+	GENERATED_BODY()	
 
 protected:
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -48,18 +47,19 @@ protected:
 	class UPlayerInventory* PlayerInventoryRef = nullptr;
 
 public:	
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Function that allows the character to access the object name
 	UFUNCTION()
-	virtual FString GetIndicatorName() { return IndicatorDisplayName; }
+	virtual FString GetIndicatorName();
 
 	// Returns the object to the scene as a collectable
 	void DropItem(FVector DropLocation);
 
 	// Handle behaviour when object is collected by the player (disable mesh and collision components etc.)
-	virtual void CollectObject(AFirstPersonCharacter* NewOwner);
+	virtual void OnObjectCollected(AFirstPersonCharacter* NewOwner);
 	
 	// Used to make distinctions between empty slots and normal items in the blueprints script
 	UFUNCTION(BlueprintCallable)
@@ -70,9 +70,28 @@ public:
 
 	void SetObjectOwner(AFirstPersonCharacter* Owner) { ObjectOwner = Owner; }
 
+	UFUNCTION(BlueprintCallable)
+	int GetMaxItemsPerSlot() { return MaxItemsPerSlot; }
+
+	UFUNCTION(BlueprintCallable)
+	int GetCurItemsInSlot() { return CurItemsInSlot; }
+
 private:
 
 	// Icon that should be displayed to represent the item in the inventory
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	UTexture2D* Thumbnail = nullptr;
+
+	// Maximum number of the same item stored per slot
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
+	int MaxItemsPerSlot = 1;
+
+	// Initial number assigned to the item
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
+	int InitItems = 1;
+
+	// Tracks how many slots are in the item
+	int CurItemsInSlot = 1;
+
+
 };

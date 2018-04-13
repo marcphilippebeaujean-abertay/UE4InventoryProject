@@ -11,7 +11,7 @@ void AEquipableObject::OnConstruction(const FTransform & Transform)
 
 void AEquipableObject::CollectObject(AFirstPersonCharacter* NewOwner)
 {
-	Super::CollectObject(NewOwner);
+	Super::OnObjectCollected(NewOwner);
 }
 
 

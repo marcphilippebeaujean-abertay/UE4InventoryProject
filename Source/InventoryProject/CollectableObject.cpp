@@ -12,6 +12,13 @@ ACollectableObject::ACollectableObject()
 
 	// Apply editor-specified variables to the local temps created in the script
 	AssignDefaultComponents();
+	// Initialise item values
+	if(MaxItemsPerSlot <= 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Max items per slot noted assigned to object!"));
+		MaxItemsPerSlot = 1;
+	}
+	CurItemsInSlot = FMath::Clamp(InitItems, 1, MaxItemsPerSlot);
 }
 
 // Called when the game starts or when spawned
@@ -38,7 +45,7 @@ void ACollectableObject::AssignDefaultComponents()
 	Mesh->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }
 
-void ACollectableObject::CollectObject(AFirstPersonCharacter* NewOwner)
+void ACollectableObject::OnObjectCollected(AFirstPersonCharacter* NewOwner)
 {
 	// Deactivate collision for the actor
 	this->SetActorEnableCollision(false);
@@ -70,4 +77,15 @@ void ACollectableObject::DropItem(FVector DropLocation)
 	this->SetActorHiddenInGame(false);
 	// Actor should tick
 	this->SetActorTickEnabled(true);
+}
+
+FString ACollectableObject::GetIndicatorName()
+{
+	// Check if indicator name needs to include number of items in the slot
+	FString ItemNrIndicator = "";
+	if(CurItemsInSlot > 0)
+	{
+		ItemNrIndicator = (" " + FString::FromInt(CurItemsInSlot));
+	}
+	return (IndicatorDisplayName + ItemNrIndicator);
 }
