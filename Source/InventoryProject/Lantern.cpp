@@ -2,6 +2,7 @@
 
 #include "Lantern.h"
 #include "ItemContainer.h"
+#include "PlayerInventory.h"
 
 void ALantern::EquipItem()
 {
@@ -36,13 +37,28 @@ void ALantern::OnObjectCollected(UItemContainer* NewOwner)
 
 void ALantern::UseItem()
 {
-	if (LanternComponent)
+	// Create player inventory reference
+	UPlayerInventory* PlayerInventory = OwningPlayer->FindComponentByClass<UPlayerInventory>();
+	// Find matches resource in the inventory
+	ACollectableObject* MatchStack = PlayerInventory->GetResourceOfType(EResourceType::Matches);
+	// Check if a match stack is available
+	if (MatchStack)
 	{
-		// Relight the lantern component
-		LanternComponent->RelightLantern();
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to find lantern component!"));
+		if (LanternComponent)
+		{
+			// Relight the lantern component
+			LanternComponent->RelightLantern();
+			// Subtract item count from match stack
+			MatchStack->DecrementItemCount(1);
+			if(MatchStack->GetCurItemsInSlot() <= 0)
+			{
+				// If match stack is depleted, remove from inventory
+				PlayerInventory->CheckForDepletedItems();
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to find lantern component!"));
+		}
 	}
 }

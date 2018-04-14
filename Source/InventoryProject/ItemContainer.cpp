@@ -88,13 +88,22 @@ void UItemContainer::SwapItems(UItemContainer* OtherContainer, int OtherItemID, 
 	}
 	// Create temporary object that stores values from other container's item
 	ACollectableObject* TempObject = OtherContainer->GetContainerItem(OtherItemID);
-	// Update owners for the object
+	// Update owners for the object and auto stack
 	TempObject->UpdateObjectOwner(this);
-	GetContainerItem(LocalItemID)->UpdateObjectOwner(OtherContainer);
-	// Set other containers item to be able equal to that of the local one
-	OtherContainer->SetContainerItem(OtherItemID, GetContainerItem(LocalItemID));
-	// Set local item to be equal to that of the temporary object
-	SetContainerItem(LocalItemID, TempObject);
+	// Check if the object dragged onto this container has been depleted by auto stacking
+	if (TempObject->GetCurItemsInSlot() > 0)
+	{
+		GetContainerItem(LocalItemID)->UpdateObjectOwner(OtherContainer);
+		// Set other containers item to be able equal to that of the local one
+		OtherContainer->SetContainerItem(OtherItemID, GetContainerItem(LocalItemID));
+		// Set local item to be equal to that of the temporary object
+		SetContainerItem(LocalItemID, TempObject);
+	}
+	else
+	{
+		// Its not a swap, since the object dragged to the new container has been depleted - replace object in other container with empty slot
+		OtherContainer->SetContainerItem(OtherItemID, OtherContainer->GetEmptySlot());
+	}
 	// Update widgets
 	BroadcastWidgetUpdate();
 	OtherContainer->BroadcastWidgetUpdate();

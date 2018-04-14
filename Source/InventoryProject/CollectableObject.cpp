@@ -54,11 +54,6 @@ void ACollectableObject::OnObjectCollected(UItemContainer* NewOwner)
 	this->SetActorHiddenInGame(true);
 	// Stop actor from ticking
 	this->SetActorTickEnabled(false);
-	// Set the new owner of the object
-	if (OwningPlayer == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to assign owner to object!"));
-	}
 	// Setup reference to the player and inventory
 	UpdateObjectOwner(NewOwner);
 }
@@ -94,8 +89,8 @@ void ACollectableObject::UpdateObjectOwner(UItemContainer* NewOwner)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to assign inventory!"));
 	}
-	// Check if container belongs to a player, if so, assign the new player as owning player
-	if(AFirstPersonCharacter* NewPlayerOwner = Cast<AFirstPersonCharacter>(NewOwner->GetOwner()))
+	// Check if container belongs to a player, if so, assign the new player as player
+	if(AFirstPersonCharacter* NewPlayerOwner = Cast<AFirstPersonCharacter>(OwningContainer->GetOwner()))
 	{
 		OwningPlayer = NewPlayerOwner;
 	}
