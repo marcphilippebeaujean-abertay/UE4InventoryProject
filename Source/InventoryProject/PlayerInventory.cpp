@@ -15,8 +15,6 @@ void UPlayerInventory::BeginPlay()
 
 void UPlayerInventory::CollectObject(ACollectableObject* OtherActor)
 {
-	// Disable the collectable object
-	OtherActor->OnObjectCollected(this);
 	// Add the object to inventory
 	AddObjToContainer(OtherActor);
 }

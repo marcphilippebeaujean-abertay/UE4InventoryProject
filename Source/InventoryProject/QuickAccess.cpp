@@ -47,7 +47,6 @@ void UQuickAccess::SetContainerItem(int ContainerID, ACollectableObject* NewItem
 		// Unequip the current item
 		Cast<AEquipableObject>(GetContainerItem(CurSelectedItem))->UnEquipItem();
 	}
-
 	Super::SetContainerItem(ContainerID, NewItem);
 	// Check if the new object is being assigned as the current item slot
 	if (ContainerID == CurSelectedItem)

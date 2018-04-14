@@ -61,6 +61,10 @@ void UItemContainer::AddObjToContainer(ACollectableObject* NewItem)
 			{
 				// Set the empty slot to equal the new item
 				ContainerItems[i] = NewItem;
+				// Collect item
+				ContainerItems[i]->OnObjectCollected(this);
+				// Check for depleted items
+				CheckForDepletedItems();
 				// Update the widget
 				BroadcastWidgetUpdate();
 				// If we found a slot, only add one instance of the item to the container
@@ -129,4 +133,17 @@ ACollectableObject* UItemContainer::GetResourceOfType(EResourceType ResType)
 		}
 	}
 	return ReturnItem;
+}
+
+void UItemContainer::CheckForDepletedItems()
+{
+	// Check each item in array
+	for(int i = 0; i < ContainerItems.Num(); i++)
+	{
+		if(ContainerItems[i]->GetCurItemsInSlot() <= 0)
+		{
+			// this should now be an empty slot!
+			ContainerItems[i] = EmptySlot;
+		}
+	}
 }

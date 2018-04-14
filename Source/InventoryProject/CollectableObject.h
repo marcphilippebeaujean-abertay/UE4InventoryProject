@@ -56,6 +56,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh = nullptr;
 
+	// Finds all items that share a resource with this type and combines them if necessary, to reduce max numbers of slots
+	void CheckForCommonResource();
+
 public:	
 
 	// Called every frame
@@ -90,6 +93,12 @@ public:
 	EResourceType GetItemResourceType() { return ItemResourceType; }
 
 	void UpdateObjectOwner(class UItemContainer* NewOwner);
+
+	UFUNCTION(BlueprintCallable)
+	void IncrementItemCount(int IncrementAmount) { CurItemsInSlot = FMath::Clamp(CurItemsInSlot + IncrementAmount, 0, MaxItemsPerSlot); }
+
+	UFUNCTION(BlueprintCallable)
+	void DecrementItemCount(int DecrementAmount) { CurItemsInSlot = FMath::Clamp(CurItemsInSlot - DecrementAmount, 0, MaxItemsPerSlot); }
 
 private:
 

@@ -46,7 +46,11 @@ public:
 	void SwapItems(UItemContainer* OtherContainer, int OtherItemID, int LocalItemID);
 
 	// Sets an item in the container
-	virtual void SetContainerItem(int ContainerID, ACollectableObject* NewItem) { ContainerItems[ContainerID] = NewItem; }
+	virtual void SetContainerItem(int ContainerID, ACollectableObject* NewItem)
+	{
+		ContainerItems[ContainerID] = NewItem;
+		CheckForDepletedItems();
+	}
 
 	// Get an item from a container
 	ACollectableObject* GetContainerItem(int ContainerID) { return ContainerItems[ContainerID]; }
@@ -68,6 +72,8 @@ public:
 
 	// Find an object in the inventory that stores the required type
 	ACollectableObject* GetResourceOfType(EResourceType ResType);
+
+	void CheckForDepletedItems();
 
 private:
 	// Reference to empty slot item

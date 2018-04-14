@@ -104,4 +104,36 @@ void ACollectableObject::UpdateObjectOwner(UItemContainer* NewOwner)
 		OwningPlayer = nullptr;
 		UE_LOG(LogTemp, Error, TEXT("Failed to cast container own to player!"));
 	}
+	// Check if we need to combine items in the inventory, since they have a similiar resource
+	if(ItemResourceType != EResourceType::None)
+	{
+		CheckForCommonResource();
+	}
+}
+
+void ACollectableObject::CheckForCommonResource()
+{
+	for(int i = 0; i < OwningContainer->GetContainerItems().Num(); i++)
+	{
+		ACollectableObject* NewContainerItem = OwningContainer->GetContainerItem(i);
+		// Check if the items resource type is identical to the one 
+		if(NewContainerItem->GetItemResourceType() == ItemResourceType)
+		{
+			// Check if that item does not have the max number of slots filled
+			if(NewContainerItem->GetCurItemsInSlot() < MaxItemsPerSlot)
+			{
+				// Get maximum number that can be added to the new item slot from the current one
+				int ItemsToBeAdded = FMath::Clamp(CurItemsInSlot, 0, MaxItemsPerSlot - NewContainerItem->GetCurItemsInSlot());
+				// Add to the other container item
+				NewContainerItem->IncrementItemCount(ItemsToBeAdded);
+				// Subtract from curent container item
+				DecrementItemCount(ItemsToBeAdded);
+				// Check if local items have not been depleted
+				if(CurItemsInSlot <= 0)
+				{
+					break;
+				}
+			}
+		}
+	}
 }
