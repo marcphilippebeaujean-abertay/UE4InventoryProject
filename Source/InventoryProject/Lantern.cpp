@@ -54,6 +54,7 @@ void ALantern::UseItem()
 			{
 				// If match stack is depleted, remove from inventory
 				PlayerInventory->CheckForDepletedItems();
+				PlayerInventory->BroadcastWidgetUpdate();
 			}
 		}
 		else
