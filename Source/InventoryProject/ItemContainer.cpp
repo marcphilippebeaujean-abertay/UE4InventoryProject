@@ -98,3 +98,33 @@ void UItemContainer::BroadcastWidgetUpdate()
 {
 	OnUpdateContainer.Broadcast(ContainerItems);
 }
+
+ACollectableObject* UItemContainer::GetResourceOfType(EResourceType ResType)
+{
+	// Initialise collectable reference
+	ACollectableObject* ReturnItem = nullptr;
+	// Search inventory for object that has the required resource
+	for (int i = 0; i < ContainerItems.Num(); i++)
+	{
+		// Check if the current item contains the required resource type
+		if (ContainerItems[i]->GetItemResourceType() == ResType)
+		{
+			// Check if return item has been assigned
+			if (ReturnItem == nullptr)
+			{
+				// ..if not, assign this new item
+				ReturnItem = ContainerItems[i];
+			}
+			else
+			{
+				// Check if this new item is storing less items than the other
+				if(ContainerItems[i]->GetCurItemsInSlot() < ReturnItem->GetCurItemsInSlot())
+				{
+					// We always want to return the item with the lowest amount of resources and subtract from that
+					ReturnItem = ContainerItems[i];
+				}
+			}
+		}
+	}
+	return ReturnItem;
+}

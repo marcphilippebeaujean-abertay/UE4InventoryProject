@@ -34,7 +34,7 @@ protected:
 	ACollectableObject();
 
 	// The name of an object as it should be displayed when the player hovers over it and in the inventory UI
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	FString IndicatorDisplayName;
 
 	// Condition that checks if an object can be moved to quick access
@@ -60,8 +60,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Function that allows the character to access the object name
-	UFUNCTION()
-	virtual FString GetIndicatorName();
+	UFUNCTION(BlueprintCallable)
+	FString GetIndicatorName();
 
 	// Returns the object to the scene as a collectable
 	void DropItem(FVector DropLocation);
@@ -69,7 +69,7 @@ public:
 	// Handle behaviour when object is collected by the player (disable mesh and collision components etc.)
 	virtual void OnObjectCollected(AFirstPersonCharacter* NewOwner);
 	
-	// Used to make distinctions between empty slots and normal items in the blueprints script
+	// Getters and conditions
 	UFUNCTION(BlueprintCallable)
 	bool IsEmptySlot() { return bEmptySlot; }
 

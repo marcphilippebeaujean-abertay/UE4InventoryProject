@@ -65,6 +65,9 @@ public:
 	// Get empty slot
 	ACollectableObject* GetEmptySlot() { return EmptySlot; }
 
+	// Find an object in the inventory that stores the required type
+	ACollectableObject* GetResourceOfType(EResourceType ResType);
+
 private:
 	// Reference to empty slot item
 	ACollectableObject* EmptySlot = nullptr;

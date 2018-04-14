@@ -12,20 +12,19 @@ ACollectableObject::ACollectableObject()
 
 	// Apply editor-specified variables to the local temps created in the script
 	AssignDefaultComponents();
-	// Initialise item values
-	if(MaxItemsPerSlot <= 0)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Max items per slot noted assigned to object!"));
-		MaxItemsPerSlot = 1;
-	}
-	CurItemsInSlot = FMath::Clamp(InitItems, 1, MaxItemsPerSlot);
 }
 
 // Called when the game starts or when spawned
 void ACollectableObject::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	// Initialise item values
+	if (MaxItemsPerSlot <= 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Max items per slot noted assigned to object!"));
+		MaxItemsPerSlot = 1;
+	}
+	CurItemsInSlot = FMath::Clamp(InitItems, 1, MaxItemsPerSlot);
 }
 
 // Called every frame
@@ -43,6 +42,8 @@ void ACollectableObject::AssignDefaultComponents()
 	RootComponent = Mesh;
 	// Attach to root
 	Mesh->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	// Setup collision preset for mesh to be compatible with the pickup trace
+	Mesh->SetCollisionProfileName(UCollisionProfile::PhysicsActor_ProfileName);
 }
 
 void ACollectableObject::OnObjectCollected(AFirstPersonCharacter* NewOwner)
@@ -83,9 +84,11 @@ FString ACollectableObject::GetIndicatorName()
 {
 	// Check if indicator name needs to include number of items in the slot
 	FString ItemNrIndicator = "";
-	if(CurItemsInSlot > 0)
+	UE_LOG(LogTemp, Error, TEXT("%s!"), *ItemNrIndicator);
+	if (MaxItemsPerSlot > 1)
 	{
-		ItemNrIndicator = (" " + FString::FromInt(CurItemsInSlot));
+		ItemNrIndicator = (" (" + FString::FromInt(CurItemsInSlot) + ")");
+		UE_LOG(LogTemp, Error, TEXT("%s!"), *ItemNrIndicator);
 	}
 	return (IndicatorDisplayName + ItemNrIndicator);
 }
