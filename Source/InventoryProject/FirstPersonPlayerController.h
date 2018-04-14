@@ -67,10 +67,6 @@ private:
 	void GrabObject();
 	void OnGrabReleased();
 
-	// Back-and forwards movement
-	void MovementForward(float val);
-	void MovementRight(float val);
-
 	// Function used to toggle between items in the quick access bar
 	void UpdateItemSelectionInc();
 	void UpdateItemSelectionDec();

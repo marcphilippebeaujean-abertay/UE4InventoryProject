@@ -68,6 +68,12 @@ private:
 	// Check to see if camera is angled at the ground
 	bool LookingAtFloor();
 
+	// Condition thats set to false when for example player is in the inventory and doesnt need to move
+	bool bShouldMove = true;
+
+	// Override character movement controls
+	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
 public:
 
 	// Called every frame
@@ -83,10 +89,6 @@ public:
 	void ReleasePhysicsObject();
 	// Returns true if playre is carrying physics object
 	bool CarryingPhysicsObject();
-	// Sets the player viewpoint - called from controller to avoid circular dependancy
-	void SetPlayerViewLocation(FVector ViewPointLocation) { PlayerViewPointLocation = ViewPointLocation; }
-	void SetPlayerViewRotation(FRotator ViewPointRotation) { PlayerViewPointRotation = ViewPointRotation; }
-
 
 	// Basic movement functions bound to the axis
 	void MoveForward(float val);
@@ -95,4 +97,6 @@ public:
 	// Functions used when a new object is equiped
 	void SetItemMesh(UStaticMesh* NewItemMesh, UMaterialInterface* NewItemMaterial);
 	void HideItemMesh();
+
+	void SetShouldMove(bool ShouldMove) { bShouldMove = ShouldMove; }
 };

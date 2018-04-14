@@ -101,9 +101,6 @@ void AFirstPersonPlayerController::SetupInputComponent()
 	// Handle mouse look
 	InputComponent->BindAxis("Turn", this, &AFirstPersonPlayerController::AddYawInput);
 	InputComponent->BindAxis("LookUp", this, &AFirstPersonPlayerController::AddPitchInput);
-	// Handle character movement
-	InputComponent->BindAxis("Forward", this, &AFirstPersonPlayerController::MovementForward);
-	InputComponent->BindAxis("Right", this, &AFirstPersonPlayerController::MovementRight);
 	// Grab object
 	InputComponent->BindAction("Grab", IE_Pressed, this, &AFirstPersonPlayerController::GrabObject);
 	InputComponent->BindAction("Grab", IE_Released, this, &AFirstPersonPlayerController::OnGrabReleased);
@@ -182,28 +179,12 @@ void AFirstPersonPlayerController::OnGrabReleased()
 	PlayerCharacter->ReleasePhysicsObject();
 }
 
-void AFirstPersonPlayerController::MovementForward(float val)
-{
-	if (!bInventoryOpen)
-	{
-		PlayerCharacter->MoveForward(val);
-	}
-}
-
-void AFirstPersonPlayerController::MovementRight(float val)
-{
-	if (!bInventoryOpen)
-	{
-		PlayerCharacter->MoveRight(val);
-	}
-}
-
 void AFirstPersonPlayerController::UseCurrentItem()
 {
 	// Check if current selected item is available
 	if(QuickAccessBar->GetSelectedItem())
 	{
-		// Use item that is currently equipped
+	//	 Use item that is currently equipped
 		QuickAccessBar->GetSelectedItem()->UseItem();
 	}
 	else
