@@ -24,7 +24,6 @@ void ALantern::UnEquipItem()
 	LanternComponent->SetComponentTickEnabled(false);
 }
 
-
 void ALantern::CollectObject(AFirstPersonCharacter* NewOwner)
 {
 	Super::CollectObject(NewOwner);

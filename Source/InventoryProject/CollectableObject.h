@@ -9,6 +9,14 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "CollectableObject.generated.h"
 
+// Define resource type enum
+UENUM(BlueprintType)
+enum class EResourceType : uint8
+{
+	None,
+	Matches
+};
+
 UCLASS()
 class INVENTORYPROJECT_API ACollectableObject : public AActor
 {
@@ -76,6 +84,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetCurItemsInSlot() { return CurItemsInSlot; }
 
+	UFUNCTION(BlueprintCallable)
+	EResourceType GetItemResourceType() { return ItemResourceType; }
+
 private:
 
 	// Icon that should be displayed to represent the item in the inventory
@@ -93,5 +104,7 @@ private:
 	// Tracks how many slots are in the item
 	int CurItemsInSlot = 1;
 
-
+	// Variable used to determine the resource type of the object
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
+	EResourceType ItemResourceType = EResourceType::None;
 };
