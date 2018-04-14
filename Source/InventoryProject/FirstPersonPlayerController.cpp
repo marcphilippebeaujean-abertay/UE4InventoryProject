@@ -112,7 +112,7 @@ void AFirstPersonPlayerController::SetupInputComponent()
 	// Switch between items in the quick access bar
 	InputComponent->BindAction("IncrementItemSelection", IE_Pressed, this, &AFirstPersonPlayerController::UpdateItemSelectionInc);
 	InputComponent->BindAction("DecrementItemSelection", IE_Pressed, this, &AFirstPersonPlayerController::UpdateItemSelectionDec);
-
+	// Use item selected in the quick access bar
 	InputComponent->BindAction("UseInventoryItem", IE_Pressed, this, &AFirstPersonPlayerController::UseCurrentItem);
 }
 
@@ -200,7 +200,6 @@ void AFirstPersonPlayerController::MovementRight(float val)
 
 void AFirstPersonPlayerController::UseCurrentItem()
 {
-	UE_LOG(LogTemp, Error, TEXT("Trying to use item..."));
 	// Check if current selected item is available
 	if(QuickAccessBar->GetSelectedItem())
 	{

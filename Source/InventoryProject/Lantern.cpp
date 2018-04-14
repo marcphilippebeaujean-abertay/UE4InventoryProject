@@ -17,7 +17,11 @@ void ALantern::EquipItem()
 
 void ALantern::UnEquipItem()
 {
-	
+	Super::UnEquipItem();
+
+	// Extinguish lantern light
+	LanternComponent->ExtinguishLantern();
+	LanternComponent->SetComponentTickEnabled(false);
 }
 
 
