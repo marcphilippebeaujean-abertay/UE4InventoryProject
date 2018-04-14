@@ -25,6 +25,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	// Array that stores objects which are in the container
+	UPROPERTY()
 	TArray<ACollectableObject*> ContainerItems;
 
 	// Variable used to differentiate between quick access and regular containers, without having to cast

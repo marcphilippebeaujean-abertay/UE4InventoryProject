@@ -45,14 +45,16 @@ protected:
 	bool bEmptySlot = false;
 
 	// The character that owns the object
-	AFirstPersonCharacter* ObjectOwner = nullptr;
+	UPROPERTY()
+	class AFirstPersonCharacter* OwningPlayer = nullptr;
+
+	// Forward declaration the player inventory
+	UPROPERTY()
+	class UItemContainer* OwningContainer = nullptr;
 
 	// Variable that allows the designer to assign a mesh in the editor
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh = nullptr;
-
-	// Forward declaration the player inventory
-	class UPlayerInventory* PlayerInventoryRef = nullptr;
 
 public:	
 
@@ -67,7 +69,7 @@ public:
 	void DropItem(FVector DropLocation);
 
 	// Handle behaviour when object is collected by the player (disable mesh and collision components etc.)
-	virtual void OnObjectCollected(AFirstPersonCharacter* NewOwner);
+	virtual void OnObjectCollected(class UItemContainer* NewOwner);
 	
 	// Getters and conditions
 	UFUNCTION(BlueprintCallable)
@@ -76,7 +78,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsEquipable() { return bEquipable; }
 
-	void SetObjectOwner(AFirstPersonCharacter* Owner) { ObjectOwner = Owner; }
+	void SetObjectOwner(AFirstPersonCharacter* Owner) { OwningPlayer = Owner; }
 
 	UFUNCTION(BlueprintCallable)
 	int GetMaxItemsPerSlot() { return MaxItemsPerSlot; }
@@ -86,6 +88,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	EResourceType GetItemResourceType() { return ItemResourceType; }
+
+	void UpdateObjectOwner(class UItemContainer* NewOwner);
 
 private:
 

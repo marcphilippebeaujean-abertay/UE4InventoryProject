@@ -2,7 +2,7 @@
 
 #include "CollectableObject.h"
 #include "Components/StaticMeshComponent.h"
-#include "PlayerInventory.h"
+#include "ItemContainer.h"
 
 // Sets default values
 ACollectableObject::ACollectableObject()
@@ -46,7 +46,7 @@ void ACollectableObject::AssignDefaultComponents()
 	Mesh->SetCollisionProfileName(UCollisionProfile::PhysicsActor_ProfileName);
 }
 
-void ACollectableObject::OnObjectCollected(AFirstPersonCharacter* NewOwner)
+void ACollectableObject::OnObjectCollected(UItemContainer* NewOwner)
 {
 	// Deactivate collision for the actor
 	this->SetActorEnableCollision(false);
@@ -55,17 +55,12 @@ void ACollectableObject::OnObjectCollected(AFirstPersonCharacter* NewOwner)
 	// Stop actor from ticking
 	this->SetActorTickEnabled(false);
 	// Set the new owner of the object
-	ObjectOwner = NewOwner;
-	if (ObjectOwner == nullptr)
+	if (OwningPlayer == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to assign owner to object!"));
 	}
-	// Get reference to the inventory
-	PlayerInventoryRef = NewOwner->FindComponentByClass<UPlayerInventory>();
-	if (PlayerInventoryRef == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to assign inventory!"));
-	}
+	// Setup reference to the player and inventory
+	UpdateObjectOwner(NewOwner);
 }
 
 void ACollectableObject::DropItem(FVector DropLocation)
@@ -84,11 +79,29 @@ FString ACollectableObject::GetIndicatorName()
 {
 	// Check if indicator name needs to include number of items in the slot
 	FString ItemNrIndicator = "";
-	UE_LOG(LogTemp, Error, TEXT("%s!"), *ItemNrIndicator);
 	if (MaxItemsPerSlot > 1)
 	{
 		ItemNrIndicator = (" (" + FString::FromInt(CurItemsInSlot) + ")");
-		UE_LOG(LogTemp, Error, TEXT("%s!"), *ItemNrIndicator);
 	}
 	return (IndicatorDisplayName + ItemNrIndicator);
+}
+
+void ACollectableObject::UpdateObjectOwner(UItemContainer* NewOwner)
+{
+	// Setup reference to the new container
+	OwningContainer = NewOwner;
+	if (OwningContainer == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to assign inventory!"));
+	}
+	// Check if container belongs to a player, if so, assign the new player as owning player
+	if(AFirstPersonCharacter* NewPlayerOwner = Cast<AFirstPersonCharacter>(NewOwner->GetOwner()))
+	{
+		OwningPlayer = NewPlayerOwner;
+	}
+	else
+	{
+		OwningPlayer = nullptr;
+		UE_LOG(LogTemp, Error, TEXT("Failed to cast container own to player!"));
+	}
 }

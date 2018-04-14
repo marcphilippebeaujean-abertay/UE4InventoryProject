@@ -84,11 +84,13 @@ void UItemContainer::SwapItems(UItemContainer* OtherContainer, int OtherItemID, 
 	}
 	// Create temporary object that stores values from other container's item
 	ACollectableObject* TempObject = OtherContainer->GetContainerItem(OtherItemID);
+	// Update owners for the object
+	TempObject->UpdateObjectOwner(this);
+	GetContainerItem(LocalItemID)->UpdateObjectOwner(OtherContainer);
 	// Set other containers item to be able equal to that of the local one
 	OtherContainer->SetContainerItem(OtherItemID, GetContainerItem(LocalItemID));
 	// Set local item to be equal to that of the temporary object
 	SetContainerItem(LocalItemID, TempObject);
-	
 	// Update widgets
 	BroadcastWidgetUpdate();
 	OtherContainer->BroadcastWidgetUpdate();

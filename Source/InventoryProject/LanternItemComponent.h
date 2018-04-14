@@ -31,6 +31,7 @@ public:
 
 private:
 	// Reference to player's point light component
+	UPROPERTY()
 	UPointLightComponent* LanternLight = nullptr;
 	
 	// Speed at which the attenuation of the light decreases, when the lanter has been lit

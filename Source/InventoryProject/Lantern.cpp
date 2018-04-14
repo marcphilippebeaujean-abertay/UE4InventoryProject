@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Lantern.h"
-#include "PlayerInventory.h"
+#include "ItemContainer.h"
 
 void ALantern::EquipItem()
 {
@@ -9,7 +9,7 @@ void ALantern::EquipItem()
 	if (!LanternComponent)
 	{
 		// Locate and assign lantern item component, which is responsible for handling the light cast by the lantern
-		LanternComponent = ObjectOwner->FindComponentByClass<ULanternItemComponent>();
+		LanternComponent = OwningPlayer->FindComponentByClass<ULanternItemComponent>();
 	}
 	// Enable tick on the lantern component
 	LanternComponent->SetComponentTickEnabled(true);
@@ -24,13 +24,13 @@ void ALantern::UnEquipItem()
 	LanternComponent->SetComponentTickEnabled(false);
 }
 
-void ALantern::CollectObject(AFirstPersonCharacter* NewOwner)
+void ALantern::OnObjectCollected(UItemContainer* NewOwner)
 {
-	Super::CollectObject(NewOwner);
+	Super::OnObjectCollected(NewOwner);
 	// Find lantern component
-	if(ObjectOwner)
+	if(OwningPlayer)
 	{
-		LanternComponent = ObjectOwner->FindComponentByClass<ULanternItemComponent>();
+		LanternComponent = OwningPlayer->FindComponentByClass<ULanternItemComponent>();
 	}
 }
 

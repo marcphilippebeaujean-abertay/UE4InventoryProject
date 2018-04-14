@@ -23,6 +23,6 @@ public:
 	// Override object specific functions
 	virtual void EquipItem() override;
 	virtual void UnEquipItem() override;
-	virtual void CollectObject(AFirstPersonCharacter* NewOwner) override;
+	virtual void OnObjectCollected(class UItemContainer* NewOwner) override;
 	virtual void UseItem() override;
 };

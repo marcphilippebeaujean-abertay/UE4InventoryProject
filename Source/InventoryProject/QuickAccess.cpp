@@ -41,25 +41,25 @@ void UQuickAccess::UpdateSelectedItem(bool increment)
 
 void UQuickAccess::SetContainerItem(int ContainerID, ACollectableObject* NewItem)
 {
-	Super::SetContainerItem(ContainerID, NewItem);
-
-	// Access the equipable type
-	AEquipableObject* EquipObj = Cast<AEquipableObject>(NewItem);
-	// Check if cast was successful
-	if (EquipObj == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed cast to equipable object - cannot equip!"));
-		return;
-	}
-	// Check if this object is equiped and that their new item id in the container is not the cur selected item
-	if (EquipObj->IsEquiped() && ContainerID != CurSelectedItem)
-	{
-		EquipObj->UnEquipItem();
-		return;
-	}
 	// Check if the new object is being assigned as the current item slot
-	if(ContainerID == CurSelectedItem)
+	if (ContainerID == CurSelectedItem)
 	{
+		// Unequip the current item
+		Cast<AEquipableObject>(GetContainerItem(CurSelectedItem))->UnEquipItem();
+	}
+
+	Super::SetContainerItem(ContainerID, NewItem);
+	// Check if the new object is being assigned as the current item slot
+	if (ContainerID == CurSelectedItem)
+	{
+		// Access the equipable type
+		AEquipableObject* EquipObj = Cast<AEquipableObject>(NewItem);
+		// Check if cast was successful
+		if (EquipObj == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed cast to equipable object - cannot equip!"));
+			return;
+		}
 		// See if item is equipable
 		EquipObj->EquipItem();
 	}

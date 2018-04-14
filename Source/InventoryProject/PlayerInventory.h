@@ -17,11 +17,11 @@ class INVENTORYPROJECT_API UPlayerInventory : public UItemContainer
 protected:
 	virtual void BeginPlay() override;
 
+
 private:
-
-	// Owning player of the inventory
+	// Owning actor of the container
+	UPROPERTY()
 	AFirstPersonCharacter* OwningPlayer;
-
 public: 
 	// Collect item, add it to inventory and disable in game world
 	void CollectObject(ACollectableObject* OtherActor);

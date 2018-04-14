@@ -25,7 +25,6 @@ public:
 	virtual void EquipItem();
 	virtual void UnEquipItem();
 	virtual void UseItem();
-	virtual void CollectObject(AFirstPersonCharacter* NewOwner);
 
 	bool IsEquiped() { return bEquiped; }
 	bool HasExternalDependancy() { return bExternalDependancy; }

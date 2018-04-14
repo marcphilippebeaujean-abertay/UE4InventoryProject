@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "EquipableObject.h"
+#include "ItemContainer.h"
 
 void AEquipableObject::OnConstruction(const FTransform & Transform)
 {
@@ -9,18 +10,13 @@ void AEquipableObject::OnConstruction(const FTransform & Transform)
 	bEquipable = true;
 }
 
-void AEquipableObject::CollectObject(AFirstPersonCharacter* NewOwner)
-{
-	Super::OnObjectCollected(NewOwner);
-}
-
 
 void AEquipableObject::EquipItem()
 {
-	if (ObjectOwner)
+	if (OwningPlayer)
 	{
 		// Set mesh of item for the player
-		ObjectOwner->SetItemMesh(Mesh->GetStaticMesh(), Mesh->GetMaterial(0));
+		OwningPlayer->SetItemMesh(Mesh->GetStaticMesh(), Mesh->GetMaterial(0));
 		bEquiped = true;
 	}
 	else
@@ -31,10 +27,10 @@ void AEquipableObject::EquipItem()
 
 void AEquipableObject::UnEquipItem()
 {
-	if (ObjectOwner)
+	if (OwningPlayer)
 	{
 		// Hide item mesh if its being unequiped
-		ObjectOwner->HideItemMesh();
+		OwningPlayer->HideItemMesh();
 		bEquiped = false;
 	}
 	else
