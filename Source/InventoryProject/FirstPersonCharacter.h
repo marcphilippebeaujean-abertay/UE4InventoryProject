@@ -31,19 +31,19 @@ private:
 
 	// First person camera
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FirstPersonCameraComponent = nullptr;
+	class UCameraComponent* FirstPersonCameraComponent = nullptr;
 
 	// Mesh for the item
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* ItemMesh = nullptr;
+	class UStaticMeshComponent* ItemMesh = nullptr;
 
 	// Light component used to toggle the lantern
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
-	UPointLightComponent* LanternLight = nullptr;
+	class UPointLightComponent* LanternLight = nullptr;
 
 	// Physics handle component that we will access
 	UPROPERTY()
-	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	class UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
 	// Create/find dependancies
 	void InitActorComponents();
@@ -93,6 +93,6 @@ public:
 	void MoveRight(float val);
 
 	// Functions used when a new object is equiped
-	void SetItemMesh(UStaticMesh* NewItemMesh);
+	void SetItemMesh(UStaticMesh* NewItemMesh, UMaterialInterface* NewItemMaterial);
 	void HideItemMesh();
 };

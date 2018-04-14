@@ -176,12 +176,15 @@ bool AFirstPersonCharacter::CarryingPhysicsObject()
 	}
 }
 
-void AFirstPersonCharacter::SetItemMesh(UStaticMesh* NewItemMesh)
+void AFirstPersonCharacter::SetItemMesh(UStaticMesh* NewItemMesh, UMaterialInterface* NewItemMaterial)
 {
 	// Set visibility to true
 	ItemMesh->SetHiddenInGame(false);
 	// Set the new mesh
 	ItemMesh->SetStaticMesh(NewItemMesh);
+	// Set the new material
+	ItemMesh->SetMaterial(0, NewItemMaterial);
+
 }
 
 void AFirstPersonCharacter::HideItemMesh()

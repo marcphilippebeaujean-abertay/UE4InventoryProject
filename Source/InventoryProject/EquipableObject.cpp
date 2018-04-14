@@ -20,7 +20,7 @@ void AEquipableObject::EquipItem()
 	if (ObjectOwner)
 	{
 		// Set mesh of item for the player
-		ObjectOwner->SetItemMesh(Mesh->GetStaticMesh());
+		ObjectOwner->SetItemMesh(Mesh->GetStaticMesh(), Mesh->GetMaterial(0));
 		bEquiped = true;
 	}
 	else
