@@ -55,10 +55,6 @@ public:
 	// Get an item from a container
 	ACollectableObject* GetContainerItem(int ContainerID) { return ContainerItems[ContainerID]; }
 
-	// Maximum number of different classes that the inventory can hold - needs to be synchronised with the UI
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container")
-	int MaxItemSlots = 10;
-
 	bool IsQuickAccess() { return bQuickAccess; }
 
 	// Broadcasts event, indicating that the user interface needs to be updated
@@ -75,11 +71,25 @@ public:
 
 	void CheckForDepletedItems();
 
+	UFUNCTION(BlueprintCallable)
+	int GetNumOfRows() { return NumberOfRows; }
+	UFUNCTION(BlueprintCallable)
+	int GetNumOfCollumns() { return NumberOfCollumns; }
+
 private:
 	// Reference to empty slot item
 	ACollectableObject* EmptySlot = nullptr;
 
+	// Define dimensions of the inventory
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true"))
+	int NumberOfCollumns = 8;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true"))
+	int NumberOfRows = 8;
+
 	// Delegate used to broadcast to the blueprint that the invnetory has been updated
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")
 	FInventoryInterfaceUpdate OnUpdateContainer;
+
+	// Maximum number of different classes that the inventory can hold - needs to be synchronised with the UI
+	int MaxItemSlots = 10;
 };

@@ -18,11 +18,12 @@ UItemContainer::UItemContainer()
 void UItemContainer::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 void UItemContainer::InitContainerContents(ACollectableObject* EmptySlotClass)
 {
+	// Designate the max item slot
+	MaxItemSlots = NumberOfCollumns * NumberOfRows;
 	// Set empty slot class
 	EmptySlot = EmptySlotClass;
 	// Check if emtpy slot class was assigned - not doing this check can crash the editor

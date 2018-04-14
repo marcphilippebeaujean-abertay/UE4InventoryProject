@@ -26,13 +26,13 @@ void UQuickAccess::UpdateSelectedItem(bool increment)
 		CurSelectedItem--;
 	}
 	// Ensure that cur selected item is going to be within the container's array - if they exceed them, return the highest/lowest possible value
-	if(CurSelectedItem > (MaxItemSlots - 1))
+	if(CurSelectedItem > (GetNumOfCollumns() - 1))
 	{
 		CurSelectedItem = 0;
 	}
 	if(CurSelectedItem < 0)
 	{
-		CurSelectedItem = (MaxItemSlots - 1);
+		CurSelectedItem = (GetNumOfCollumns() - 1);
 	}
 	// Equip the new current item
 	Cast<AEquipableObject>(GetContainerItem(CurSelectedItem))->EquipItem();
