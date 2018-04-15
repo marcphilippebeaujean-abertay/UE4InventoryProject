@@ -117,30 +117,38 @@ FHitResult AFirstPersonCharacter::GetTraceResult()
 
 void AFirstPersonCharacter::MoveForward(float val)
 {
-	if ((Controller != NULL) && (val != 0.0f))
+	// Check if player should move
+	if (bShouldMove)
 	{
-		// find out which way is forward
-		FRotator Rotation = Controller->GetControlRotation();
-		// Limit pitch when walking or falling
-		if (GetCharacterMovement()->IsMovingOnGround() || GetCharacterMovement()->IsFalling())
+		if ((Controller != NULL) && (val != 0.0f))
 		{
-			Rotation.Pitch = 0.0f;
+			// find out which way is forward
+			FRotator Rotation = Controller->GetControlRotation();
+			// Limit pitch when walking or falling
+			if (GetCharacterMovement()->IsMovingOnGround() || GetCharacterMovement()->IsFalling())
+			{
+				Rotation.Pitch = 0.0f;
+			}
+			// add movement in that direction
+			const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
+			AddMovementInput(Direction, val);
 		}
-		// add movement in that direction
-		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
-		AddMovementInput(Direction, val);
 	}
 }
 
 void AFirstPersonCharacter::MoveRight(float val)
 {
-	if ((Controller != NULL) && (val != 0.0f))
+	// Check if player should move
+	if (bShouldMove)
 	{
-		// find out which way is right
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
-		// add movement in that direction
-		AddMovementInput(Direction, val);
+		if ((Controller != NULL) && (val != 0.0f))
+		{
+			// find out which way is right
+			const FRotator Rotation = Controller->GetControlRotation();
+			const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
+			// add movement in that direction
+			AddMovementInput(Direction, val);
+		}
 	}
 }
 

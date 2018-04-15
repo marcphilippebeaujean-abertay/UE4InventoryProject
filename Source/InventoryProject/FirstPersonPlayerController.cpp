@@ -129,11 +129,15 @@ void AFirstPersonPlayerController::ToggleInventory()
 		// Determine if the inventory should be visible or not
 		if (bInventoryOpen)
 		{
+			// Player should not move if inventory is open
+			PlayerCharacter->SetShouldMove(false);
 			// Make sure to update the inventory before making it visible
 			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
 		}
 		else
 		{
+			// Player should move if inventory is open
+			PlayerCharacter->SetShouldMove(true);
 			InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
 		}
 	}
