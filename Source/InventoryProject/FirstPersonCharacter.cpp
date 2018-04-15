@@ -74,6 +74,7 @@ void AFirstPersonCharacter::InitActorComponents()
 	ItemMesh->bCastDynamicShadow = false;
 	ItemMesh->CastShadow = false;
 
+	// Initialise the light component
 	LanternLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("LanternLight"));
 	LanternLight->SetupAttachment(ItemMesh);
 	LanternLight->SetAttenuationRadius(0.0f);

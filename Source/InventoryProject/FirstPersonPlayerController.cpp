@@ -54,6 +54,9 @@ void AFirstPersonPlayerController::InitInterfaceWidgets()
 	// Set inventory widget
 	InventoryWidget = DefaultInterfaceWidget->GetWidgetFromName("Inventory_Container");
 	InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
+	// Set external container widget
+	ExternalContainerWidget = DefaultInterfaceWidget->GetWidgetFromName("External_Container");
+	ExternalContainerWidget->SetVisibility(ESlateVisibility::Hidden);
 	// Broadcast a widget update
 	UpdateWidgets();
 }
@@ -102,7 +105,7 @@ void AFirstPersonPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("Turn", this, &AFirstPersonPlayerController::AddYawInput);
 	InputComponent->BindAxis("LookUp", this, &AFirstPersonPlayerController::AddPitchInput);
 	// Grab object
-	InputComponent->BindAction("Grab", IE_Pressed, this, &AFirstPersonPlayerController::GrabObject);
+	InputComponent->BindAction("Grab", IE_Pressed, this, &AFirstPersonPlayerController::InteractWithObject);
 	InputComponent->BindAction("Grab", IE_Released, this, &AFirstPersonPlayerController::OnGrabReleased);
 	// Toggle inventory
 	InputComponent->BindAction("ToggleInventory", IE_Pressed, this, &AFirstPersonPlayerController::ToggleInventory);
@@ -133,12 +136,21 @@ void AFirstPersonPlayerController::ToggleInventory()
 			PlayerCharacter->SetShouldMove(false);
 			// Make sure to update the inventory before making it visible
 			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
+			if (ExternalItemContainer != nullptr)
+			{
+				ExternalContainerWidget->SetVisibility(ESlateVisibility::Visible);
+			}
 		}
 		else
 		{
 			// Player should move if inventory is open
 			PlayerCharacter->SetShouldMove(true);
 			InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
+			if(ExternalItemContainer != nullptr)
+			{
+				ExternalItemContainer = nullptr;
+				ExternalContainerWidget->SetVisibility(ESlateVisibility::Hidden);
+			}
 		}
 	}
 	else
@@ -157,24 +169,47 @@ void AFirstPersonPlayerController::UpdateItemSelectionDec()
 	QuickAccessBar->UpdateSelectedItem(false);
 }
 
-void AFirstPersonPlayerController::GrabObject()
+void AFirstPersonPlayerController::InteractWithObject()
 {
-	// Get the hit result to see if we grabbed a collectable object
-	FHitResult TraceHit = PlayerCharacter->GetTraceResult();
-	// Deduce the actor that was hit by the trace
-	auto ActorHit = TraceHit.GetActor();
-	// Check if we got a hit
-	if (ActorHit)
+	if (!bInventoryOpen)
 	{
-		// Check if the other actor is of type collectable
-		if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
+		// Get the hit result to see if we grabbed a collectable object
+		FHitResult TraceHit = PlayerCharacter->GetTraceResult();
+		// Deduce the actor that was hit by the trace
+		auto ActorHit = TraceHit.GetActor();
+		// Check if we got a hit
+		if (ActorHit)
 		{
-			// Use the inventory to collect the item
-			Inventory->CollectObject(HitCollectable);
+			// Check if the other actor is of type collectable
+			if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
+			{
+				// Use the inventory to collect the item
+				Inventory->CollectObject(HitCollectable);
+				return;
+			}
+			// Search for external item container in the actor
+			if (UItemContainer* OtherContainer = ActorHit->FindComponentByClass<UItemContainer>())
+			{
+				// Assign external item container
+				ExternalItemContainer = OtherContainer;
+				// Broadcast the new external container
+				OnUpdateExternalContainer.Broadcast(ExternalItemContainer);
+				// Check if external container has been initialised
+				if (ExternalItemContainer->IsUnitinitialised())
+				{
+					// Initialise container
+					ExternalItemContainer->InitContainerContents(EmptySlot);
+				}
+				// Broadcast a widget update
+				ExternalItemContainer->BroadcastWidgetUpdate();
+				// Open the inventory to transfer items between this container
+				ToggleInventory();
+				return;
+			}
+			// Attempt to grab a physics object if the hit object is not of type collectable
+			PlayerCharacter->GrabPhysicsObject(TraceHit.GetComponent(), TraceHit.GetActor()->GetActorLocation());
 			return;
 		}
-		// Attempt to grab a physics object if the hit object is not of type collectable
-		PlayerCharacter->GrabPhysicsObject(TraceHit.GetComponent(), TraceHit.GetActor()->GetActorLocation());
 	}
 }
 

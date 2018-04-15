@@ -98,5 +98,6 @@ public:
 	void SetItemMesh(UStaticMesh* NewItemMesh, UMaterialInterface* NewItemMaterial);
 	void HideItemMesh();
 
+	// Function used by the controller to communicate to the player if it should move
 	void SetShouldMove(bool ShouldMove) { bShouldMove = ShouldMove; }
 };

@@ -15,6 +15,9 @@
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExternalContainereUpdate, const UItemContainer*, NewContainer);
+
 UCLASS()
 class INVENTORYPROJECT_API AFirstPersonPlayerController : public APlayerController
 {
@@ -34,13 +37,16 @@ private:
 	UUserWidget* DefaultInterfaceWidget = nullptr;
 
 	// Empty slot initialised to be used by the containers
+	UPROPERTY()
 	ACollectableObject* EmptySlot = nullptr;
 	
 	// Displays the bulk of the inventory - should be toggled on and off
+	UPROPERTY()
 	UWidget* InventoryWidget = nullptr;
 
-	// Mesh of the currently equiped item
-	UStaticMeshComponent* ItemMesh;
+	// Displays the external container opened by the player
+	UPROPERTY()
+	UWidget* ExternalContainerWidget = nullptr;
 
 	// Inventory containing all the objects the player collected
 	UPROPERTY()
@@ -49,6 +55,10 @@ private:
 	// Items stored in the quick access bar to 
 	UPROPERTY()
 	UQuickAccess* QuickAccessBar = nullptr;
+
+	// External item container
+	UPROPERTY()
+	UItemContainer* ExternalItemContainer = nullptr;
 
 	// Initialise inventory components
 	void InitInterfaceWidgets();
@@ -64,20 +74,28 @@ private:
 	AFirstPersonCharacter* PlayerCharacter = nullptr;
 
 	/// Functions called to interact with objects in the world
-	void GrabObject();
+	void InteractWithObject();
 	void OnGrabReleased();
 
 	// Function used to toggle between items in the quick access bar
 	void UpdateItemSelectionInc();
 	void UpdateItemSelectionDec();
 
+	// Delegate used to broadcast to the blueprint that the invnetory has been updated
+	UPROPERTY(BlueprintAssignable, Category = "UI Events")
+	FExternalContainereUpdate OnUpdateExternalContainer;
+
 	void UseCurrentItem();
 
 public:
+	// Container getters
 	UFUNCTION(BlueprintCallable)
 	UItemContainer* GetInventoryContainer() { return Inventory; }
 	UFUNCTION(BlueprintCallable)
 	UItemContainer* GetQuickAccessContainer() { return QuickAccessBar; }
+	UFUNCTION(BlueprintCallable)
+	UItemContainer* GetExternalContainer() { return ExternalItemContainer; }
+
 	// Update all UI elements
 	UFUNCTION(BlueprintCallable)
 	void UpdateWidgets();

@@ -40,6 +40,8 @@ void UItemContainer::InitContainerContents(ACollectableObject* EmptySlotClass)
 	{
 		UE_LOG(LogTemp, Error, TEXT("No empty slot class blueprint assigned!"));
 	}
+	// Set condition for initialisation to true
+	bUninitialised = false;
 }
 
 // Called every frame

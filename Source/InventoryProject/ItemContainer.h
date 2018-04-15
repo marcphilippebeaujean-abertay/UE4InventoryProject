@@ -9,7 +9,7 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "ItemContainer.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryInterfaceUpdate, const TArray<ACollectableObject*>&, Contents);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FContentsInterfaceUpdate, const TArray<ACollectableObject*>&, Contents);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class INVENTORYPROJECT_API UItemContainer : public UActorComponent
@@ -55,8 +55,6 @@ public:
 	// Get an item from a container
 	ACollectableObject* GetContainerItem(int ContainerID) { return ContainerItems[ContainerID]; }
 
-	bool IsQuickAccess() { return bQuickAccess; }
-
 	// Broadcasts event, indicating that the user interface needs to be updated
 	void BroadcastWidgetUpdate();
 
@@ -75,6 +73,8 @@ public:
 	int GetNumOfRows() { return NumberOfRows; }
 	UFUNCTION(BlueprintCallable)
 	int GetNumOfCollumns() { return NumberOfCollumns; }
+	bool IsQuickAccess() { return bQuickAccess; }
+	bool IsUnitinitialised() { return bUninitialised; }
 
 private:
 	// Reference to empty slot item
@@ -88,8 +88,11 @@ private:
 
 	// Delegate used to broadcast to the blueprint that the invnetory has been updated
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")
-	FInventoryInterfaceUpdate OnUpdateContainer;
+	FContentsInterfaceUpdate OnUpdateContainer;
 
 	// Maximum number of different classes that the inventory can hold - needs to be synchronised with the UI
 	int MaxItemSlots = 10;
+
+	// Condition that checks if the container has been initialised
+	bool bUninitialised = true;
 };
