@@ -10,7 +10,6 @@ UItemContainer::UItemContainer()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
 }
 
 
@@ -22,15 +21,13 @@ void UItemContainer::BeginPlay()
 
 void UItemContainer::InitContainerContents(ACollectableObject* EmptySlotClass)
 {
-	// Designate the max item slot
-	MaxItemSlots = NumberOfCollumns * NumberOfRows;
 	// Set empty slot class
 	EmptySlot = EmptySlotClass;
 	// Check if emtpy slot class was assigned - not doing this check can crash the editor
 	if (EmptySlot != nullptr)
 	{
 		// Check if we need to add item slots
-		for (int i = 0; i < MaxItemSlots; i++)
+		for (int i = 0; i < GetMaxItemSlots(); i++)
 		{
 			// If so, add the emtpy slot to the container
 			ContainerItems.Add(EmptySlot);

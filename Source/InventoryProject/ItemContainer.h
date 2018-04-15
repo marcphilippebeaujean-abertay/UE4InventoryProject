@@ -73,6 +73,8 @@ public:
 	int GetNumOfRows() { return NumberOfRows; }
 	UFUNCTION(BlueprintCallable)
 	int GetNumOfCollumns() { return NumberOfCollumns; }
+	UFUNCTION(BlueprintCallable)
+	int GetMaxItemSlots() { return (NumberOfCollumns * NumberOfRows); }
 	bool IsQuickAccess() { return bQuickAccess; }
 	bool IsUnitinitialised() { return bUninitialised; }
 
@@ -89,9 +91,6 @@ private:
 	// Delegate used to broadcast to the blueprint that the invnetory has been updated
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")
 	FContentsInterfaceUpdate OnUpdateContainer;
-
-	// Maximum number of different classes that the inventory can hold - needs to be synchronised with the UI
-	int MaxItemSlots = 10;
 
 	// Condition that checks if the container has been initialised
 	bool bUninitialised = true;
