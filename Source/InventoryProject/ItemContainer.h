@@ -5,24 +5,29 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "CollectableObject.h"
+#include "Engine/World.h"
 #include "DefaultEmptySlot.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "ItemContainer.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FContentsInterfaceUpdate, const TArray<ACollectableObject*>&, Contents);
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class INVENTORYPROJECT_API UItemContainer : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UItemContainer();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	// Array of items that can be set in the blueprint, which dictates what items are in the container at game start (or when the player interacts with it)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true"))
+		TArray<TSubclassOf<ACollectableObject>> InitItems;
 
 	// Array that stores objects which are in the container
 	UPROPERTY()
@@ -31,7 +36,7 @@ protected:
 	// Variable used to differentiate between quick access and regular containers, without having to cast
 	bool bQuickAccess = false;
 
-public:	
+public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -39,7 +44,7 @@ public:
 	void AddObjToContainer(ACollectableObject* NewItem);
 
 	// Returns all items within the contain
-	TArray<ACollectableObject*> GetContainerItems() { return ContainerItems; };
+	TArray<ACollectableObject*> GetContainerItems() { return ContainerItems; }; 
 
 	// Allows the items to be swapped between containers
 	UFUNCTION(BlueprintCallable)
@@ -67,8 +72,10 @@ public:
 	// Find an object in the inventory that stores the required type
 	ACollectableObject* GetResourceOfType(EResourceType ResType);
 
+	// Sets objects that have been depleted to type "EmptySlot"
 	void CheckForDepletedItems();
 
+	// Getters
 	UFUNCTION(BlueprintCallable)
 	int GetNumOfRows() { return NumberOfRows; }
 	UFUNCTION(BlueprintCallable)

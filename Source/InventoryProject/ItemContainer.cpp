@@ -37,6 +37,14 @@ void UItemContainer::InitContainerContents(ACollectableObject* EmptySlotClass)
 	{
 		UE_LOG(LogTemp, Error, TEXT("No empty slot class blueprint assigned!"));
 	}
+	// Spawn items that should be in the container on initialisation
+	for(int i = 0; i < InitItems.Num(); i++)
+	{
+		// Create item reference
+		ACollectableObject* NewItem = Cast<ACollectableObject>(GetWorld()->SpawnActor(InitItems[i]));
+		// Add the item to the container
+		AddObjToContainer(NewItem);
+	}
 	// Set condition for initialisation to true
 	bUninitialised = false;
 }
