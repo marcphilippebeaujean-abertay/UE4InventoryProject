@@ -108,25 +108,28 @@ void ACollectableObject::UpdateObjectOwner(UItemContainer* NewOwner)
 
 void ACollectableObject::CheckForCommonResource()
 {
-	for(int i = 0; i < OwningContainer->GetContainerItems().Num(); i++)
+	if (this->CurItemsInSlot != MaxItemsPerSlot)
 	{
-		ACollectableObject* NewContainerItem = OwningContainer->GetContainerItem(i);
-		// Check if the items resource type is identical to the one 
-		if(NewContainerItem->GetItemResourceType() == ItemResourceType)
+		for (int i = 0; i < OwningContainer->GetContainerItems().Num(); i++)
 		{
-			// Check if that item does not have the max number of slots filled
-			if(NewContainerItem->GetCurItemsInSlot() < MaxItemsPerSlot)
+			ACollectableObject* NewContainerItem = OwningContainer->GetContainerItem(i);
+			// Check if the items resource type is identical to the one 
+			if (NewContainerItem->GetItemResourceType() == ItemResourceType)
 			{
-				// Get maximum number that can be added to the new item slot from the current one
-				int ItemsToBeAdded = FMath::Clamp(CurItemsInSlot, 0, MaxItemsPerSlot - NewContainerItem->GetCurItemsInSlot());
-				// Add to the other container item
-				NewContainerItem->IncrementItemCount(ItemsToBeAdded);
-				// Subtract from curent container item
-				DecrementItemCount(ItemsToBeAdded);
-				// Check if local items have not been depleted
-				if(CurItemsInSlot <= 0)
+				// Check if that item does not have the max number of slots filled
+				if (NewContainerItem->GetCurItemsInSlot() < MaxItemsPerSlot)
 				{
-					break;
+					// Get maximum number that can be added to the new item slot from the current one
+					int ItemsToBeAdded = FMath::Clamp(CurItemsInSlot, 0, MaxItemsPerSlot - NewContainerItem->GetCurItemsInSlot());
+					// Add to the other container item
+					NewContainerItem->IncrementItemCount(ItemsToBeAdded);
+					// Subtract from curent container item
+					DecrementItemCount(ItemsToBeAdded);
+					// Check if local items have not been depleted
+					if (CurItemsInSlot <= 0)
+					{
+						break;
+					}
 				}
 			}
 		}
