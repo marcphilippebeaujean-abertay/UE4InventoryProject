@@ -48,8 +48,7 @@ private:
 	// Create/find dependancies
 	void InitActorComponents();
 
-	// Raycast dependancies
-	const FVector GetRayEndPoint();
+	// Variables used to store player view point
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 
@@ -100,4 +99,7 @@ public:
 
 	// Function used by the controller to communicate to the player if it should move
 	void SetShouldMove(bool ShouldMove) { bShouldMove = ShouldMove; }
+
+	// Raycast dependancies
+	const FVector GetRayEndPoint(bool IsGrabbing);
 };

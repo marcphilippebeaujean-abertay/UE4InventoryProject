@@ -181,3 +181,23 @@ void UItemContainer::CheckForDepletedItems()
 		}
 	}
 }
+
+void UItemContainer::DropItem(int ItemID)
+{
+	// Check if object owner is the player
+	if(AFirstPersonCharacter* Player = Cast<AFirstPersonCharacter>(GetOwner()))
+	{
+		// Drop the object
+		ContainerItems[ItemID]->DropItem(Player->GetRayEndPoint(false));
+		// Remove it from the array
+		ContainerItems.RemoveAt(ItemID);
+		// Insert a reference to the empty slot
+		ContainerItems.Insert(EmptySlot, ItemID);
+		// Broadcast a widget update
+		BroadcastWidgetUpdate();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Owning actor was not a player!"));
+	}
+}

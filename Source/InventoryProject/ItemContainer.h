@@ -27,7 +27,7 @@ protected:
 
 	// Array of items that can be set in the blueprint, which dictates what items are in the container at game start (or when the player interacts with it)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true"))
-		TArray<TSubclassOf<ACollectableObject>> InitItems;
+	TArray<TSubclassOf<ACollectableObject>> InitItems;
 
 	// Array that stores objects which are in the container
 	UPROPERTY()
@@ -56,6 +56,10 @@ public:
 		ContainerItems[ContainerID] = NewItem;
 		CheckForDepletedItems();
 	}
+
+	// Removes items that the player owns from the inventory
+	UFUNCTION(BlueprintCallable)
+	virtual void DropItem(int ItemID);
 
 	// Get an item from a container
 	ACollectableObject* GetContainerItem(int ContainerID) { return ContainerItems[ContainerID]; }

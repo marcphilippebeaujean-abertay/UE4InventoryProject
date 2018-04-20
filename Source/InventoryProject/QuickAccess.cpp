@@ -74,3 +74,21 @@ void UQuickAccess::CheckForUnequip(int ItemID)
 		Cast<AEquipableObject>(GetContainerItem(CurSelectedItem))->UnEquipItem();
 	}
 }
+
+void UQuickAccess::DropItem(int ItemID)
+{
+	// Unequip item before dropping it
+	if(ItemID == CurSelectedItem)
+	{
+		if(AEquipableObject* CurItem = Cast<AEquipableObject>(GetContainerItem(ItemID)))
+		{
+			CurItem->UnEquipItem();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed cast to equipable object while dropping!"));
+			return;
+		}
+	}
+	Super::DropItem(ItemID);
+}

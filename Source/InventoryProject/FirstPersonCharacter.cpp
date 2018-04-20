@@ -30,7 +30,7 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 	if (PhysicsHandle->GrabbedComponent)
 	{
 		// Move object we are holding
-		PhysicsHandle->SetTargetLocationAndRotation(GetRayEndPoint(), GetActorRotation());
+		PhysicsHandle->SetTargetLocationAndRotation(GetRayEndPoint(false), GetActorRotation());
 	}
 }
 
@@ -82,14 +82,14 @@ void AFirstPersonCharacter::InitActorComponents()
 	LanternLight->SetSourceRadius(0.0f);
 }
 
-const FVector AFirstPersonCharacter::GetRayEndPoint()
+const FVector AFirstPersonCharacter::GetRayEndPoint(bool IsGrabbing)
 {
 	// Strange syntax - the parameters past into the function are manipulated (returned?)
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
 	// Temporary variable that stores the grab distance
 	float FinalGrabDistance = GrabDistance;
 	// Check if the player is looking at the floor beneath them
-	if (LookingAtFloor())
+	if (LookingAtFloor() && IsGrabbing)
 	{
 		// To simulate the player being able to crouch down and grab objects beneath them, the grab distance is multiplied
 		FinalGrabDistance *= 2;
@@ -107,7 +107,7 @@ FHitResult AFirstPersonCharacter::GetTraceResult()
 	// Create the ray
 	FHitResult Hit;
 	// Update view related variables - "PlayerViewPointLocation" is updated here, hence why we need to call it first
-	FVector RayEndPoint = GetRayEndPoint();
+	FVector RayEndPoint = GetRayEndPoint(true);
 	// Function that sets "Hit" to contain the information of our ray cast
 	if (GetWorld()->LineTraceSingleByObjectType(Hit, PlayerViewPointLocation, RayEndPoint, FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), TraceParameters))
 	{
