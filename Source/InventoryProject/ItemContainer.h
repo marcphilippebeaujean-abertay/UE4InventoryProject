@@ -94,9 +94,9 @@ private:
 	ACollectableObject* EmptySlot = nullptr;
 
 	// Define dimensions of the inventory
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true", UIMin = '1', UIMax = '8'))
 	int NumberOfCollumns = 8;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true", UIMin = '1', UIMax = '8'))
 	int NumberOfRows = 8;
 
 	// Delegate used to broadcast to the blueprint that the invnetory has been updated
