@@ -41,12 +41,6 @@ void UQuickAccess::UpdateSelectedItem(bool increment)
 
 void UQuickAccess::SetContainerItem(int ContainerID, ACollectableObject* NewItem)
 {
-	// Check if the new object is being assigned as the current item slot
-	if (ContainerID == CurSelectedItem)
-	{
-		// Unequip the current item
-		Cast<AEquipableObject>(GetContainerItem(CurSelectedItem))->UnEquipItem();
-	}
 	Super::SetContainerItem(ContainerID, NewItem);
 	// Check if the new object is being assigned as the current item slot
 	if (ContainerID == CurSelectedItem)
@@ -61,5 +55,22 @@ void UQuickAccess::SetContainerItem(int ContainerID, ACollectableObject* NewItem
 		}
 		// See if item is equipable
 		EquipObj->EquipItem();
+	}
+}
+
+void UQuickAccess::SwapItems(UItemContainer* OtherContainer, int OtherItemID, int LocalItemID)
+{
+	// If required, unequip item from quick access bar
+	CheckForUnequip(LocalItemID);
+	Super::SwapItems(OtherContainer, OtherItemID, LocalItemID);
+}
+
+void UQuickAccess::CheckForUnequip(int ItemID)
+{
+	// See if item ID is currently equiped item
+	if(ItemID == CurSelectedItem)
+	{
+		// Unequip item
+		Cast<AEquipableObject>(GetContainerItem(CurSelectedItem))->UnEquipItem();
 	}
 }

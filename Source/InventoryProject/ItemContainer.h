@@ -48,7 +48,7 @@ public:
 
 	// Allows the items to be swapped between containers
 	UFUNCTION(BlueprintCallable)
-	void SwapItems(UItemContainer* OtherContainer, int OtherItemID, int LocalItemID);
+	virtual void SwapItems(UItemContainer* OtherContainer, int OtherItemID, int LocalItemID);
 
 	// Sets an item in the container
 	virtual void SetContainerItem(int ContainerID, ACollectableObject* NewItem)

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ItemContainer.h"
-
+#include "QuickAccess.h"
 
 // Sets default values for this component's properties
 UItemContainer::UItemContainer()
@@ -100,6 +100,15 @@ void UItemContainer::SwapItems(UItemContainer* OtherContainer, int OtherItemID, 
 		{
 			// If not, don't perform swap
 			return;
+		}
+		// Check if other object is the quick access bar
+		if(OtherContainer->IsQuickAccess())
+		{
+			if(UQuickAccess* OtherQuickAccess =  Cast<UQuickAccess>(OtherContainer))
+			{
+				// Check if the item needs to be unequiped
+				OtherQuickAccess->CheckForUnequip(OtherItemID);
+			}
 		}
 	}
 	// Create temporary object that stores values from other container's item
