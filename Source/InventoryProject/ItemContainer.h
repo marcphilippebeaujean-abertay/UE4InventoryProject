@@ -95,9 +95,9 @@ private:
 
 	// Define dimensions of the inventory
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true", UIMin = '1', UIMax = '8'))
-	int NumberOfCollumns = 8;
+	int NumberOfCollumns = 4;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true", UIMin = '1', UIMax = '8'))
-	int NumberOfRows = 8;
+	int NumberOfRows = 2;
 
 	// Delegate used to broadcast to the blueprint that the invnetory has been updated
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")

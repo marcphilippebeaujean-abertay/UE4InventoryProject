@@ -45,6 +45,15 @@ private:
 	UPROPERTY()
 	class UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
+	class UPlayerInventory* Inventory = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
+	class UQuickAccess* QuickAccess = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
+	class ULanternItemComponent* LanternItem = nullptr;
+
 	// Create/find dependancies
 	void InitActorComponents();
 

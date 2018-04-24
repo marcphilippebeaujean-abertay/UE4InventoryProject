@@ -23,20 +23,8 @@ void UItemContainer::InitContainerContents(ACollectableObject* EmptySlotClass)
 {
 	// Set empty slot class
 	EmptySlot = EmptySlotClass;
-	// Check if emtpy slot class was assigned - not doing this check can crash the editor
-	if (EmptySlot != nullptr)
-	{
-		// Check if we need to add item slots
-		for (int i = 0; i < GetMaxItemSlots(); i++)
-		{
-			// If so, add the emtpy slot to the container
-			ContainerItems.Add(EmptySlot);
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("No empty slot class blueprint assigned!"));
-	}
+	// Fill container with the needed number of empty slots
+	ContainerItems.Init(EmptySlotClass, GetMaxItemSlots());
 	// Check objects to be initialised isnt too big
 	if(InitItems.Num() > GetMaxItemSlots())
 	{

@@ -1,6 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "FirstPersonCharacter.h"
+#include "QuickAccess.h"
+#include "PlayerInventory.h"
+#include "LanternItemComponent.h"
 
 // Sets default values
 AFirstPersonCharacter::AFirstPersonCharacter()
@@ -80,6 +83,14 @@ void AFirstPersonCharacter::InitActorComponents()
 	LanternLight->SetAttenuationRadius(0.0f);
 	LanternLight->SetIntensity(10.0f);
 	LanternLight->SetSourceRadius(0.0f);
+
+	// Create inventory related components
+	Inventory = CreateDefaultSubobject<UPlayerInventory>(TEXT("PlayerInventory"));
+	QuickAccess = CreateDefaultSubobject<UQuickAccess>(TEXT("QuickAccess"));
+
+	// Create item components
+	LanternItem = CreateDefaultSubobject<ULanternItemComponent>(TEXT("LanternComponent"));
+	
 }
 
 const FVector AFirstPersonCharacter::GetRayEndPoint(bool IsGrabbing)

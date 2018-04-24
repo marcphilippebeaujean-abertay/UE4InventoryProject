@@ -19,12 +19,12 @@ void ACollectableObject::BeginPlay()
 {
 	Super::BeginPlay();
 	// Initialise item values
-	if (MaxItemsPerSlot <= 0)
+	if (MaxUnitsPerSlot <= 0)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Max items per slot noted assigned to object!"));
-		MaxItemsPerSlot = 1;
+		MaxUnitsPerSlot = 1;
 	}
-	CurItemsInSlot = FMath::Clamp(InitItems, 1, MaxItemsPerSlot);
+	CurUnitsInSlot = FMath::Clamp(InitUnits, 1, MaxUnitsPerSlot);
 }
 
 // Called every frame
@@ -74,9 +74,9 @@ FString ACollectableObject::GetIndicatorName()
 {
 	// Check if indicator name needs to include number of items in the slot
 	FString ItemNrIndicator = "";
-	if (MaxItemsPerSlot > 1)
+	if (MaxUnitsPerSlot > 1)
 	{
-		ItemNrIndicator = (" (" + FString::FromInt(CurItemsInSlot) + ")");
+		ItemNrIndicator = (" (" + FString::FromInt(CurUnitsInSlot) + ")");
 	}
 	return (IndicatorDisplayName + ItemNrIndicator);
 }
@@ -108,7 +108,7 @@ void ACollectableObject::UpdateObjectOwner(UItemContainer* NewOwner)
 
 void ACollectableObject::CheckForCommonResource()
 {
-	if (this->CurItemsInSlot != MaxItemsPerSlot)
+	if (this->CurUnitsInSlot != MaxUnitsPerSlot)
 	{
 		for (int i = 0; i < OwningContainer->GetContainerItems().Num(); i++)
 		{
@@ -117,16 +117,16 @@ void ACollectableObject::CheckForCommonResource()
 			if (NewContainerItem->GetItemResourceType() == ItemResourceType)
 			{
 				// Check if that item does not have the max number of slots filled
-				if (NewContainerItem->GetCurItemsInSlot() < MaxItemsPerSlot)
+				if (NewContainerItem->GetCurItemsInSlot() < MaxUnitsPerSlot)
 				{
 					// Get maximum number that can be added to the new item slot from the current one
-					int ItemsToBeAdded = FMath::Clamp(CurItemsInSlot, 0, MaxItemsPerSlot - NewContainerItem->GetCurItemsInSlot());
+					int ItemsToBeAdded = FMath::Clamp(CurUnitsInSlot, 0, MaxUnitsPerSlot - NewContainerItem->GetCurItemsInSlot());
 					// Add to the other container item
 					NewContainerItem->IncrementItemCount(ItemsToBeAdded);
 					// Subtract from curent container item
 					DecrementItemCount(ItemsToBeAdded);
 					// Check if local items have not been depleted
-					if (CurItemsInSlot <= 0)
+					if (CurUnitsInSlot <= 0)
 					{
 						break;
 					}

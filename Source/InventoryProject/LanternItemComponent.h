@@ -36,10 +36,10 @@ private:
 	
 	// Speed at which the attenuation of the light decreases, when the lanter has been lit
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
-	float LightDecrementRate = 1.0f;
+	float LightDecrementRate = 50.0f;
 
 	// Variable used to control the attenuation of the light dynamicall
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory", Meta = (AllowPrivateAccess = "true"))
-	float InitAttenuation = 10.0f;
+	float InitAttenuation = 500.0f;
 	float CurAttenuation = 0.0f;
 };

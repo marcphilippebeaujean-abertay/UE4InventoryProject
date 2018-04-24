@@ -84,10 +84,10 @@ public:
 	void SetObjectOwner(AFirstPersonCharacter* Owner) { OwningPlayer = Owner; }
 
 	UFUNCTION(BlueprintCallable)
-	int GetMaxItemsPerSlot() { return MaxItemsPerSlot; }
+	int GetMaxItemsPerSlot() { return MaxUnitsPerSlot; }
 
 	UFUNCTION(BlueprintCallable)
-	int GetCurItemsInSlot() { return CurItemsInSlot; }
+	int GetCurItemsInSlot() { return CurUnitsInSlot; }
 
 	UFUNCTION(BlueprintCallable)
 	EResourceType GetItemResourceType() { return ItemResourceType; }
@@ -95,10 +95,10 @@ public:
 	void UpdateObjectOwner(class UItemContainer* NewOwner);
 
 	UFUNCTION(BlueprintCallable)
-	void IncrementItemCount(int IncrementAmount) { CurItemsInSlot = FMath::Clamp(CurItemsInSlot + IncrementAmount, 0, MaxItemsPerSlot); }
+	void IncrementItemCount(int IncrementAmount) { CurUnitsInSlot = FMath::Clamp(CurUnitsInSlot + IncrementAmount, 0, MaxUnitsPerSlot); }
 
 	UFUNCTION(BlueprintCallable)
-	void DecrementItemCount(int DecrementAmount) { CurItemsInSlot = FMath::Clamp(CurItemsInSlot - DecrementAmount, 0, MaxItemsPerSlot); }
+	void DecrementItemCount(int DecrementAmount) { CurUnitsInSlot = FMath::Clamp(CurUnitsInSlot - DecrementAmount, 0, MaxUnitsPerSlot); }
 
 private:
 
@@ -108,14 +108,14 @@ private:
 
 	// Maximum number of the same item stored per slot
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
-	int MaxItemsPerSlot = 1;
+	int MaxUnitsPerSlot = 1;
 
 	// Initial number assigned to the item
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
-	int InitItems = 1;
+	int InitUnits = 1;
 
 	// Tracks how many slots are in the item
-	int CurItemsInSlot = 1;
+	int CurUnitsInSlot = 1;
 
 	// Variable used to determine the resource type of the object
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Inventory Specifications", Meta = (AllowPrivateAccess = "true"))
