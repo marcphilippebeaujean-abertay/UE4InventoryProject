@@ -68,6 +68,8 @@ void ACollectableObject::DropItem(FVector DropLocation)
 	this->SetActorHiddenInGame(false);
 	// Actor should tick
 	this->SetActorTickEnabled(true);
+	// Reset physics velocity
+	Mesh->SetPhysicsLinearVelocity(FVector(0, 0, 0));
 }
 
 FString ACollectableObject::GetIndicatorName()
