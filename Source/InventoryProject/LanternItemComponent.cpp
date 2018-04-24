@@ -26,7 +26,6 @@ void ULanternItemComponent::BeginPlay()
 	}
 	
 	this->SetComponentTickEnabled(false);
-
 	// ...
 	
 }
@@ -35,7 +34,6 @@ void ULanternItemComponent::BeginPlay()
 void ULanternItemComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
 	if(LanternLight)
 	{
 		// Decrement attenuation of light
@@ -70,4 +68,5 @@ void ULanternItemComponent::ExtinguishLantern()
 	// Reset lantern attenuation
 	CurAttenuation = 8;
 	LanternLight->SetAttenuationRadius(CurAttenuation);
+	UE_LOG(LogTemp, Error, TEXT("extinguished light!"));
 }

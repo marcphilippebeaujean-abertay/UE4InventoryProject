@@ -62,9 +62,13 @@ void UQuickAccess::SetContainerItem(int ContainerID, ACollectableObject* NewItem
 
 void UQuickAccess::SwapItems(UItemContainer* OtherContainer, int OtherItemID, int LocalItemID)
 {
-	// If required, unequip item from quick access bar
-	CheckForUnequip(LocalItemID);
-	Super::SwapItems(OtherContainer, OtherItemID, LocalItemID);
+	// Check if other item is equipable (otherwise, no need to try for swap)
+	if (Cast<AEquipableObject>(OtherContainer->GetContainerItem(OtherItemID)))
+	{
+		// If required, unequip item from quick access bar
+		CheckForUnequip(LocalItemID);
+		Super::SwapItems(OtherContainer, OtherItemID, LocalItemID);
+	}
 }
 
 void UQuickAccess::CheckForUnequip(int ItemID)

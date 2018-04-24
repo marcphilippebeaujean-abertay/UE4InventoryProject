@@ -103,13 +103,6 @@ void AFirstPersonCharacter::InitActorComponents()
 	ItemMesh->bCastDynamicShadow = false;
 	ItemMesh->CastShadow = false;
 
-	// Initialise the light component
-	LanternLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("LanternLight"));
-	LanternLight->SetupAttachment(ItemMesh);
-	LanternLight->SetAttenuationRadius(0.0f);
-	LanternLight->SetIntensity(10.0f);
-	LanternLight->SetSourceRadius(0.0f);
-
 	// Create inventory related components
 	Inventory = CreateDefaultSubobject<UPlayerInventory>(TEXT("PlayerInventory"));
 	QuickAccess = CreateDefaultSubobject<UQuickAccess>(TEXT("QuickAccess"));

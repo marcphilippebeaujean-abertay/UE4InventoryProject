@@ -44,6 +44,8 @@ void ACollectableObject::AssignDefaultComponents()
 	Mesh->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	// Setup collision preset for mesh to be compatible with the pickup trace
 	Mesh->SetCollisionProfileName(UCollisionProfile::PhysicsActor_ProfileName);
+	// Enable physics
+	Mesh->SetSimulatePhysics(true);
 }
 
 void ACollectableObject::OnObjectCollected(UItemContainer* NewOwner)
@@ -54,6 +56,8 @@ void ACollectableObject::OnObjectCollected(UItemContainer* NewOwner)
 	this->SetActorHiddenInGame(true);
 	// Stop actor from ticking
 	this->SetActorTickEnabled(false);
+	// Disable physics
+	Mesh->SetSimulatePhysics(false);
 	// Setup reference to the player and inventory
 	UpdateObjectOwner(NewOwner);
 }
@@ -66,10 +70,14 @@ void ACollectableObject::DropItem(FVector DropLocation)
 	this->SetActorEnableCollision(true);
 	// Make actor visible
 	this->SetActorHiddenInGame(false);
-	// Actor should tick
-	this->SetActorTickEnabled(true);
+	// Make actor visible
+	this->SetActorHiddenInGame(false);
+	// Disable physics
+	Mesh->SetSimulatePhysics(true);
 	// Reset physics velocity
 	Mesh->SetPhysicsLinearVelocity(FVector(0, 0, 0));
+	// Set object owner to nullptr
+	UpdateObjectOwner(nullptr);
 }
 
 FString ACollectableObject::GetIndicatorName()

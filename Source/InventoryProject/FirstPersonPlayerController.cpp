@@ -224,7 +224,7 @@ void AFirstPersonPlayerController::UseCurrentItem()
 	// Check if current selected item is available
 	if(QuickAccessBar->GetSelectedItem())
 	{
-	//	 Use item that is currently equipped
+		// Use item that is currently equipped
 		QuickAccessBar->GetSelectedItem()->UseItem();
 	}
 	else

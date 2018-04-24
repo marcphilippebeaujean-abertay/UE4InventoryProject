@@ -39,10 +39,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* ItemMesh = nullptr;
 
-	// Light component used to toggle the lantern
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
-	class UPointLightComponent* LanternLight = nullptr;
-
 	// Physics handle component that we will access
 	UPROPERTY()
 	class UPhysicsHandleComponent* PhysicsHandle = nullptr;
