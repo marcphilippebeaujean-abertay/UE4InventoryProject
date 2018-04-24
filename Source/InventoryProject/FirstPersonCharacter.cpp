@@ -35,6 +35,32 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 		// Move object we are holding
 		PhysicsHandle->SetTargetLocationAndRotation(GetRayEndPoint(false), GetActorRotation());
 	}
+	// Get the hit result to see if we grabbed a collectable object
+	FHitResult TraceHit = GetTraceResult();
+	// Deduce the actor that was hit by the trace
+	auto ActorHit = TraceHit.GetActor();
+	// Check if we got a hit
+	if (ActorHit)
+	{
+		// Check if the other actor is of type collectable
+		if (ACollectableObject* HitCollectable = Cast<ACollectableObject>(ActorHit))
+		{
+			// Update indicator using the recieved object
+			OnUpdateIndicator.Broadcast(HitCollectable->GetIndicatorName());
+			// Set indicator to require reset
+			bIndicatorReset = false;
+			return;
+		}
+	}
+	else
+	{
+		// Check if indicator needs to be updated
+		if (!bIndicatorReset)
+		{
+			bIndicatorReset = true;
+			OnUpdateIndicator.Broadcast("");
+		}
+	}
 }
 
 void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

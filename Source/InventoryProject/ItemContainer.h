@@ -36,6 +36,12 @@ protected:
 	// Variable used to differentiate between quick access and regular containers, without having to cast
 	bool bQuickAccess = false;
 
+	// Define dimensions of the inventory
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true", UIMin = '1', UIMax = '8'))
+	int NumberOfCollumns = 4;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true", UIMin = '1', UIMax = '8'))
+	int NumberOfRows = 2;
+
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -92,12 +98,6 @@ public:
 private:
 	// Reference to empty slot item
 	ACollectableObject* EmptySlot = nullptr;
-
-	// Define dimensions of the inventory
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true", UIMin = '1', UIMax = '8'))
-	int NumberOfCollumns = 4;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true", UIMin = '1', UIMax = '8'))
-	int NumberOfRows = 2;
 
 	// Delegate used to broadcast to the blueprint that the invnetory has been updated
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")

@@ -12,6 +12,8 @@
 #include "Blueprint/UserWidget.h"
 #include "FirstPersonCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FItemIndicatorUpdate, const FString, ItemName);
+
 UCLASS()
 class INVENTORYPROJECT_API AFirstPersonCharacter : public ACharacter
 {
@@ -45,12 +47,14 @@ private:
 	UPROPERTY()
 	class UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
+	// Item container components
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
 	class UPlayerInventory* Inventory = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
 	class UQuickAccess* QuickAccess = nullptr;
 
+	// Item specific components
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
 	class ULanternItemComponent* LanternItem = nullptr;
 
@@ -82,6 +86,14 @@ private:
 	// Override character movement controls
 	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	// Basic movement functions bound to the axis
+	void MoveForward(float val);
+	void MoveRight(float val);
+
+	UPROPERTY(BlueprintAssignable, Category = "UI Events")
+	FItemIndicatorUpdate OnUpdateIndicator;
+	bool bIndicatorReset = false;
+
 public:
 
 	// Called every frame
@@ -97,10 +109,6 @@ public:
 	void ReleasePhysicsObject();
 	// Returns true if playre is carrying physics object
 	bool CarryingPhysicsObject();
-
-	// Basic movement functions bound to the axis
-	void MoveForward(float val);
-	void MoveRight(float val);
 
 	// Functions used when a new object is equiped
 	void SetItemMesh(UStaticMesh* NewItemMesh, UMaterialInterface* NewItemMaterial);

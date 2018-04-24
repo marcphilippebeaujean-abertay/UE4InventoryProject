@@ -10,6 +10,8 @@ void UQuickAccess::OnComponentCreated()
 
 	// Set quick access check to true
 	bQuickAccess = true;
+	// Make sure rows is set to 1
+	NumberOfRows = 1;
 }
 
 void UQuickAccess::UpdateSelectedItem(bool increment)
