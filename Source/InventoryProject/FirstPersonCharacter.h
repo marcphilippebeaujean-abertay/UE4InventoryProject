@@ -86,9 +86,21 @@ private:
 	void MoveForward(float val);
 	void MoveRight(float val);
 
+	// Other movement related input
+	void StartCrouch();
+	void StopCrouch();
+
+	void StartSprint();
+	void StopSprint();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Visual, meta = (AllowPrivateAccess = "true"))
+	int WalkingSpeed;
+
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")
 	FItemIndicatorUpdate OnUpdateIndicator;
 	bool bIndicatorReset = false;
+
+	UCharacterMovementComponent* MovementComp = nullptr;
 
 public:
 

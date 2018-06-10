@@ -70,6 +70,10 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	// Setup movement input
 	InputComponent->BindAxis("Forward", this, &AFirstPersonCharacter::MoveForward);
 	InputComponent->BindAxis("Right", this, &AFirstPersonCharacter::MoveRight);
+	InputComponent->BindAction("Crouch", IE_Pressed, this, &AFirstPersonCharacter::StartCrouch);
+	InputComponent->BindAction("Crouch", IE_Released, this, &AFirstPersonCharacter::StopCrouch);
+	InputComponent->BindAction("Sprint", IE_Pressed, this, &AFirstPersonCharacter::StartSprint);
+	InputComponent->BindAction("Sprint", IE_Released, this, &AFirstPersonCharacter::StopSprint);
 }
 
 void AFirstPersonCharacter::InitActorComponents()
@@ -109,7 +113,10 @@ void AFirstPersonCharacter::InitActorComponents()
 
 	// Create item components
 	LanternItem = CreateDefaultSubobject<ULanternItemComponent>(TEXT("LanternComponent"));
-	
+
+	// Find movement component
+	MovementComp = this->FindComponentByClass<UCharacterMovementComponent>();
+	WalkingSpeed = MovementComp->MaxWalkSpeed;
 }
 
 const FVector AFirstPersonCharacter::GetRayEndPoint(bool IsGrabbing)
@@ -234,6 +241,27 @@ void AFirstPersonCharacter::SetItemMesh(UStaticMesh* NewItemMesh, UMaterialInter
 	ItemMesh->SetMaterial(0, NewItemMaterial);
 
 }
+
+void AFirstPersonCharacter::StartCrouch()
+{
+	Crouch();
+}
+
+void AFirstPersonCharacter::StopCrouch()
+{
+	UnCrouch();
+}
+
+void AFirstPersonCharacter::StartSprint()
+{
+	MovementComp->MaxWalkSpeed = MovementComp->MaxCustomMovementSpeed;
+}
+
+void AFirstPersonCharacter::StopSprint()
+{
+	MovementComp->MaxWalkSpeed = WalkingSpeed;
+}
+
 
 void AFirstPersonCharacter::HideItemMesh()
 {
