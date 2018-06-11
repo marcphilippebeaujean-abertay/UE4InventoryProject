@@ -82,6 +82,9 @@ public:
 	// Find an object in the inventory that stores the required type
 	ACollectableObject* GetResourceOfType(EResourceType ResType);
 
+	// Find all objects in a given container, that use the specified type
+	TArray<ACollectableObject*> GetResourcesOfType(EResourceType ResType);
+
 	// Sets objects that have been depleted to type "EmptySlot"
 	void CheckForDepletedItems();
 

@@ -189,3 +189,19 @@ void UItemContainer::DropItem(int ItemID)
 		UE_LOG(LogTemp, Error, TEXT("Owning actor was not a player!"));
 	}
 }
+
+TArray<ACollectableObject*> UItemContainer::GetResourcesOfType(EResourceType ResType)
+{
+	TArray<ACollectableObject*> ResourceObjects;
+	// Loop through all items
+	for(int i = 0; i < ContainerItems.Num(); i++)
+	{
+		// Object of that type is found..
+		if(ContainerItems[i]->GetItemResourceType() == ResType)
+		{
+			// ..retrieve it and add it to the array!
+			ResourceObjects.Add(ContainerItems[i]);
+		}
+	}
+	return ResourceObjects;
+}

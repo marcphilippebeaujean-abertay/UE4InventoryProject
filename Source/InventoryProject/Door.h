@@ -17,6 +17,7 @@ class INVENTORYPROJECT_API ADoor : public AInteractable
 	
 public:
 
+	void BeginPlay() override;
 	virtual void OnInteracted() override;
 	virtual bool CanInteract() override;
 
