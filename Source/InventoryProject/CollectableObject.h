@@ -14,7 +14,8 @@ UENUM(BlueprintType)
 enum class EResourceType : uint8
 {
 	None,
-	Matches
+	Matches,
+	Key
 };
 
 UCLASS()
