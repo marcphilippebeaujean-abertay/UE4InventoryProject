@@ -15,7 +15,10 @@ void ADoor::BeginPlay()
 
 void ADoor::OnInteracted()
 {
-	
+	// Get current level
+	FString CurrentLevel = GetWorld()->GetMapName();
+	// Load that level
+	UGameplayStatics::OpenLevel(GetWorld(), "Testing_Room");
 }
 
 bool ADoor::CanInteract()

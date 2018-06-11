@@ -245,17 +245,6 @@ bool AFirstPersonCharacter::CarryingPhysicsObject()
 	}
 }
 
-void AFirstPersonCharacter::SetItemMesh(UStaticMesh* NewItemMesh, UMaterialInterface* NewItemMaterial)
-{
-	// Set visibility to true
-	ItemMesh->SetHiddenInGame(false);
-	// Set the new mesh
-	ItemMesh->SetStaticMesh(NewItemMesh);
-	// Set the new material
-	ItemMesh->SetMaterial(0, NewItemMaterial);
-
-}
-
 void AFirstPersonCharacter::StartCrouch()
 {
 	Crouch();
@@ -276,8 +265,24 @@ void AFirstPersonCharacter::StopSprint()
 	MovementComp->MaxWalkSpeed = WalkingSpeed;
 }
 
-
 void AFirstPersonCharacter::HideItemMesh()
 {
 	ItemMesh->SetHiddenInGame(true);
+}
+
+void AFirstPersonCharacter::SetPlayerContainers(UPlayerInventory* l_gameInstanceInventory, UQuickAccess* l_gameInstanceQuickAccess)
+{
+	Inventory = l_gameInstanceInventory;
+	QuickAccess = l_gameInstanceQuickAccess;
+}
+
+void AFirstPersonCharacter::SetItemMesh(UStaticMesh* NewItemMesh, UMaterialInterface* NewItemMaterial)
+{
+	// Set visibility to true
+	ItemMesh->SetHiddenInGame(false);
+	// Set the new mesh
+	ItemMesh->SetStaticMesh(NewItemMesh);
+	// Set the new material
+	ItemMesh->SetMaterial(0, NewItemMaterial);
+
 }

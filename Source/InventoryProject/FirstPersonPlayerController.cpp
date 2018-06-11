@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "FirstPersonPlayerController.h"
-
+#include "Interactable.h"
+#include "MyGameInstance.h"
 
 AFirstPersonPlayerController::AFirstPersonPlayerController()
 {
@@ -66,27 +67,40 @@ void AFirstPersonPlayerController::InitContainers()
 	EmptySlot = Cast<ACollectableObject>(this->GetWorld()->SpawnActor<ADefaultEmptySlot>());
 	// Set owner of slot to be the character
 	EmptySlot->SetObjectOwner(PlayerCharacter);
-	if(EmptySlot)
+	// Retrieve player containers from game instance
+	Inventory = Cast<UMyGameInstance>(GetGameInstance())->GetPlayerInventory();
+	QuickAccessBar = Cast<UMyGameInstance>(GetGameInstance())->GetPlayerQuickAccess();
+	// Check if the containers exist...
+	if (Inventory == nullptr)
 	{
-		// Find player inventory
-		Inventory = PlayerCharacter->FindComponentByClass<UPlayerInventory>();
-		Inventory->InitContainerContents(EmptySlot);
-		if (Inventory == nullptr)
+		// ...initialise containers for the first time
+		if (EmptySlot)
 		{
-			UE_LOG(LogTemp, Error, TEXT("Failed to find inventory!"));
+			// Find player inventory
+			Inventory = PlayerCharacter->FindComponentByClass<UPlayerInventory>();
+			Inventory->InitContainerContents(EmptySlot);
+			if (Inventory == nullptr)
+			{
+				UE_LOG(LogTemp, Error, TEXT("Failed to find inventory!"));
+			}
+			// Find quick access component
+			QuickAccessBar = PlayerCharacter->FindComponentByClass<UQuickAccess>();
+			if (QuickAccessBar == nullptr)
+			{
+				UE_LOG(LogTemp, Error, TEXT("Failed to find quick access bar!"));
+			}
+			QuickAccessBar->InitContainerContents(EmptySlot);
 		}
-		// Find quick access component
-		QuickAccessBar = PlayerCharacter->FindComponentByClass<UQuickAccess>();
-		if (QuickAccessBar == nullptr)
+		else
 		{
-			UE_LOG(LogTemp, Error, TEXT("Failed to find quick access bar!"));
+			UE_LOG(LogTemp, Error, TEXT("Failed to find empty slot class!"));
+			return;
 		}
-		QuickAccessBar->InitContainerContents(EmptySlot);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to find empty slot class!"));
-		return;
+		// ...set containers of the player to be that in the game instance
+		PlayerCharacter->SetPlayerContainers(Inventory, QuickAccessBar);
 	}
 }
 
@@ -205,9 +219,19 @@ void AFirstPersonPlayerController::InteractWithObject()
 				ToggleInventory();
 				return;
 			}
+			// Check if other actor is of type interactable
+			if (AInteractable* HitInteractable = Cast<AInteractable>(ActorHit))
+			{
+				// Check if player can interact with the object
+				if (HitInteractable->CanInteract())
+				{
+					// Interact with object
+					HitInteractable->OnInteracted();
+					return;
+				}
+			}
 			// Attempt to grab a physics object if the hit object is not of type collectable
 			PlayerCharacter->GrabPhysicsObject(TraceHit.GetComponent(), TraceHit.GetActor()->GetActorLocation());
-			return;
 		}
 	}
 }
