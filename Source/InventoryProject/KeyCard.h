@@ -23,7 +23,7 @@ class INVENTORYPROJECT_API AKeyCard : public ACollectableObject
 	
 private:
 
-	// Variable used to determine the resource type of the object
+	// Variable used to determine the doors that this key can unlock
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Key Unlock", Meta = (AllowPrivateAccess = "true"))
 	EKeyType KeyTarget = EKeyType::Master;
 	
