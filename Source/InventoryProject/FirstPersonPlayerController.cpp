@@ -27,8 +27,6 @@ void AFirstPersonPlayerController::BeginPlay()
 void AFirstPersonPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
-	
 }
 
 

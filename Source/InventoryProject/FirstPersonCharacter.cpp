@@ -3,6 +3,7 @@
 #include "FirstPersonCharacter.h"
 #include "QuickAccess.h"
 #include "PlayerInventory.h"
+#include "Interactable.h"
 #include "LanternItemComponent.h"
 
 // Sets default values
@@ -49,6 +50,19 @@ void AFirstPersonCharacter::Tick(float DeltaTime)
 			OnUpdateIndicator.Broadcast(HitCollectable->GetIndicatorName());
 			// Set indicator to require reset
 			bIndicatorReset = false;
+			return;
+		}
+		// Check if other actor is of type interactable
+		if(AInteractable* HitInteractable = Cast<AInteractable>(ActorHit))
+		{
+			// Check if player can interact with the object
+			if (HitInteractable->CanInteract())
+			{
+				// Update indicator
+				OnUpdateIndicator.Broadcast(HitInteractable->GetIndicatorName());
+				// Set indicator to require rest
+				bIndicatorReset = false;
+			}
 			return;
 		}
 	}

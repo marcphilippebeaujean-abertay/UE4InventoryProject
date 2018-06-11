@@ -15,7 +15,7 @@ enum class EResourceType : uint8
 {
 	None,
 	Matches,
-	Key
+	Key,
 };
 
 UCLASS()
