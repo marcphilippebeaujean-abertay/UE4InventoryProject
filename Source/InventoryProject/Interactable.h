@@ -41,6 +41,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Visual", Meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* Mesh = nullptr;
 
-	virtual void AssignDefaultComponents();
+	void AssignDefaultComponents();
 	
 };

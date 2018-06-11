@@ -37,12 +37,12 @@ bool ADoor::CanInteract()
 		{
 			// Get key type of current object
 			EKeyType KeyType = Cast<AKeyCard>(itr)->GetKeyType();
-			if(KeyType == RequiredKey)
+			if(KeyType == RequiredKey || KeyType == EKeyType::Master)
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Can interact with door!"));
 				return true;
 			}
 		}
 	}
-
 	return false;
 }
