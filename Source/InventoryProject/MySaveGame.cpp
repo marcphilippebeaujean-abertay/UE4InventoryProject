@@ -15,7 +15,6 @@ void UMySaveGame::SaveContainerItems(FString l_containerID, UItemContainer* l_it
 	// Check if map for the container already exists
 	if (ContainerIsStored(l_containerID))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Found stored map!"));
 		// Clear the item refernces
 		m_containerRefs[l_containerID].m_containerItems.Empty();
 	}
@@ -26,7 +25,6 @@ void UMySaveGame::SaveContainerItems(FString l_containerID, UItemContainer* l_it
 		newContainerRef.m_containerID = l_containerID;
 		newContainerRef.m_containerItems = TArray<FContainerObjectReference>();
 		m_containerRefs.Add(l_containerID, newContainerRef);
-		UE_LOG(LogTemp, Error, TEXT("Adding container to map!"));
 		if(m_containerRefs.Num() <= 0)
 		{
 			UE_LOG(LogTemp, Error, TEXT("Failed to add container to map!"));
@@ -44,12 +42,9 @@ void UMySaveGame::SaveContainerItems(FString l_containerID, UItemContainer* l_it
 		inventoryItem.SetCollectableClass(itr->GetClass());
 		// Increment item index iterator
 		itemIndex++;
-		UE_LOG(LogTemp, Warning, TEXT("Adding item to map array!"));
 		// Append the struct to our list, with the key
 		m_containerRefs[l_containerID].m_containerItems.Add(inventoryItem);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("%d"), m_containerRefs.Num());
-	UE_LOG(LogTemp, Warning, TEXT("%d"), m_containerRefs[l_containerID].m_containerItems.Num());
 }
 
 bool UMySaveGame::ContainerIsStored(FString l_containerID)

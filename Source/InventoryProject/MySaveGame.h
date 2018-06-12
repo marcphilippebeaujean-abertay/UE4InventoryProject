@@ -89,6 +89,10 @@ public:
 	}
 
 	void SaveContainerItems(FString l_containerID, class UItemContainer* l_itemContainer);
+	void ClearPlayerContainerRefs()
+	{
+		m_containerRefs.Empty();
+	}
 	bool ContainerIsStored(FString l_containerID);
 	TArray<FContainerObjectReference> LoadContainerItems(FString l_containerID);
 
