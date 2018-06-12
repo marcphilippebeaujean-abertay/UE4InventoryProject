@@ -291,6 +291,8 @@ void AFirstPersonPlayerController::SetupPlayerContainer(UItemContainer* l_contai
 			ACollectableObject* storedItem = Cast<ACollectableObject>(GetWorld()->SpawnActor(itr.GetCollectableClass()));
 			// Set variables that were stored in the save object
 			storedItem->SetUnitCount(itr.GetUnitCount());
+			// Call on collected for each item
+			storedItem->OnObjectCollected(l_container);
 			// Add the item to the container
 			retrievedItems.Add(storedItem);
 		}

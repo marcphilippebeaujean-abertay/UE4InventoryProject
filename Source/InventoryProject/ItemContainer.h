@@ -52,13 +52,6 @@ public:
 	// Returns all items within the contain
 	TArray<ACollectableObject*> GetContainerItems() { return ContainerItems; };
 
-	// Set container contents to be of that of another item
-	void SetContainerItems(TArray<ACollectableObject*> l_containerItems)
-	{
-		ContainerItems = l_containerItems;
-		BroadcastWidgetUpdate();
-	}
-
 	// Allows the items to be swapped between containers
 	UFUNCTION(BlueprintCallable)
 	virtual void SwapItems(UItemContainer* OtherContainer, int OtherItemID, int LocalItemID);
@@ -68,6 +61,13 @@ public:
 	{
 		ContainerItems[ContainerID] = NewItem;
 		CheckForDepletedItems();
+	}
+
+	// Set container contents to be of that of another item
+	virtual void SetContainerItems(TArray<ACollectableObject*> l_containerItems)
+	{
+		ContainerItems = l_containerItems;
+		BroadcastWidgetUpdate();
 	}
 
 	// Removes items that the player owns from the inventory

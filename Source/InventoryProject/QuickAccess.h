@@ -34,8 +34,9 @@ public:
 	AEquipableObject* GetSelectedItem() { return Cast<AEquipableObject>(ContainerItems[CurSelectedItem]); }
 
 	// Override set container item, since we need to check if an object is being equiped when a container update is made
-	virtual void SetContainerItem(int ContainerID, ACollectableObject* NewItem) override;
-	virtual void SwapItems(UItemContainer* OtherContainer, int OtherItemID, int LocalItemID) override;
+	void SetContainerItem(int ContainerID, ACollectableObject* NewItem) override;
+	void SetContainerItems(TArray<ACollectableObject*> l_containerItems) override;
+	void SwapItems(UItemContainer* OtherContainer, int OtherItemID, int LocalItemID) override;
 	UFUNCTION(BlueprintCallable)
 	virtual void DropItem(int ItemID);
 	void CheckForUnequip(int ItemID);

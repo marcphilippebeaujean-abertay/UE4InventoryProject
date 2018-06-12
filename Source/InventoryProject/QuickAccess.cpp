@@ -12,6 +12,8 @@ void UQuickAccess::OnComponentCreated()
 	bQuickAccess = true;
 	// Make sure rows is set to 1
 	NumberOfRows = 1;
+	// Set collecte item
+	CurSelectedItem = 0;
 }
 
 void UQuickAccess::UpdateSelectedItem(bool increment)
@@ -58,6 +60,21 @@ void UQuickAccess::SetContainerItem(int ContainerID, ACollectableObject* NewItem
 		// See if item is equipable
 		EquipObj->EquipItem();
 	}
+}
+
+void UQuickAccess::SetContainerItems(TArray<ACollectableObject*> l_containerItems)
+{
+	Super::SetContainerItems(l_containerItems);
+	// Access the equipable type
+	AEquipableObject* EquipObj = Cast<AEquipableObject>(ContainerItems[CurSelectedItem]);
+	// Check if cast was successful
+	if (EquipObj == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed cast to equipable object - cannot equip!"));
+		return;
+	}
+	// See if item is equipable
+	EquipObj->EquipItem();
 }
 
 void UQuickAccess::SwapItems(UItemContainer* OtherContainer, int OtherItemID, int LocalItemID)
