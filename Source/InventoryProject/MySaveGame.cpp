@@ -8,7 +8,6 @@ UMySaveGame::UMySaveGame()
 {
 	m_saveSlotName = TEXT("TestSaveSlot");
 	m_userIndex = 0;
-	m_containerRefs.Empty();
 }
 
 void UMySaveGame::SaveContainerItems(FString l_containerID, UItemContainer* l_itemContainer)
