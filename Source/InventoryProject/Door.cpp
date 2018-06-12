@@ -5,6 +5,7 @@
 #include "FirstPersonCharacter.h"
 #include "KeyCard.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "FirstPersonPlayerController.h"
 
 void ADoor::BeginPlay()
 {
@@ -15,8 +16,8 @@ void ADoor::BeginPlay()
 
 void ADoor::OnInteracted()
 {
-	// Get current level
-	FString CurrentLevel = GetWorld()->GetMapName();
+	// Update game instance inventory instance
+	Cast<AFirstPersonPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->UpdateGameInstanceInventory();
 	// Load that level
 	UGameplayStatics::OpenLevel(GetWorld(), "Testing_Room");
 }

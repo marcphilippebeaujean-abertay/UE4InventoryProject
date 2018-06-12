@@ -3,6 +3,7 @@
 #include "FirstPersonPlayerController.h"
 #include "Interactable.h"
 #include "MyGameInstance.h"
+#include "MySaveGame.h"
 
 AFirstPersonPlayerController::AFirstPersonPlayerController()
 {
@@ -67,11 +68,14 @@ void AFirstPersonPlayerController::InitContainers()
 	EmptySlot = Cast<ACollectableObject>(this->GetWorld()->SpawnActor<ADefaultEmptySlot>());
 	// Set owner of slot to be the character
 	EmptySlot->SetObjectOwner(PlayerCharacter);
-	// Retrieve player containers from game instance
-	Inventory = Cast<UMyGameInstance>(GetGameInstance())->GetPlayerInventory();
-	QuickAccessBar = Cast<UMyGameInstance>(GetGameInstance())->GetPlayerQuickAccess();
+	// Check for correct game instance
+	if(!Cast<UMyGameInstance>(GetGameInstance()))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Wrong game instance assigned in project settings - please update!"));
+		return;
+	}
 	// Check if the containers exist...
-	if (Inventory == nullptr)
+	if (Inventory == nullptr || QuickAccessBar == nullptr)
 	{
 		// ...initialise containers for the first time
 		if (EmptySlot)
@@ -96,11 +100,32 @@ void AFirstPersonPlayerController::InitContainers()
 			UE_LOG(LogTemp, Error, TEXT("Failed to find empty slot class!"));
 			return;
 		}
+
 	}
 	else
 	{
-		// ...set containers of the player to be that in the game instance
-		PlayerCharacter->SetPlayerContainers(Inventory, QuickAccessBar);
+		UE_LOG(LogTemp, Error, TEXT("Containers initialised prematurely!"));
+		return;
+	}
+	// Check if prior information on the object has been stored
+	if (Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->SaveDataAvailable() == true)
+	{
+		// Retrieve reference to current save object
+		UMySaveGame* LoadGameInstance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass()));
+		LoadGameInstance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->GetSaveSlotName(), LoadGameInstance->GetUserIndex()));
+		// Load containers from save object 
+		//Inventory->SetContainerItems(LoadGameInstance->GetPlayerInventory()->GetContainerItems());
+		//
+		//QuickAccessBar->SetContainerItems(LoadGameInstance->GetPlayerQuickAccess()->GetContainerItems());
+		//if (Inventory)
+		//{
+		//	UE_LOG(LogTemp, Warning, TEXT("Retrieved items from game instance...!"));
+		//	// ...set containers of the player to be that in the game instance
+		//	PlayerCharacter->SetPlayerContainers(Inventory, QuickAccessBar);
+		//	// Update the container widgets
+		//	Inventory->BroadcastWidgetUpdate();
+		//	QuickAccessBar->BroadcastWidgetUpdate();
+		//}
 	}
 }
 
@@ -254,4 +279,9 @@ void AFirstPersonPlayerController::UseCurrentItem()
 		UE_LOG(LogTemp, Error, TEXT("Cur selected item not avilable!"));
 		return;
 	}
+}
+
+void AFirstPersonPlayerController::UpdateGameInstanceInventory()
+{
+	Cast<UMyGameInstance>(GetGameInstance())->UpdatePlayerContainers(Inventory, QuickAccessBar);
 }

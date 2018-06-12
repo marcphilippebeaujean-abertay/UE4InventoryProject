@@ -3,13 +3,10 @@
 #include "MyGameInstance.h"
 #include "QuickAccess.h"
 #include "PlayerInventory.h"
+#include "MySaveGame.h"
 
-void UMyGameInstance::SetPlayerInventory(UPlayerInventory* l_itemContainer)
-{
-	m_playerInventory = l_itemContainer;
-}
 
-void UMyGameInstance::SetPlayerQuickAccess(UQuickAccess* l_itemContainer)
+void UMyGameInstance::UpdatePlayerContainers(class UPlayerInventory* l_plInventory, class UQuickAccess* l_quickAccess)
 {
-	m_playerQuickAccess = l_itemContainer;
+
 }

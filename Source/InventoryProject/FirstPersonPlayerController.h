@@ -99,4 +99,8 @@ public:
 	// Update all UI elements
 	UFUNCTION(BlueprintCallable)
 	void UpdateWidgets();
+
+	// Should be called before level switch - updates the game instance inventory reference
+	UFUNCTION(BlueprintCallable)
+	void UpdateGameInstanceInventory();
 };

@@ -104,7 +104,7 @@ void UItemContainer::SwapItems(UItemContainer* OtherContainer, int OtherItemID, 
 	// Update owners for the object and auto stack
 	TempObject->UpdateObjectOwner(this);
 	// Check if the object dragged onto this container has been depleted by auto stacking
-	if (TempObject->GetCurItemsInSlot() > 0)
+	if (TempObject->GetCurUnitsInSlot() > 0)
 	{
 		GetContainerItem(LocalItemID)->UpdateObjectOwner(OtherContainer);
 		// Set other containers item to be able equal to that of the local one
@@ -146,7 +146,7 @@ ACollectableObject* UItemContainer::GetResourceOfType(EResourceType ResType)
 			else
 			{
 				// Check if this new item is storing less items than the other
-				if(ContainerItems[i]->GetCurItemsInSlot() < ReturnItem->GetCurItemsInSlot())
+				if(ContainerItems[i]->GetCurUnitsInSlot() < ReturnItem->GetCurUnitsInSlot())
 				{
 					// We always want to return the item with the lowest amount of resources and subtract from that
 					ReturnItem = ContainerItems[i];
@@ -162,7 +162,7 @@ void UItemContainer::CheckForDepletedItems()
 	// Check each item in array
 	for(int i = 0; i < ContainerItems.Num(); i++)
 	{
-		if(ContainerItems[i]->GetCurItemsInSlot() <= 0)
+		if(ContainerItems[i]->GetCurUnitsInSlot() <= 0)
 		{
 			// this should now be an empty slot!
 			ContainerItems[i] = EmptySlot;

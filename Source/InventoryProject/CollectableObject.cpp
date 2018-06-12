@@ -127,10 +127,10 @@ void ACollectableObject::CheckForCommonResource()
 			if (NewContainerItem->GetItemResourceType() == ItemResourceType)
 			{
 				// Check if that item does not have the max number of slots filled
-				if (NewContainerItem->GetCurItemsInSlot() < MaxUnitsPerSlot)
+				if (NewContainerItem->GetCurUnitsInSlot() < MaxUnitsPerSlot)
 				{
 					// Get maximum number that can be added to the new item slot from the current one
-					int ItemsToBeAdded = FMath::Clamp(CurUnitsInSlot, 0, MaxUnitsPerSlot - NewContainerItem->GetCurItemsInSlot());
+					int ItemsToBeAdded = FMath::Clamp(CurUnitsInSlot, 0, MaxUnitsPerSlot - NewContainerItem->GetCurUnitsInSlot());
 					// Add to the other container item
 					NewContainerItem->IncrementItemCount(ItemsToBeAdded);
 					// Subtract from curent container item

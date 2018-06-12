@@ -50,7 +50,7 @@ void ALantern::UseItem()
 			LanternComponent->RelightLantern();
 			// Subtract item count from match stack
 			MatchStack->DecrementItemCount(1);
-			if(MatchStack->GetCurItemsInSlot() <= 0)
+			if(MatchStack->GetCurUnitsInSlot() <= 0)
 			{
 				// If match stack is depleted, remove from inventory
 				PlayerInventory->CheckForDepletedItems();

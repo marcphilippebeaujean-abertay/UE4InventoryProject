@@ -7,35 +7,24 @@
 #include "MyGameInstance.generated.h"
 
 /**
- * 
- */
+*
+*/
 UCLASS()
 class INVENTORYPROJECT_API UMyGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
-	
+
 public:
 
-	class UPlayerInventory* GetPlayerInventory()
+	// Stores the containres in the save game object
+	void UpdatePlayerContainers(class UPlayerInventory* l_plInventory, class UQuickAccess* l_quickAccess);
+
+	bool SaveDataAvailable()
 	{
-		return m_playerInventory;
+		return m_initialisedSaveFile;
 	}
 
-	class UQuickAccess* GetPlayerQuickAccess()
-	{
-		return m_playerQuickAccess;
-	}
-
-	void SetPlayerInventory(class UPlayerInventory* l_itemContainer);
-	void SetPlayerQuickAccess(class UQuickAccess* l_itemContainer);
-	
 private:
 
-	// References to the player's item containers
-	UPROPERTY()
-	class UPlayerInventory* m_playerInventory = nullptr;
-	UPROPERTY()
-	class UQuickAccess* m_playerQuickAccess = nullptr;
-	
-
+	bool m_initialisedSaveFile = false;
 };

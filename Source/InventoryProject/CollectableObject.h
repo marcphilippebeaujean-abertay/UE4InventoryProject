@@ -85,10 +85,10 @@ public:
 	void SetObjectOwner(AFirstPersonCharacter* Owner) { OwningPlayer = Owner; }
 
 	UFUNCTION(BlueprintCallable)
-	int GetMaxItemsPerSlot() { return MaxUnitsPerSlot; }
+	int GetMaxUnitsPerSlot() { return MaxUnitsPerSlot; }
 
 	UFUNCTION(BlueprintCallable)
-	int GetCurItemsInSlot() { return CurUnitsInSlot; }
+	int GetCurUnitsInSlot() { return CurUnitsInSlot; }
 
 	UFUNCTION(BlueprintCallable)
 	EResourceType GetItemResourceType() { return ItemResourceType; }

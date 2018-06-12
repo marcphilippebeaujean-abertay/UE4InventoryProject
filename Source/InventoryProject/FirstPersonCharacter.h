@@ -130,5 +130,4 @@ public:
 
 	// Used to set the containers at the beginning of each level switch
 	void SetPlayerContainers(class UPlayerInventory* l_gameInstanceInventory, class UQuickAccess* l_gameInstanceQuickAccess);
-
 };

@@ -50,7 +50,14 @@ public:
 	void AddObjToContainer(ACollectableObject* NewItem);
 
 	// Returns all items within the contain
-	TArray<ACollectableObject*> GetContainerItems() { return ContainerItems; }; 
+	TArray<ACollectableObject*> GetContainerItems() { return ContainerItems; };
+
+	// Set container contents to be of that of another item
+	void SetContainerItems(TArray<ACollectableObject*> l_containerItems)
+	{
+		ContainerItems = l_containerItems;
+		BroadcastWidgetUpdate();
+	}
 
 	// Allows the items to be swapped between containers
 	UFUNCTION(BlueprintCallable)
