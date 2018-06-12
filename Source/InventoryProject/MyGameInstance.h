@@ -16,15 +16,4 @@ class INVENTORYPROJECT_API UMyGameInstance : public UGameInstance
 
 public:
 
-	// Stores the containres in the save game object
-	void UpdatePlayerContainers(class UPlayerInventory* l_plInventory, class UQuickAccess* l_quickAccess);
-
-	bool SaveDataAvailable()
-	{
-		return m_initialisedSaveFile;
-	}
-
-private:
-
-	bool m_initialisedSaveFile = false;
 };

@@ -5,8 +5,3 @@
 #include "PlayerInventory.h"
 #include "MySaveGame.h"
 
-
-void UMyGameInstance::UpdatePlayerContainers(class UPlayerInventory* l_plInventory, class UQuickAccess* l_quickAccess)
-{
-
-}

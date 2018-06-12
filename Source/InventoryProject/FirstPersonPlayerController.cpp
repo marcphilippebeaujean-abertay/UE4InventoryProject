@@ -80,20 +80,22 @@ void AFirstPersonPlayerController::InitContainers()
 		// ...initialise containers for the first time
 		if (EmptySlot)
 		{
-			// Find player inventory
+			// Find player inventory component
 			Inventory = PlayerCharacter->FindComponentByClass<UPlayerInventory>();
-			Inventory->InitContainerContents(EmptySlot);
 			if (Inventory == nullptr)
 			{
 				UE_LOG(LogTemp, Error, TEXT("Failed to find inventory!"));
+				return;
 			}
+			SetupPlayerContainer(Inventory);
 			// Find quick access component
 			QuickAccessBar = PlayerCharacter->FindComponentByClass<UQuickAccess>();
 			if (QuickAccessBar == nullptr)
 			{
 				UE_LOG(LogTemp, Error, TEXT("Failed to find quick access bar!"));
+				return;
 			}
-			QuickAccessBar->InitContainerContents(EmptySlot);
+			SetupPlayerContainer(QuickAccessBar);
 		}
 		else
 		{
@@ -106,26 +108,6 @@ void AFirstPersonPlayerController::InitContainers()
 	{
 		UE_LOG(LogTemp, Error, TEXT("Containers initialised prematurely!"));
 		return;
-	}
-	// Check if prior information on the object has been stored
-	if (Cast<UMyGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->SaveDataAvailable() == true)
-	{
-		// Retrieve reference to current save object
-		UMySaveGame* LoadGameInstance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass()));
-		LoadGameInstance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->GetSaveSlotName(), LoadGameInstance->GetUserIndex()));
-		// Load containers from save object 
-		//Inventory->SetContainerItems(LoadGameInstance->GetPlayerInventory()->GetContainerItems());
-		//
-		//QuickAccessBar->SetContainerItems(LoadGameInstance->GetPlayerQuickAccess()->GetContainerItems());
-		//if (Inventory)
-		//{
-		//	UE_LOG(LogTemp, Warning, TEXT("Retrieved items from game instance...!"));
-		//	// ...set containers of the player to be that in the game instance
-		//	PlayerCharacter->SetPlayerContainers(Inventory, QuickAccessBar);
-		//	// Update the container widgets
-		//	Inventory->BroadcastWidgetUpdate();
-		//	QuickAccessBar->BroadcastWidgetUpdate();
-		//}
 	}
 }
 
@@ -281,7 +263,36 @@ void AFirstPersonPlayerController::UseCurrentItem()
 	}
 }
 
-void AFirstPersonPlayerController::UpdateGameInstanceInventory()
+void AFirstPersonPlayerController::PreparePlayerLevelTransition()
 {
-	Cast<UMyGameInstance>(GetGameInstance())->UpdatePlayerContainers(Inventory, QuickAccessBar);
+	// Load save game object
+	UMySaveGame* SaveGameInstance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass()));
+	// Save player containers
+	SaveGameInstance->SaveContainerItems(Inventory->GetContainerID(), Inventory);
+	SaveGameInstance->SaveContainerItems(QuickAccessBar->GetContainerID(), QuickAccessBar);
+	// Save to slot, so that it can be recalled later
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->GetSaveSlotName(), SaveGameInstance->GetUserIndex());
+}
+
+void AFirstPersonPlayerController::SetupPlayerContainer(UItemContainer* l_container)
+{
+	// Init container
+	l_container->InitContainerContents(EmptySlot);
+	// Attempt to load any inventory information stored in the save slot
+	UMySaveGame* LoadGameInstance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass()));
+	LoadGameInstance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->GetSaveSlotName(), LoadGameInstance->GetUserIndex()));
+	// Check if previous instance of container has been stored
+	if (LoadGameInstance->ContainerIsStored(l_container->GetContainerID()))
+	{
+		// Iterate through all items stored with the container ID
+		for (auto &itr : LoadGameInstance->LoadContainerItems(l_container->GetContainerID()))
+		{
+			// Create the item
+			ACollectableObject* storedItem = Cast<ACollectableObject>(GetWorld()->SpawnActor(itr.GetCollectableClass()));
+			// Set variables that were stored in the save object
+			storedItem->SetUnitCount(itr.GetUnitCount());
+			// Add the item to the container
+			l_container->SetContainerItem(itr.GetInventoryIndex(), storedItem);
+		}
+	}
 }

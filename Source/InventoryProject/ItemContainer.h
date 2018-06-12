@@ -104,6 +104,7 @@ public:
 	int GetMaxItemSlots() { return (NumberOfCollumns * NumberOfRows); }
 	bool IsQuickAccess() { return bQuickAccess; }
 	bool IsUnitinitialised() { return bUninitialised; }
+	FString GetContainerID() { return m_containerID; }
 
 private:
 	// Reference to empty slot item
@@ -112,6 +113,9 @@ private:
 	// Delegate used to broadcast to the blueprint that the invnetory has been updated
 	UPROPERTY(BlueprintAssignable, Category = "UI Events")
 	FContentsInterfaceUpdate OnUpdateContainer;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Container", Meta = (AllowPrivateAccess = "true"))
+	FString m_containerID;
 
 	// Condition that checks if the container has been initialised
 	bool bUninitialised = true;

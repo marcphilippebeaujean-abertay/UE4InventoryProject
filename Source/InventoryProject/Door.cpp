@@ -17,7 +17,7 @@ void ADoor::BeginPlay()
 void ADoor::OnInteracted()
 {
 	// Update game instance inventory instance
-	Cast<AFirstPersonPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->UpdateGameInstanceInventory();
+	Cast<AFirstPersonPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->PreparePlayerLevelTransition();
 	// Load that level
 	UGameplayStatics::OpenLevel(GetWorld(), "Testing_Room");
 }

@@ -86,6 +86,7 @@ private:
 	FExternalContainereUpdate OnUpdateExternalContainer;
 
 	void UseCurrentItem();
+	void SetupPlayerContainer(UItemContainer* l_container);
 
 public:
 	// Container getters
@@ -102,5 +103,5 @@ public:
 
 	// Should be called before level switch - updates the game instance inventory reference
 	UFUNCTION(BlueprintCallable)
-	void UpdateGameInstanceInventory();
+	void PreparePlayerLevelTransition();
 };

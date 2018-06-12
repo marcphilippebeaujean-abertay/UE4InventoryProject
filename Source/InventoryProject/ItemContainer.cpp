@@ -17,6 +17,11 @@ UItemContainer::UItemContainer()
 void UItemContainer::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	if(m_containerID == "")
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Container ID not assigned - this object's contents will not be saved!"));
+	}
 }
 
 void UItemContainer::InitContainerContents(ACollectableObject* EmptySlotClass)

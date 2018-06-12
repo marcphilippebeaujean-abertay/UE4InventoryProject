@@ -26,8 +26,9 @@ private:
 	// Index of the object when it was deleted
 	UPROPERTY()
 	uint32 m_inventoryIndex = 1;
-public:
 
+public:
+	// Getters + setters
 	void SetCollectableClass(TSubclassOf<ACollectableObject> l_collectableClass)
 	{
 		m_collectableClass = l_collectableClass;
@@ -76,7 +77,8 @@ public:
 	}
 
 	void SaveContainerItems(FString l_containerID, class UItemContainer* l_itemContainer);
-
+	bool ContainerIsStored(FString l_containerID);
+	TArray<FInventoryObjectsStruct> LoadContainerItems(FString l_containerID);
 
 private:
 

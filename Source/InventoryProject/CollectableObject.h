@@ -96,6 +96,12 @@ public:
 	void UpdateObjectOwner(class UItemContainer* NewOwner);
 
 	UFUNCTION(BlueprintCallable)
+	void SetUnitCount(int l_unitCount)
+	{
+		CurUnitsInSlot = l_unitCount;
+	}
+
+	UFUNCTION(BlueprintCallable)
 	void IncrementItemCount(int IncrementAmount) { CurUnitsInSlot = FMath::Clamp(CurUnitsInSlot + IncrementAmount, 0, MaxUnitsPerSlot); }
 
 	UFUNCTION(BlueprintCallable)
