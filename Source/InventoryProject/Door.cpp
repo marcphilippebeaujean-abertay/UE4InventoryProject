@@ -31,9 +31,10 @@ bool ADoor::CanInteract()
 		return false;
 	}
 	// Get inventory reference
-	UPlayerInventory* PlayerInventory = PlayerRef->FindComponentByClass<UPlayerInventory>();
+	UPlayerInventory* PlayerInventory = PlayerRef->GetInventory();
 	// Check if there are keys in the inventory
 	TArray<ACollectableObject*> KeyObjects = PlayerInventory->GetResourcesOfType(EResourceType::Key);
+	bool canInteract = false;
 	if(KeyObjects.Num() > 0)
 	{
 		// Look for the right key type
@@ -43,9 +44,10 @@ bool ADoor::CanInteract()
 			EKeyType KeyType = Cast<AKeyCard>(itr)->GetKeyType();
 			if(KeyType == RequiredKey || KeyType == EKeyType::Master)
 			{
-				return true;
+				canInteract = true;
+				break;
 			}
 		}
 	}
-	return false;
+	return canInteract;
 }

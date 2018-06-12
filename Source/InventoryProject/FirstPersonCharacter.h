@@ -104,8 +104,9 @@ private:
 
 public:
 
+
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	void Tick(float DeltaTime) override;
 
 	// Return hit from raycast
 	FHitResult GetTraceResult();
@@ -130,4 +131,9 @@ public:
 
 	// Used to set the containers at the beginning of each level switch
 	void SetPlayerContainers(class UPlayerInventory* l_gameInstanceInventory, class UQuickAccess* l_gameInstanceQuickAccess);
+
+	UPlayerInventory* GetInventory()
+	{
+		return Inventory;
+	}
 };
