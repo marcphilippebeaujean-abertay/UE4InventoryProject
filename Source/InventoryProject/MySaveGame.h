@@ -11,21 +11,21 @@
  * 
  */
 USTRUCT()
-struct FInventoryObjectsStruct
+struct FContainerObjectReference
 {
 	GENERATED_BODY()
 private:
 	// Blueprint class of the object
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, Category = Basic)
 	TSubclassOf<ACollectableObject> m_collectableClass = nullptr;
-	
+
 	// Number of units contained by the object before it was destroyed
-	UPROPERTY()
-	uint32 m_unitCount = 1;
+	UPROPERTY(VisibleAnywhere, Category = Basic)
+	int m_unitCount = 1;
 
 	// Index of the object when it was deleted
-	UPROPERTY()
-	uint32 m_inventoryIndex = 1;
+	UPROPERTY(VisibleAnywhere, Category = Basic)
+	int m_inventoryIndex = 1;
 
 public:
 	// Getters + setters
@@ -42,7 +42,7 @@ public:
 	{
 		m_unitCount = l_unitCount;
 	}
-	uint32 GetUnitCount()
+	int GetUnitCount()
 	{
 		return m_unitCount;
 	}
@@ -51,10 +51,22 @@ public:
 	{
 		m_inventoryIndex = l_index;
 	}
-	uint32 GetInventoryIndex()
+	int GetInventoryIndex()
 	{
 		return m_inventoryIndex;
 	}
+};
+
+USTRUCT()
+struct FContainerReference
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(VisibleAnywhere, Category = Basic)
+	TArray<FContainerObjectReference> m_containerItems;
+	UPROPERTY(VisibleAnywhere, Category = Basic)
+	FString m_containerID;
 };
 
 UCLASS()
@@ -78,7 +90,7 @@ public:
 
 	void SaveContainerItems(FString l_containerID, class UItemContainer* l_itemContainer);
 	bool ContainerIsStored(FString l_containerID);
-	TArray<FInventoryObjectsStruct> LoadContainerItems(FString l_containerID);
+	TArray<FContainerObjectReference> LoadContainerItems(FString l_containerID);
 
 private:
 
@@ -89,5 +101,6 @@ private:
 	uint32 m_userIndex;
 
 	// Items stored when saving and changing levels, that need to be reinstantiated
-	TMap<FString, TArray<FInventoryObjectsStruct>> m_containerItems;
+	UPROPERTY(VisibleAnywhere, Category = Basic)
+	TMap<FString, FContainerReference> m_containerRefs;
 };

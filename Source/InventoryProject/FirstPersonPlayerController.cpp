@@ -282,11 +282,15 @@ void AFirstPersonPlayerController::SetupPlayerContainer(UItemContainer* l_contai
 	UMySaveGame* LoadGameInstance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass()));
 	LoadGameInstance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->GetSaveSlotName(), LoadGameInstance->GetUserIndex()));
 	// Check if previous instance of container has been stored
+	UE_LOG(LogTemp, Error, TEXT("%s!"), *l_container->GetContainerID());
 	if (LoadGameInstance->ContainerIsStored(l_container->GetContainerID()))
 	{
+		UE_LOG(LogTemp, Error, TEXT("Loading container items...!"));
+		UE_LOG(LogTemp, Error, TEXT("Loaded items: %d...!"), LoadGameInstance->LoadContainerItems(l_container->GetContainerID()).Num());
 		// Iterate through all items stored with the container ID
-		for (auto &itr : LoadGameInstance->LoadContainerItems(l_container->GetContainerID()))
+		for (auto itr : LoadGameInstance->LoadContainerItems(l_container->GetContainerID()))
 		{
+			UE_LOG(LogTemp, Error, TEXT("Loading saved item!"));
 			// Create the item
 			ACollectableObject* storedItem = Cast<ACollectableObject>(GetWorld()->SpawnActor(itr.GetCollectableClass()));
 			// Set variables that were stored in the save object
@@ -294,5 +298,7 @@ void AFirstPersonPlayerController::SetupPlayerContainer(UItemContainer* l_contai
 			// Add the item to the container
 			l_container->SetContainerItem(itr.GetInventoryIndex(), storedItem);
 		}
+		// Display the changes in the UI
+		l_container->BroadcastWidgetUpdate();
 	}
 }
